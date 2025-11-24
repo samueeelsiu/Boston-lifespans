@@ -5,7 +5,7 @@ An interactive web-based visualization dashboard for analyzing building demoliti
 
 ## Live Demo
 
-[View Live Dashboard](https://samueeelsiu.github.io/Boston-RAZE/)
+[View Live Dashboard](https://samueeelsiu.github.io/Boston-lifespans/)
 
 ## Table of Contents
 
