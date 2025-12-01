@@ -405,7 +405,7 @@
     <div class="container">
         <div class="header">
             <h1>Boston Building Demolition Analysis</h1>
-            <p class="subtitle" id="subtitle">Data From NSI enhanced USA Structure(Massachusetts) dataset</p>
+            <p class="subtitle" id="subtitle">Data From NSI enhanced USA Structure(MA) dataset</p>
             
             <div class="methodology" style="background: #f8f9fa; padding: 25px; border-left: 5px solid #3498db; border-radius: 4px; margin-top: 20px;">
                 <h3 style="color: #2c3e50; margin-top: 0;">Data Source & Methodology</h3>
@@ -418,16 +418,37 @@
                         <h4 style="margin-bottom: 10px; color: #3498db;">Data Processing & Cleaning</h4>
                         <ol style="margin-left: 20px; padding-left: 0; line-height: 1.5; color: #444; font-size: 0.9em;">
                             <li style="margin-bottom: 6px;">
-                                <strong>Geometry Conversion:</strong> Building footprints (Polygons) were converted to <strong>Centroids (Points)</strong> for precise mapping and spatial analysis.
+                                <strong>Permit Matching Strategy:</strong> 
+                                Building Polygons were linked to Demolition Permits using a <strong>Nearest Neighbor Spatial Join</strong> with a <strong>5-meter search radius</strong> (EPSG:2249).
+                                
+                                <div style="background: #eef2f7; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-size: 0.9em; border-left: 3px solid #3498db; color: #555;">
+                                    <strong>Matching Stats (Total: 5,018):</strong><br>
+                                    <span style="color: #27ae60;">●</span> <strong>Exact Matches:</strong> 4,922 (98.1%)<br>
+                                    <span style="color: #e67e22;">●</span> <strong>Buffer Matches (<5m):</strong> 96 (1.9%)
+                                </div>
+                                <span style="color:#666; font-size:0.9em;">This logic ensures permits with slight geocoding offsets are correctly attributed to the nearest structure.</span>
                             </li>
+                            
                             <li style="margin-bottom: 6px;">
-                                <strong>Geographic Filtering:</strong> Data was filtered to include only major Greater Boston municipalities: <em>Boston, Cambridge, Somerville, Brookline, Quincy, Newton, Watertown, Chelsea, Revere, and Everett</em>.
+                                <strong>Conflict Resolution:</strong> 
+                                Where multiple permits matched a single building, priority was given to <strong>Closed</strong> status and the <strong>Most Recent</strong> date.
                             </li>
+
                             <li style="margin-bottom: 6px;">
-                                <strong>Spatial Integration:</strong> Demolition points were <strong>spatially joined</strong> with <code>Boston_Zoning_Subdistricts.geojson</code>. Points falling on district boundaries were de-duplicated to ensure each building maps to exactly one zoning district.
+                                <strong>Geometry Conversion:</strong> 
+                                Post-matching, building footprints (Polygons) were converted to <strong>Centroids (Points)</strong> for visualization.
                             </li>
+                            
                             <li style="margin-bottom: 6px;">
-                                <strong>Outlier Removal:</strong> Records with calculated lifespans <strong>≥ 500 years</strong> were removed as data errors. Null values in Material/Foundation were labeled as 'Unknown'; missing GFA values were defaulted to 0.
+                                <strong>Geographic Filtering:</strong> Data was filtered to include only major Greater Boston municipalities (Boston, Cambridge, Somerville, etc.).
+                            </li>
+                            
+                            <li style="margin-bottom: 6px;">
+                                <strong>Spatial Integration:</strong> Demolition points were spatially joined with <code>Boston_Zoning_Subdistricts.geojson</code>.
+                            </li>
+                            
+                            <li style="margin-bottom: 6px;">
+                                <strong>Outlier Removal:</strong> Records with calculated lifespans <strong>≥ 500 years</strong> were removed.
                             </li>
                         </ol>
                     </div>
@@ -436,9 +457,20 @@
                         <h4 style="margin-bottom: 10px; color: #3498db;">Calculation Logic</h4>
                         <ul style="list-style-type: none; padding: 0; font-size: 0.9em; line-height: 1.6;">
                             <li style="margin-bottom: 8px;">
-                                <strong>Lifespan Calculation:</strong> <code>Demolition Year - Year Built</code>.
-                                <br><span style="color:#666; font-size:0.9em;">• <strong>Positive (>0):</strong> Standard lifecycle. Used for "Average Lifespan" stats.</span>
-                                <br><span style="color:#666; font-size:0.9em;">• <strong>Non-Positive (≤0):</strong> Indicates redevelopment/data anomalies. Included in counts but excluded from averages.</span>
+                                <strong>Lifespan Calculation & Filtering:</strong> <code>Demolition Year - Year Built</code>.
+                                <br><span style="color:#666; font-size:0.9em;">• <strong>Positive Lifespan (>0 yrs):</strong> Represents a complete, valid building lifecycle. Used in <strong>ALL</strong> visualizations (Maps, Heatmaps, Age Distributions, Boxplots, etc.) to ensure statistical accuracy.</span>
+                                <br><span style="color:#666; font-size:0.9em;">• <strong>Non-Positive Lifespan (≤0 yrs):</strong> Indicates rapid redevelopment (e.g., "Demolished & Replaced" in the same year) or data anomalies. These are <strong>strictly excluded</strong> from all charts except for:
+                                    <ul style="margin-top:4px; margin-left:15px;">
+                                        <li>The <em>"Demolitions by Year"</em> stacked chart (shown as a distinct dark grey category).</li>
+                                        <li>The <em>"RAZE Lifespan Summary"</em> statistics badges.</li>
+                                    </ul>
+                                </span>
+                            </li>
+                            <li style="margin-bottom: 8px;">
+                                <strong>Current Buildings Definition:</strong> 
+                                Calculated as the total dataset <em>minus</em> buildings confirmed as demolished.
+                                <br><span style="color:#666; font-size:0.9em;">• Buildings with a <strong>RAZE</strong> permit and <strong>Positive Lifespan</strong> are <span style="color:#e74c3c; font-weight:500;">removed</span> from the "Current Age" charts, as they no longer exist.</span>
+                                <br><span style="color:#666; font-size:0.9em;">• Buildings with a <strong>RAZE</strong> permit but <strong>Lifespan ≤ 0</strong> are <span style="color:#27ae60; font-weight:500;">retained</span>. These "Demolished & Replaced" records represent the active structure currently on the parcel.</span>
                             </li>
                             <li style="margin-bottom: 8px;">
                                 <strong>Status Inference:</strong> Derived from <code>DEMOLITION_STATUS</code> using exclusion logic. Any record <em>not</em> explicitly 'Closed' (e.g., 'Open', 'Issued', 'Pending', or Null) is classified as <strong>Open</strong>.
@@ -490,6 +522,7 @@
                         <option value="percentage">Percentage</option>
                     </select>
                 </div>
+
             </div>
 
             <div class="stats-grid">
@@ -517,31 +550,45 @@
 
             <div class="chart-container" id="raze-lifespan-summary-container">
                 <h2 class="chart-title">RAZE Lifespan Summary</h2>
-                <div class="badge-container">
-                    <div class="mini-stat" style="padding:8px 10px; border:1px solid #eee; border-radius:8px; min-width:200px;">
-                        <div style="font-size:12px; opacity:.75;">RAZE lifespan > 0</div>
-                        <div id="razePosCount" style="font-weight:600; font-size:16px;">-</div>
-                        <div class="status-row">
-                            <span id="razePosClose" class="badge badge-close">- Close</span>
-                            <span id="razePosOpen"  class="badge badge-open">- Open</span>
+                
+                <div class="badge-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                    
+                    <div class="mini-stat" style="padding:15px; border:1px solid #eee; border-radius:8px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size:12px; opacity:.75; margin-bottom: 5px;">RAZE lifespan > 0</div>
+                        <div id="razePosCount" style="font-weight:700; font-size:1.4em; color: #2c3e50; margin-bottom: 8px;">-</div>
+                        <div class="status-row" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span id="razePosClose" class="badge badge-close" style="flex:1; text-align:center; margin:0;">- Close</span>
+                            <span id="razePosOpen"  class="badge badge-open" style="flex:1; text-align:center; margin:0;">- Open</span>
                         </div>
                     </div>
-                    <div class="mini-stat" style="padding:8px 10px; border:1px solid #eee; border-radius:8px; min-width:200px;">
-                        <div style="font-size:12px; opacity:.75;">RAZE lifespan = 0</div>
-                        <div id="razeZeroCount" style="font-weight:600; font-size:16px;">-</div>
-                        <div class="status-row">
-                            <span id="razeZeroClose" class="badge badge-close">- Close</span>
-                            <span id="razeZeroOpen"  class="badge badge-open">- Open</span>
+
+                    <div class="mini-stat" style="padding:15px; border:1px solid #eee; border-radius:8px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size:12px; opacity:.75; margin-bottom: 5px;">RAZE lifespan = 0</div>
+                        <div id="razeZeroCount" style="font-weight:700; font-size:1.4em; color: #2c3e50; margin-bottom: 8px;">-</div>
+                        <div class="status-row" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span id="razeZeroClose" class="badge badge-close" style="flex:1; text-align:center; margin:0;">- Close</span>
+                            <span id="razeZeroOpen"  class="badge badge-open" style="flex:1; text-align:center; margin:0;">- Open</span>
                         </div>
                     </div>
-                    <div class="mini-stat" style="padding:8px 10px; border:1px solid #eee; border-radius:8px; min-width:200px;">
-                        <div style="font-size:12px; opacity:.75;">RAZE lifespan < 0</div>
-                        <div id="razeNegCount" style="font-weight:600; font-size:16px;">-</div>
-                        <div class="status-row">
-                            <span id="razeNegClose" class="badge badge-close">- Close</span>
-                            <span id="razeNegOpen"  class="badge badge-open">- Open</span>
+
+                    <div class="mini-stat" style="padding:15px; border:1px solid #eee; border-radius:8px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size:12px; opacity:.75; margin-bottom: 5px;">RAZE lifespan < 0</div>
+                        <div id="razeNegCount" style="font-weight:700; font-size:1.4em; color: #2c3e50; margin-bottom: 8px;">-</div>
+                        <div class="status-row" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span id="razeNegClose" class="badge badge-close" style="flex:1; text-align:center; margin:0;">- Close</span>
+                            <span id="razeNegOpen"  class="badge badge-open" style="flex:1; text-align:center; margin:0;">- Open</span>
                         </div>
                     </div>
+
+                    <div class="mini-stat" style="padding:15px; border:1px solid #eee; border-radius:8px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.05); background-color: #f8f9fa;">
+                        <div style="font-size:12px; opacity:.75; margin-bottom: 5px; font-weight: 600;">RAZE Total (All)</div>
+                        <div id="razeTotalCount" style="font-weight:800; font-size:1.4em; color: #130887; margin-bottom: 8px;">-</div>
+                        <div class="status-row" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span id="razeTotalClose" class="badge badge-close" style="flex:1; text-align:center; margin:0;">- Close</span>
+                            <span id="razeTotalOpen"  class="badge badge-open" style="flex:1; text-align:center; margin:0;">- Open</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             
@@ -561,6 +608,12 @@
                 <h2 class="chart-title">Material vs Lifespan Heatmap</h2>
                 <p class="chart-description">Heatmap showing demolition counts for each material-lifespan combination</p>
                 <div id="heatmapContent"></div>
+            </div>
+
+            <div id="foundationHeatmapContainer" class="chart-container">
+                <h2 class="chart-title">Foundation vs Lifespan Heatmap</h2>
+                <p class="chart-description">Heatmap showing demolition counts for each foundation-lifespan combination</p>
+                <div id="foundationHeatmapContent"></div>
             </div>
 
                         <div id="allChartContainer" class="chart-container hidden">
@@ -676,6 +729,11 @@
                     
                     <div id="zoningHeatmapContainer" style="overflow-x: auto; min-height: 150px;"></div>
                 </div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                    <h3 class="chart-title" style="font-size: 1.1em;">District Foundation vs. Lifespan Heatmap (RAZE Only)</h3>
+                    <div id="zoningFoundationHeatmapContainer" style="overflow-x: auto;"></div>
+                </div>
                 
                 </div>
 
@@ -694,9 +752,44 @@
             </div>
 
             <div class="chart-container">
-                <h2 class="chart-title">Building Lifespan Distribution</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2 class="chart-title" style="margin-bottom: 0;">Age Distribution of Demolished Buildings in Boston</h2>
+                    
+                    <label style="cursor: pointer; font-size: 0.9em; color: #d35400; background: #fff5e6; padding: 5px 10px; border-radius: 4px; border: 1px solid #ffcc80;">
+                        <input type="checkbox" id="logScale" onchange="updateVisualization()"> 
+                        Log Scale (View Outliers) 
+                        <span style="color: #666; font-size: 0.85em; margin-left: 5px;">(Only affects this & Current Age chart)</span>
+                    </label>
+                </div>
+                
                 <canvas id="lifespanChart"></canvas>
             </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">Age Distribution of Current Buildings in Boston</h2>
+                <p class="chart-description">Shows the age distribution of all existing buildings in the Boston property assessment database (Synced X-Axis)</p>
+                <canvas id="currentAgeChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">Age Distribution of Demolished(Razed) Buildings by Year</h2>
+                <p class="chart-description">Shows the relative ages of buildings demolished each year, based on their lifespan at demolition</p>
+                <canvas id="ageDistributionChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">Construction Era of Demolished Buildings by Year</h2>
+                <p class="chart-description">Shows when demolished buildings were originally constructed, grouped by historical eras</p>
+                <canvas id="constructionEraChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">Building Lifespan Distribution by Demolition(Razed) Year</h2>
+                <p class="chart-description">Each point represents a building's age at demolition. Points are jittered horizontally to show density.</p>
+                <canvas id="lifespanStripPlot"></canvas>
+            </div>
+
+
 
             <div class="chart-container">
                 <h2 class="chart-title">Material Type Statistics</h2>
@@ -750,7 +843,8 @@
             RAZE: 'rgba(13, 8, 135, 0.8)',  
             EXTDEM: 'rgba(204, 71, 120, 0.8)', 
             INTDEM: 'rgba(254, 206, 50, 0.8)', 
-            single: 'rgba(126, 3, 168, 0.8)'  
+            single: 'rgba(126, 3, 168, 0.8)' ,
+            demolished_and_replaced: 'rgba(0, 0, 0, 0.7)'
         };
 
         const borderColors = {
@@ -806,6 +900,27 @@
             const idx = Math.min(Math.floor(intensity * (plasmaColors.length -1)), plasmaColors.length - 1);
             const rgb = plasmaColors[idx];
             return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+        }
+
+        // --- Helpers for Axis Synchronization ---
+        function parseRange(str) {
+            const m = String(str).match(/(\d+)\s*-\s*(\d+)/); 
+            return m ? [parseInt(m[1]), parseInt(m[2])] : [0, 0]; 
+        }
+
+        function getUpperFromSeries(series = []) {
+            let max = 0;
+            series.forEach(d => {
+                const [, end] = parseRange(d.range); 
+                if (end > max) max = end;
+            });
+            return max;
+        }
+
+        function computeGlobalMaxAge(data) {
+            const maxCurrent = getUpperFromSeries(data.current_age_distribution_10yr || []); 
+            const maxDem = getUpperFromSeries(data.lifespan_distribution || []); 
+            return Math.max(maxCurrent, maxDem, 150); // Default min 150
         }
         
         function initializeMap() {
@@ -893,7 +1008,7 @@
                 const fnd = point.foundation || 'Unknown';
                 const yr = point.year_built || 'N/A';
                 const rawFnd = point.foundation;
-                const fndLabel = foundationMap[rawFnd] ? `${foundationMap[rawFnd]}` : (rawFnd || 'Unknown');
+                const fndLabel = foundationMap[rawFnd] ? foundationMap[rawFnd] : (rawFnd || 'Unknown');
                 marker.bindTooltip(`
                     <div style="text-align:left; font-size:13px;">
                         <strong>Type:</strong> ${dtype}<br>
@@ -1064,6 +1179,114 @@
             document.getElementById('heatmapContent').innerHTML = html;
         }
 
+        function createFoundationHeatmap(demoType, binSize, displayMode) {
+            const binKey = `bin_${binSize}`;
+            
+            const metricInput = document.querySelector('input[name="globalMetric"]:checked');
+            const metric = metricInput ? metricInput.value : 'count';
+            
+            const displaySource = (metric === 'gfa') 
+                ? currentData.foundation_lifespan_demo_gfa 
+                : currentData.foundation_lifespan_demo;
+
+            const displayData = displaySource?.[demoType]?.[binKey] || {};
+
+            const sortSource = currentData.foundation_lifespan_demo;
+
+            if (!sortSource || !sortSource[demoType] || !sortSource[demoType][binKey]) {
+                document.getElementById('foundationHeatmapContent').innerHTML = `<div class="error-message">No data available for this selection.</div>`;
+                return;
+            }
+            const sortData = sortSource[demoType][binKey];
+
+            const sortTotals = {};
+            Object.entries(sortData).forEach(([foundation, lifespans]) => {
+                sortTotals[foundation] = Object.values(lifespans).reduce((sum, val) => sum + val, 0);
+            });
+            
+            let sortedFoundations = Object.keys(sortTotals).sort((a, b) => sortTotals[b] - sortTotals[a]);
+            sortedFoundations = sortedFoundations.slice(0, 20); 
+
+            sortedFoundations.sort((a, b) => {
+                const lowerA = a.toLowerCase();
+                const lowerB = b.toLowerCase();
+                if (lowerA === 'unknown') return 1;  
+                if (lowerB === 'unknown') return -1; 
+                return sortTotals[b] - sortTotals[a];
+            });
+            
+            const allLifespanBins = new Set();
+            sortedFoundations.forEach(foundation => {
+                if(sortData[foundation]) {
+                    Object.keys(sortData[foundation]).forEach(bin => allLifespanBins.add(bin));
+                }
+            });
+            
+            const sortedLifespanBins = Array.from(allLifespanBins).sort((a, b) => {
+                const getFirstNum = (str) => parseInt(str.match(/\d+/)?.[0] || 0);
+                return getFirstNum(a) - getFirstNum(b);
+            });
+            
+            let maxValue = 0;
+            sortedFoundations.forEach(foundation => {
+                if (displayData[foundation]) {
+                    Object.values(displayData[foundation]).forEach(val => maxValue = Math.max(maxValue, val));
+                }
+            });
+            
+            let html = '<div class="heatmap-container">';
+            html += '<table class="heatmap-table">';
+            html += '<thead><tr>';
+            html += '<th class="material-header">Foundation</th>'; 
+            sortedLifespanBins.forEach(bin => {
+                html += `<th>${bin.replace(' years', '')}</th>`;
+            });
+            html += '<th>Total</th>'; 
+            html += '</tr></thead>';
+            html += '<tbody>';
+            
+            sortedFoundations.forEach(foundation => {
+                html += '<tr>';
+                html += `<td class="material-name">${foundation}</td>`;
+                
+                let rowTotal = 0;
+                if (displayData[foundation]) {
+                    rowTotal = Object.values(displayData[foundation]).reduce((a,b)=>a+b,0);
+                }
+
+                sortedLifespanBins.forEach(bin => {
+                    const value = displayData[foundation]?.[bin] || 0;
+                    let displayValue = value.toLocaleString(); 
+                    
+                    if (displayMode === 'percentage' && value > 0) {
+                        const pct = rowTotal > 0 ? (value / rowTotal) * 100 : 0;
+                        displayValue = `${value.toLocaleString()} <br><span style="font-size:0.8em">(${pct.toFixed(1)}%)</span>`;
+                    }
+                    
+                    const bgColor = getPlasmaColor(value, maxValue);
+                    const intensity = maxValue > 0 ? value / maxValue : 0;
+                    const textColor = intensity > 0.5 ? 'white' : '#333';
+                    
+                    html += `<td style="background-color: ${bgColor}; color: ${textColor};">`;
+                    html += `<div class="heatmap-cell">${value > 0 ? displayValue : ''}</div>`;
+                    html += '</td>';
+                });
+                
+                html += `<td style="background-color: #f8f9fa; font-weight: bold;">${rowTotal.toLocaleString()}</td>`;
+                html += '</tr>';
+            });
+            html += '</tbody></table></div>';
+            
+            html += '<div class="heatmap-legend">';
+            html += '<div class="legend-gradient">';
+            html += '<span>0</span><div class="gradient-bar"></div>';
+            html += `<span>${maxValue.toLocaleString()}</span></div>`;
+            html += `<div>Metric: <strong>${metric === 'gfa' ? 'Estimated GFA (sq meters)' : 'Count'}</strong></div>`;
+            html += '</div>';
+            
+            document.getElementById('foundationHeatmapContent').innerHTML = html;
+        }
+
         function setVisualizationType(type) {
             currentVisualization = type;
             document.getElementById('heatmapBtn').classList.toggle('active', type === 'heatmap');
@@ -1073,12 +1296,13 @@
 
         function updateVisualization() {
             if (!currentData) return;
-            
+            const globalMaxAge = computeGlobalMaxAge(currentData);
             const binSize = parseInt(document.getElementById('lifespanBinSize').value);
             const displayMode = document.getElementById('viewMode').value;
             
             if (currentVisualization === 'heatmap') {
                 document.getElementById('heatmapContainer').classList.remove('hidden');
+                document.getElementById('foundationHeatmapContainer').classList.remove('hidden');
                 document.getElementById('allChartContainer').classList.add('hidden');
                 document.getElementById('razeChartContainer').classList.add('hidden');
                 document.getElementById('extdemChartContainer').classList.add('hidden');
@@ -1086,10 +1310,20 @@
                 
                 const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
                 createHeatmap(demolitionView, binSize, displayMode);
+                createFoundationHeatmap(demolitionView, binSize, displayMode);
             } else {
                 document.getElementById('heatmapContainer').classList.add('hidden');
+                document.getElementById('foundationHeatmapContainer').classList.add('hidden');
                 updateDemolitionView(); // This will show the correct stacked chart
             }
+            createLifespanChart(currentData, globalMaxAge);
+
+            createCurrentAgeChart(currentData.current_age_distribution_10yr, binSize, globalMaxAge);
+
+
+            createAgeDistributionChart(currentData.yearly_age_distribution);
+            createConstructionEraChart(currentData.yearly_construction_era);
+            createLifespanStripPlot(currentData.lifespan_by_year_boxplot);
         }
 
         // Function to calculate average lifespan for selected demolition type
@@ -1228,7 +1462,6 @@
 
             setVisualizationType('heatmap'); // Start with heatmap view
             createYearlyChart(data.yearly_stacked);
-            createLifespanChart(data);
             
             // Update boxplot with initial demolition type
             const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
@@ -1359,29 +1592,36 @@
             const years = yearlyData.map(d => d.year);
             let datasets = [];
             
+            let typesToShow = [];
+
             if (demolitionView === 'all') {
-                const types = [
-                    {name: 'RAZE', total: yearlyData.reduce((s, d) => s + (d.RAZE || 0), 0)},
-                    {name: 'EXTDEM', total: yearlyData.reduce((s, d) => s + (d.EXTDEM || 0), 0)},
-                    {name: 'INTDEM', total: yearlyData.reduce((s, d) => s + (d.INTDEM || 0), 0)}
-                ].sort((a, b) => b.total - a.total);
 
-                const sortedColors = ['rgba(13, 8, 135, 0.8)', 'rgba(172, 33, 152, 0.8)', 'rgba(240, 249, 33, 0.8)'];
-
-                types.forEach((type, index) => {
-                    datasets.push({
-                        label: type.name,
-                        data: yearlyData.map(d => d[type.name] || 0),
-                        backgroundColor: sortedColors[index]
-                    });
-                });
+                typesToShow = [
+                    { key: 'RAZE', label: 'RAZE (>0 yrs)', color: colors.RAZE },
+                    { key: 'EXTDEM', label: 'EXTDEM', color: colors.EXTDEM },
+                    { key: 'INTDEM', label: 'INTDEM', color: colors.INTDEM },
+                    { key: 'demolished_and_replaced', label: 'Demolished & Replaced (≤0 yrs)', color: colors.demolished_and_replaced }
+                ];
+            } else if (demolitionView === 'RAZE') {
+                typesToShow = [
+                    { key: 'RAZE', label: 'RAZE (>0 yrs)', color: colors.RAZE },
+                    { key: 'demolished_and_replaced', label: 'Demolished & Replaced (≤0 yrs)', color: colors.demolished_and_replaced }
+                ];
             } else {
-                datasets.push({
-                    label: demolitionView,
-                    data: yearlyData.map(d => d[demolitionView] || 0),
-                    backgroundColor: 'rgba(13, 8, 135, 0.8)'
-                });
+                typesToShow = [
+                    { key: demolitionView, label: demolitionView, color: colors[demolitionView] }
+                ];
             }
+
+            typesToShow.forEach(type => {
+                datasets.push({
+                    label: type.label,
+                    data: yearlyData.map(d => d[type.key] || 0),
+                    backgroundColor: type.color,
+                    borderWidth: 0,
+                    borderColor: 'rgba(255,255,255,0.5)' 
+                });
+            });
 
             charts.yearly = new Chart(ctx, {
                 type: 'bar',
@@ -1390,61 +1630,322 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { stacked: demolitionView === 'all', title: { display: true, text: 'Year' } },
-                        y: { stacked: demolitionView === 'all', title: { display: true, text: 'Count' } }
+                        x: { 
+                            stacked: true, 
+                            title: { display: true, text: 'Year' } 
+                        },
+                        y: { 
+                            stacked: true, 
+                            title: { display: true, text: 'Count' } 
+                        }
                     },
                     plugins: {
-                        legend: { display: demolitionView === 'all', reverse: true }
+                        legend: { display: true, reverse: true }, 
+                        tooltip: { mode: 'index', intersect: false }
                     }
                 }
             });
         }
 
-        function createLifespanChart(data) {
+
+        function parseRange(str) {
+            const m = String(str).match(/(\d+)\s*-\s*(\d+)/); 
+            return m ? [parseInt(m[1]), parseInt(m[2])] : [0, 0]; 
+        }
+
+
+        function createLifespanChart(data, globalMaxAge) { 
             const ctx = document.getElementById('lifespanChart').getContext('2d');
             if (charts.lifespan) charts.lifespan.destroy();
             
+            const binSize = parseInt(document.getElementById('lifespanBinSize').value);
             const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
-            const lifespanData = data.lifespan_distribution;
-            const labels = lifespanData.map(d => d.range);
-            let datasets = [];
-            
-            if (demolitionView === 'all') {
-                const types = [
-                    {name: 'RAZE', total: lifespanData.reduce((s, d) => s + (d.RAZE || 0), 0)},
-                    {name: 'EXTDEM', total: lifespanData.reduce((s, d) => s + (d.EXTDEM || 0), 0)},
-                    {name: 'INTDEM', total: lifespanData.reduce((s, d) => s + (d.INTDEM || 0), 0)}
-                ].sort((a, b) => b.total - a.total);
+            const useLogScale = document.getElementById('logScale').checked;
+            const labels = [];
+            const safeMaxAge = Math.max(globalMaxAge || 150, 150); 
+            for (let start = 0; start < safeMaxAge; start += binSize) {
+                labels.push(`${start}-${start + binSize}`);
+            }
 
-                const sortedColors = ['rgba(13, 8, 135, 0.8)', 'rgba(172, 33, 152, 0.8)', 'rgba(240, 249, 33, 0.8)'];
-                
-                types.forEach((type, index) => {
+            const rawData = data.lifespan_distribution || [];
+
+            function getCountForRange(type, start, end) {
+                let count = 0;
+                rawData.forEach(d => {
+                    const [dStart, dEnd] = parseRange(d.range);
+
+                    if (dStart >= start && dEnd <= end) {
+                        count += (d[type] || 0);
+                    }
+                });
+                return count;
+            }
+
+            let datasets = [];
+
+            if (demolitionView === 'all') {
+                ['RAZE', 'EXTDEM', 'INTDEM'].forEach(type => {
+                    const dataPoints = labels.map(lbl => {
+                        const [s, e] = parseRange(lbl);
+                        return getCountForRange(type, s, e);
+                    });
+
                     datasets.push({
-                        label: type.name,
-                        data: lifespanData.map(d => d[type.name] || 0),
-                        backgroundColor: sortedColors[index]
+                        label: type,
+                        data: dataPoints,
+                        backgroundColor: colors[type],
+                        borderWidth: 1
                     });
                 });
             } else {
+                const dataPoints = labels.map(lbl => {
+                    const [s, e] = parseRange(lbl);
+                    return getCountForRange(demolitionView, s, e);
+                });
+
                 datasets.push({
                     label: demolitionView,
-                    data: lifespanData.map(d => d[demolitionView] || 0),
-                    backgroundColor: 'rgba(13, 8, 135, 0.8)'
+                    data: dataPoints,
+                    backgroundColor: colors[demolitionView],
+                    borderWidth: 1
                 });
             }
 
             charts.lifespan = new Chart(ctx, {
                 type: 'bar',
                 data: { labels: labels, datasets: datasets },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: { 
+                        x: { 
+                            stacked: demolitionView === 'all', // 只有 All 的时候才堆叠
+                            title: {display: true, text: 'Lifespan (Synced X-Axis)'},
+                            ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 }
+                        },
+                        y: { 
+                            stacked: demolitionView === 'all',
+                            title: {display: true, text: 'Count'},
+                            type: useLogScale ? 'logarithmic' : 'linear',
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCurrentAgeChart(ageData, binSize, globalMaxAge) {
+            const ctx = document.getElementById('currentAgeChart').getContext('2d');
+            if (charts.currentAge) charts.currentAge.destroy();
+            
+            const useLogScale = document.getElementById('logScale').checked;
+
+            const labels = [];
+            const safeMaxAge = Math.max(globalMaxAge || 150, 150);
+            for (let start = 0; start < safeMaxAge; start += binSize) {
+                labels.push(`${start}-${start + binSize}`);
+            }
+
+            const rawData = ageData || [];
+
+            function getCountForRange(start, end) {
+                let count = 0;
+                rawData.forEach(d => {
+                    const [dStart, dEnd] = parseRange(d.range);
+                    if (dStart >= start && dEnd <= end) {
+                        count += (d.count || 0);
+                    }
+                });
+                return count;
+            }
+
+            const data = labels.map(lbl => {
+                const [s, e] = parseRange(lbl);
+                return getCountForRange(s, e);
+            });
+
+            charts.currentAge = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Current Buildings',
+                        data: data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { stacked: demolitionView === 'all', title: { display: true, text: 'Lifespan (years)' } },
-                        y: { stacked: demolitionView === 'all', title: { display: true, text: 'Count' } }
+                        x: { 
+                            title: { display: true, text: 'Building Age (Years)' },
+                            ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 }
+                        },
+                        y: { 
+                            title: { display: true, text: 'Count' }, 
+                            type: useLogScale ? 'logarithmic' : 'linear',
+                            beginAtZero: true 
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Age Distribution by Year
+        function createAgeDistributionChart(ageDistData) {
+            const ctx = document.getElementById('ageDistributionChart').getContext('2d');
+            if (charts.ageDistribution) charts.ageDistribution.destroy();
+
+            if (!ageDistData) return;
+
+            const years = Object.keys(ageDistData).sort();
+            const ageBins = [
+                '0-5 years', '5-10 years', '10-20 years', '20-30 years', 
+                '30-50 years', '50-75 years', '75-100 years', '100-150 years', '150+ years'
+            ];
+            
+            const plasmaColors = [
+                'rgba(13, 8, 135, 0.8)', 'rgba(84, 2, 163, 0.8)', 'rgba(139, 10, 165, 0.8)',
+                'rgba(185, 50, 137, 0.8)', 'rgba(219, 92, 104, 0.8)', 'rgba(244, 136, 73, 0.8)',
+                'rgba(254, 188, 43, 0.8)', 'rgba(240, 249, 33, 0.8)', 'rgba(240, 249, 33, 0.9)'
+            ];
+
+            const datasets = ageBins.map((bin, i) => ({
+                label: bin,
+                data: years.map(y => ageDistData[y]?.All?.[bin] || 0), // Defaulting to 'All'
+                backgroundColor: plasmaColors[i],
+                borderWidth: 0
+            }));
+
+            charts.ageDistribution = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: years, datasets: datasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true }, y: { stacked: true } }
+                }
+            });
+        }
+
+        // 3. Construction Era Chart
+        function createConstructionEraChart(eraData) {
+            const ctx = document.getElementById('constructionEraChart').getContext('2d');
+            if (charts.constructionEra) charts.constructionEra.destroy();
+
+            if (!eraData) return;
+            const years = Object.keys(eraData).sort();
+            const eras = ['Pre-1900', '1900-1920', '1920-1940', '1940-1960', '1960-1980', '1980-2000', '2000-2010', '2010-2020', '2020+'];
+            const eraColors = [
+                'rgba(13, 8, 135, 0.8)', 'rgba(84, 2, 163, 0.8)', 'rgba(139, 10, 165, 0.8)',
+                'rgba(185, 50, 137, 0.8)', 'rgba(219, 92, 104, 0.8)', 'rgba(244, 136, 73, 0.8)',
+                'rgba(254, 188, 43, 0.8)', 'rgba(240, 249, 33, 0.8)', 'rgba(250, 250, 100, 0.9)'
+            ];
+
+            const datasets = eras.map((era, i) => ({
+                label: era,
+                data: years.map(y => eraData[y]?.All?.[era] || 0),
+                backgroundColor: eraColors[i],
+                borderWidth: 0
+            }));
+
+            charts.constructionEra = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: years, datasets: datasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true }, y: { stacked: true } }
+                }
+            });
+        }
+
+    function createLifespanStripPlot(boxplotData) {
+            const ctx = document.getElementById('lifespanStripPlot').getContext('2d');
+            if (charts.lifespanStripPlot) charts.lifespanStripPlot.destroy();
+            
+            if (!boxplotData) return;
+
+            const dataArr = Array.isArray(boxplotData) ? boxplotData : (boxplotData['All'] || []);
+
+            const years = dataArr.map(d => d.year.toString());
+            const stripData = [];
+            const medianData = [];
+            const meanData = []; 
+
+            dataArr.forEach(d => {
+                const lifespans = (d.lifespan || d.lifespans || []).sort((a,b)=>a-b);
+                if (lifespans.length > 0) {
+ 
+                     lifespans.forEach(l => stripData.push({x: d.year.toString(), y: l}));
+                     
+                     medianData.push(lifespans[Math.floor(lifespans.length * 0.5)]);
+
+                     const sum = lifespans.reduce((acc, val) => acc + val, 0);
+                     meanData.push(sum / lifespans.length);
+                } else {
+                    medianData.push(null);
+                    meanData.push(null);
+                }
+            });
+
+            charts.lifespanStripPlot = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    labels: years,
+                    datasets: [
+                        { 
+                            label: 'Buildings', 
+                            data: stripData, 
+                            backgroundColor: 'rgba(126,3,168,0.3)', 
+                            type: 'scatter', 
+                            pointRadius: 1.5 
+                        },
+                        { 
+                            label: 'Median', 
+                            data: medianData, 
+                            borderColor: 'orange', 
+                            type: 'line', 
+                            pointRadius: 0, 
+                            tension: 0.1 
+                        },
+
+                        { 
+                            label: 'Mean', 
+                            data: meanData, 
+                            borderColor: '#e74c3c', 
+                            borderDash: [5, 5],     
+                            type: 'line', 
+                            pointRadius: 0, 
+                            tension: 0.1 
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: { 
+                        x: { type: 'category', title: {display: true, text: 'Demolition Year'} },
+                        y: { title: {display: true, text: 'Lifespan (Years)'} }
                     },
                     plugins: {
-                        legend: { display: demolitionView === 'all', reverse: true }
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(1) + ' yrs';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -1594,21 +2095,37 @@
             const s = data.summary_stats;
             const sb = s.raze_status_by_lifespan;
             
-            // Helper
-            const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val.toLocaleString(); };
-            const setBadge = (id, val, label) => { const el = document.getElementById(id); if(el) el.innerText = `${val.toLocaleString()} ${label}`; };
+            // Helper functions
+            const setTxt = (id, val) => { 
+                const el = document.getElementById(id); 
+                if(el) el.innerText = val.toLocaleString(); 
+            };
+            const setBadge = (id, val, label) => { 
+                const el = document.getElementById(id); 
+                if(el) el.innerText = `${val.toLocaleString()} ${label}`; 
+            };
 
+            // 1. Positive
             setTxt('razePosCount', sb.positive.close + sb.positive.open);
             setBadge('razePosClose', sb.positive.close, 'Close');
             setBadge('razePosOpen', sb.positive.open, 'Open');
 
+            // 2. Zero
             setTxt('razeZeroCount', sb.zero.close + sb.zero.open);
             setBadge('razeZeroClose', sb.zero.close, 'Close');
             setBadge('razeZeroOpen', sb.zero.open, 'Open');
 
+            // 3. Negative
             setTxt('razeNegCount', sb.negative.close + sb.negative.open);
             setBadge('razeNegClose', sb.negative.close, 'Close');
             setBadge('razeNegOpen', sb.negative.open, 'Open');
+
+            // 4. Total
+            if (sb.total) {
+                setTxt('razeTotalCount', sb.total.close + sb.total.open);
+                setBadge('razeTotalClose', sb.total.close, 'Close');
+                setBadge('razeTotalOpen', sb.total.open, 'Open');
+            }
         }
 
         function renderZoningOverviewTable(data) {
@@ -1652,8 +2169,8 @@
         }
 
 
-        function renderZoneHeatmap(heatmapData, sortData) { 
-            const container = document.getElementById('zoningHeatmapContainer');
+        function renderZoneHeatmap(heatmapData, sortData, containerId) {
+            const container = document.getElementById(containerId);
             
             // Use sortData if available, otherwise fallback to heatmapData (safety check)
             const dataForSorting = sortData || heatmapData;
@@ -1700,21 +2217,17 @@
 
             // --- 4. Generate HTML ---
             let html = '<table class="heatmap-table" style="font-size:0.85em;">';
-            html += '<thead><tr><th class="material-header" style="min-width:120px;">Material</th>';
+            html += '<thead><tr><th class="material-header" style="min-width:120px;">Type</th>';
             sortedBins.forEach(b => html += `<th>${b}</th>`);
             html += '</tr></thead><tbody>';
 
             materials.forEach(mat => {
                 html += `<tr><td class="material-name">${mat}</td>`;
                 sortedBins.forEach(bin => {
-                    // Retrieve Value from Display Data (heatmapData)
                     const val = (heatmapData && heatmapData[mat]) ? (heatmapData[mat][bin] || 0) : 0;
-                    
                     const bgColor = getPlasmaColor(val, maxVal);
                     const color = (maxVal > 0 && val / maxVal > 0.5) ? 'white' : '#333';
-                    
                     const displayVal = val > 0 ? val.toLocaleString() : '';
-                    
                     html += `<td style="background-color:${bgColor}; color:${color}">${displayVal}</td>`;
                 });
                 html += '</tr>';
@@ -1820,18 +2333,22 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } }
             });
 
-            // --- HEATMAP LOGIC START ---
+
             const metricInput = document.querySelector('input[name="deepDiveMetric"]:checked');
             const metric = metricInput ? metricInput.value : 'count';
             
-            // 1. Get Data for Sorting (Always use 'count')
-            const countData = (d.heatmap_data && d.heatmap_data['count']) ? d.heatmap_data['count'] : {};
+            // === 1. Render Material Heatmap ===
+            const matCountData = (d.heatmap_data && d.heatmap_data['count']) ? d.heatmap_data['count'] : {};
+            const matDisplayData = (d.heatmap_data && d.heatmap_data[metric]) ? d.heatmap_data[metric] : {};
             
-            // 2. Get Data for Display (Use selected metric)
-            const displayData = (d.heatmap_data && d.heatmap_data[metric]) ? d.heatmap_data[metric] : {};
+            renderZoneHeatmap(matDisplayData, matCountData, 'zoningHeatmapContainer');
+
+            // === 2. Render Foundation Heatmap ===
+            const fndCountData = (d.heatmap_data_foundation && d.heatmap_data_foundation['count']) ? d.heatmap_data_foundation['count'] : {};
+            const fndDisplayData = (d.heatmap_data_foundation && d.heatmap_data_foundation[metric]) ? d.heatmap_data_foundation[metric] : {};
+
+            renderZoneHeatmap(fndDisplayData, fndCountData, 'zoningFoundationHeatmapContainer');
             
-            // 3. Render Heatmap (pass both datasets)
-            renderZoneHeatmap(displayData, countData);
         }
 
 

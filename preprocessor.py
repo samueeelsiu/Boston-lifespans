@@ -76,32 +76,29 @@ def process_demolition_data(
     # ---------------------------------------------------------
     print("3. Cleaning and filtering data...")
 
-    # Filter for Greater Boston Area
-    boston_cities = ['BOSTON', 'CAMBRIDGE', 'SOMERVILLE', 'BROOKLINE', 'QUINCY', 'NEWTON', 'WATERTOWN', 'CHELSEA',
-                     'REVERE', 'EVERETT']
-    df = df[df['PROP_CITY'].astype(str).str.upper().isin(boston_cities)].copy()
-
     # Ensure numeric year_built
     df['year_built'] = pd.to_numeric(df['year_built'], errors='coerce')
-
-    # Calculate Current Age for ALL buildings (Current Year - Year Built)
-    # We do this BEFORE filtering out non-demolished buildings
-    CURRENT_YEAR = 2025
-    df['current_age'] = CURRENT_YEAR - df['year_built']
-
-    # --- KEY CHANGE: CREATE A COPY OF ALL BUILDINGS HERE ---
-    # This dataframe contains everything: existing buildings AND demolished ones
-    print("   Creating snapshot of all buildings (for zoning density stats)...")
-    all_buildings_df = df.copy()
 
     # Handle Dates for Demolition Calculation
     df['DEMOLITION_DATE'] = pd.to_datetime(df['DEMOLITION_DATE'], errors='coerce')
     df['demolition_year'] = df['DEMOLITION_DATE'].dt.year
-
     # Calculate Lifespan
     df['lifespan'] = df['demolition_year'] - df['year_built']
 
-    # --- FILTERING STEP ---
+    # Calculate Current Age for ALL buildings (Current Year - Year Built)
+    CURRENT_YEAR = 2025
+    df['current_age'] = CURRENT_YEAR - df['year_built']
+
+    # --- KEY CHANGE: CREATE A COPY OF ALL BUILDINGS HERE ---
+    print("   Creating snapshot of all buildings (for zoning density stats)...")
+    all_buildings_df = df.copy()
+
+    print("   Refining 'Current Buildings' inventory (Subtracting Positive-Lifespan RAZE)...")
+    exclude_mask = (all_buildings_df['DEMOLITION_TYPE'] == 'RAZE') & (all_buildings_df['lifespan'] > 0)
+    all_buildings_df = all_buildings_df[~exclude_mask]
+    print(f"   -> Removed {exclude_mask.sum()} demolished buildings from Current Inventory.")
+
+    # --- FILTERING STEP FOR DEMOLITION DATASET ---
     # This step removes buildings that have NO demolition date or invalid lifespan
     # df now becomes "Demolished Buildings Only"
     df = df[df['lifespan'] < 500]
@@ -123,6 +120,20 @@ def process_demolition_data(
 
     df['material_group'] = df['material_type_desc'].fillna('Unknown').str.strip()
     all_buildings_df['material_group'] = all_buildings_df['material_type_desc'].fillna('Unknown').str.strip()
+
+    foundation_map = {
+        'C': 'Crawl Space',
+        'B': 'Basement',
+        'S': 'Slab',
+        'P': 'Pier',
+        'I': 'Pile',
+        'F': 'Fill',
+        'W': 'Solid Wall'
+    }
+
+    df['foundation_group'] = df['foundation_type'].map(foundation_map).fillna(df['foundation_type']).fillna('Unknown')
+    all_buildings_df['foundation_group'] = all_buildings_df['foundation_type'].map(foundation_map).fillna(
+        all_buildings_df['foundation_type']).fillna('Unknown')
 
     print("   Mapping DEMOLITION_STATUS to Open/Close...")
     if 'DEMOLITION_STATUS' in df.columns:
@@ -188,7 +199,8 @@ def process_demolition_data(
     print("4. Generating Map Points...")
     map_data = []
     for _, row in df.iterrows():
-        if pd.notna(row['LATITUDE']):
+
+        if pd.notna(row['LATITUDE']) and row['lifespan'] > 0:
             map_data.append({
                 'lat': float(row['LATITUDE']),
                 'lng': float(row['LONGITUDE']),
@@ -241,6 +253,31 @@ def process_demolition_data(
                 heatmap_gfa[mat] = bins_g
         return {'count': heatmap_counts, 'gfa': heatmap_gfa}
 
+    def make_district_foundation_heatmap(d_df, bin_size=20):
+        heatmap_counts = {}
+        heatmap_gfa = {}
+        if d_df.empty: return {'count': {}, 'gfa': {}}
+
+        top_foundations = d_df['foundation_group'].value_counts().head(15).index.tolist()
+
+        for fnd in top_foundations:
+            fnd_df = d_df[d_df['foundation_group'] == fnd]
+            if len(fnd_df) == 0: continue
+            bins_c = {}
+            bins_g = {}
+            for i in range(0, 200, bin_size):
+                label = f"{i}-{i + bin_size}"
+                mask = (fnd_df['lifespan'] >= i) & (fnd_df['lifespan'] < i + bin_size)
+                subset = fnd_df[mask]
+                count = len(subset)
+                if count > 0:
+                    bins_c[label] = int(count)
+                    bins_g[label] = int(subset['Est GFA sqmeters'].sum())
+            if bins_c:
+                heatmap_counts[fnd] = bins_c
+                heatmap_gfa[fnd] = bins_g
+        return {'count': heatmap_counts, 'gfa': heatmap_gfa}
+
     for dist in all_districts:
         # 1. Get Demolished data for this district (from df)
         d_demo_df = df[df['Zoning_District'] == dist]
@@ -252,7 +289,7 @@ def process_demolition_data(
 
         # Points for Map (Only RAZE)
         points = []
-        for _, r in r_df.iterrows():
+        for _, r in r_pos.iterrows():
             if pd.notna(r['LATITUDE']):
                 points.append({
                     'lat': r['LATITUDE'],
@@ -265,17 +302,18 @@ def process_demolition_data(
                 })
 
         zoning_stats[str(dist)] = {
-            # Demolition Stats (from df)
-            'count_raze': int(len(r_df)),
+
+            'count_raze': int(len(r_pos)),
             'avg_raze_lifespan': float(r_pos['lifespan'].mean()) if len(r_pos) > 0 else 0,
-            'demolished_age_distribution_10yr': make_hist(r_df['lifespan']),
-            'heatmap_data': make_district_heatmap(r_df, bin_size=20),
+            'demolished_age_distribution_10yr': make_hist(r_pos['lifespan']),
+            'heatmap_data': make_district_heatmap(r_pos, bin_size=20),
+            'heatmap_data_foundation': make_district_foundation_heatmap(r_pos, bin_size=20),
             'positive_raze_points': points,
 
-            # Full Inventory Stats (from all_buildings_df)
-            'count_total': int(len(d_all_df)),  # TRUE Total Buildings count
-            'avg_current_age': float(d_all_df['current_age'].mean()) if len(d_all_df) > 0 else 0,  # TRUE Avg Age
-            'current_age_distribution_10yr': make_hist(d_all_df['current_age']),  # TRUE Age Distribution
+
+            'count_total': int(len(d_all_df)),
+            'avg_current_age': float(d_all_df['current_age'].mean()) if len(d_all_df) > 0 else 0,
+            'current_age_distribution_10yr': make_hist(d_all_df['current_age']),
         }
 
     result['zoning_district_stats'] = zoning_stats
@@ -327,21 +365,169 @@ def process_demolition_data(
     result['material_lifespan_demo'] = material_lifespan_demo
     result['material_lifespan_demo_gfa'] = material_lifespan_demo_gfa
 
+    print("8. Generating Foundation Heatmap data...")
+    foundation_lifespan_demo = {}
+    foundation_lifespan_demo_gfa = {}
+
+    # === 这里是你漏掉逻辑的地方，请替换原来的空循环 ===
+    for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'all']:
+        foundation_lifespan_demo[demo_type] = {}
+        foundation_lifespan_demo_gfa[demo_type] = {}
+
+        if demo_type == 'all':
+            type_df = df
+        else:
+            type_df = df[df['DEMOLITION_TYPE'] == demo_type]
+
+        for bin_size in bin_sizes:
+            bin_key = f'bin_{bin_size}'
+            foundation_lifespan_demo[demo_type][bin_key] = {}
+            foundation_lifespan_demo_gfa[demo_type][bin_key] = {}
+
+            for fnd in type_df['foundation_group'].unique():
+                fnd_df = type_df[type_df['foundation_group'] == fnd]
+                if len(fnd_df) == 0: continue
+
+                bins_c = {}
+                bins_g = {}
+
+                for i in range(0, 200, bin_size):
+                    label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
+                    mask = (fnd_df['lifespan'] >= i) & (fnd_df['lifespan'] < i + bin_size)
+                    subset = fnd_df[mask]
+                    count = len(subset)
+                    if count > 0:
+                        bins_c[label] = int(count)
+                        bins_g[label] = int(subset['Est GFA sqmeters'].sum())
+
+                if bins_c:
+                    foundation_lifespan_demo[demo_type][bin_key][fnd] = bins_c
+                    foundation_lifespan_demo_gfa[demo_type][bin_key][fnd] = bins_g
+
+    result['foundation_lifespan_demo'] = foundation_lifespan_demo
+    result['foundation_lifespan_demo_gfa'] = foundation_lifespan_demo_gfa
+
+    print("9. Generating Advanced Chart Data (Current Age, Eras, Strip Plot)...")
+
+    def make_global_hist(series, width=10):
+        if series.empty: return []
+        series = series[(series >= 0) & (series < 500)]  # Filter reasonable range
+        if series.empty: return []
+        max_val = int(series.max())
+        bins = range(0, max_val + width, width)
+        return [{'range': f"{b}-{b + width}", 'count': int(((series >= b) & (series < b + width)).sum())} for b in bins]
+
+    result['current_age_distribution_10yr'] = make_global_hist(all_buildings_df['current_age'], 10)
+
+    # 2. Yearly Data for Advanced Stacked Charts
+
+    yearly_age_dist = {}
+    yearly_era_dist = {}
+
+    age_bins_def = [
+        (0, 5, '0-5 years'), (5, 10, '5-10 years'), (10, 20, '10-20 years'),
+        (20, 30, '20-30 years'), (30, 50, '30-50 years'), (50, 75, '50-75 years'),
+        (75, 100, '75-100 years'), (100, 150, '100-150 years'), (150, 9999, '150+ years')
+    ]
+
+    eras_def = [
+        (0, 1900, 'Pre-1900'), (1900, 1920, '1900-1920'), (1920, 1940, '1920-1940'),
+        (1940, 1960, '1940-1960'), (1960, 1980, '1960-1980'), (1980, 2000, '1980-2000'),
+        (2000, 2010, '2000-2010'), (2010, 2020, '2010-2020'), (2020, 9999, '2020+')
+    ]
+
+    all_years = sorted(df['demolition_year'].dropna().unique().astype(int))
+
+    for year in all_years:
+        y_str = str(year)
+        yearly_age_dist[y_str] = {'All': {}}
+        yearly_era_dist[y_str] = {'All': {}}
+
+        year_df = df[df['demolition_year'] == year]
+
+        # === A. Age Distribution Logic ===
+        for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'All']:
+            if demo_type == 'All':
+                sub_df = year_df[year_df['lifespan'] > 0]
+            else:
+                sub_df = year_df[(year_df['DEMOLITION_TYPE'] == demo_type) & (year_df['lifespan'] > 0)]
+
+            counts = {label: 0 for _, _, label in age_bins_def}
+
+            for start, end, label in age_bins_def:
+                c = len(sub_df[(sub_df['lifespan'] >= start) & (sub_df['lifespan'] < end)])
+                counts[label] = c
+
+            yearly_age_dist[y_str][demo_type] = counts
+
+            # === B. Construction Era Logic ===
+            for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'All']:
+                if demo_type == 'All':
+                    sub_df = year_df[year_df['lifespan'] > 0]
+                else:
+                    sub_df = year_df[(year_df['DEMOLITION_TYPE'] == demo_type) & (year_df['lifespan'] > 0)]
+
+
+                counts = {label: 0 for _, _, label in eras_def}
+
+                for start, end, label in eras_def:
+                    c = len(sub_df[(sub_df['year_built'] >= start) & (sub_df['year_built'] < end)])
+                    counts[label] = c
+
+                yearly_era_dist[y_str][demo_type] = counts
+
+    result['yearly_age_distribution'] = yearly_age_dist
+    result['yearly_construction_era'] = yearly_era_dist
+
+    # 3. Strip Plot Data (Lifespan by Year Boxplot)
+
+    strip_plot_data = {'All': []}
+    for t in ['RAZE', 'EXTDEM', 'INTDEM']:
+        strip_plot_data[t] = []
+
+    for year in all_years:
+        year_df = df[df['demolition_year'] == year]
+
+        # For 'All'
+        lifespans_all = year_df['lifespan'].dropna().tolist()
+        strip_plot_data['All'].append({
+            'year': int(year),
+            'lifespans': [int(x) for x in lifespans_all if x > 0]  # Filter positive only
+        })
+
+        # For individual types
+        for dtype in ['RAZE', 'EXTDEM', 'INTDEM']:
+            sub = year_df[year_df['DEMOLITION_TYPE'] == dtype]
+            lifespans = sub['lifespan'].dropna().tolist()
+            strip_plot_data[dtype].append({
+                'year': int(year),
+                'lifespans': [int(x) for x in lifespans if x > 0]
+            })
+
+    result['lifespan_by_year_boxplot'] = strip_plot_data
+
     # --- G, H, I Legacy Features ---
     # Yearly Stacked (Uses Demolition Data)
     yearly_data = []
     years = sorted(df['demolition_year'].unique())
     for year in years:
         y_df = df[df['demolition_year'] == year]
+
+        raze_all = y_df[y_df['DEMOLITION_TYPE'] == 'RAZE']
+        raze_pos_count = int((raze_all['lifespan'] > 0).sum())
+        raze_neg_count = int((raze_all['lifespan'] <= 0).sum())
+
         row = {
             'year': int(year),
-            'RAZE': int((y_df['DEMOLITION_TYPE'] == 'RAZE').sum()),
+            'RAZE': raze_pos_count,
             'EXTDEM': int((y_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
             'INTDEM': int((y_df['DEMOLITION_TYPE'] == 'INTDEM').sum()),
-            'demolished_and_replaced': 0
+            'demolished_and_replaced': raze_neg_count
         }
+
         row.update({f"{k}_closed": v for k, v in row.items() if k != 'year'})
         yearly_data.append(row)
+
     result['yearly_stacked'] = yearly_data
     result['yearly_stacked_closed'] = yearly_data
 
@@ -407,7 +593,8 @@ def process_demolition_data(
     for demo in ['RAZE', 'EXTDEM', 'INTDEM']:
         raw_boxplot[demo] = {}
         for mat in mat_stats[:20]:
-            m_df = df[(df['DEMOLITION_TYPE'] == demo) & (df['material_group'] == mat['material'])]
+            m_df = df[
+                (df['DEMOLITION_TYPE'] == demo) & (df['material_group'] == mat['material']) & (df['lifespan'] > 0)]
             if len(m_df) > 0:
                 raw_boxplot[demo][mat['material']] = m_df['lifespan'].tolist()
     result['material_lifespan_raw_by_demo'] = raw_boxplot
