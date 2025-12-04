@@ -535,6 +535,10 @@
                     <div class="stat-number" id="avgLifespan">-</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-label">Avg Building Age</div>
+                    <div class="stat-number" id="avgBuildingAge">-</div>
+                </div>
+                <div class="stat-card">
                     <div class="stat-label">EXTDEM</div>
                     <div class="stat-number" id="extdemCount">-</div>
                 </div>
@@ -927,10 +931,10 @@
         }
 
         function computeGlobalMaxAge(data) {
-            const maxCurrent = getUpperFromSeries(data.current_age_distribution_10yr || []); 
-            const maxDem = getUpperFromSeries(data.lifespan_distribution || []); 
-            return Math.max(maxCurrent, maxDem, 150); // Default min 150
-        }
+                    const maxCurrent = getUpperFromSeries(data.current_age_distribution_10yr || []);
+                    const maxDem = getUpperFromSeries(data.lifespan_distribution || []); 
+                    return Math.max(maxCurrent, maxDem, 50); // Default min 50
+                }
         
         function initializeMap() {
             if (map) return; 
@@ -1385,7 +1389,10 @@
             }
             createLifespanChart(currentData, globalMaxAge);
 
-            createCurrentAgeChart(currentData.current_age_distribution_10yr, binSize, globalMaxAge);
+            const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
+            // Convert 'all' to 'All' to match JSON keys
+            const currentAgeData = currentData.current_age_distribution_10yr || [];
+            createCurrentAgeChart(currentAgeData, binSize, globalMaxAge);
 
 
             createAgeDistributionChart(currentData.yearly_age_distribution);
@@ -1482,6 +1489,7 @@
         }
         function updateDashboard(data) {
             document.getElementById('totalDemo').textContent = data.summary_stats.total_demolitions.toLocaleString();
+            document.getElementById('avgBuildingAge').textContent = data.summary_stats.avg_current_building_age.toFixed(1) + ' yrs';
 
             const defaultAvgLifespan = data.material_lifespan_demo_avg && data.material_lifespan_demo_avg.RAZE 
                 ? data.material_lifespan_demo_avg.RAZE 
@@ -2430,10 +2438,10 @@
             charts.zoningCurrent = new Chart(ctxCur, {
                 type: 'bar',
                 data: {
-                    labels: d.current_age_distribution_10yr.map(x => x.range),
+                    labels: (d.current_age_distribution_10yr || []).map(x => x.range),
                     datasets: [{
                         label: 'Building Count',
-                        data: d.current_age_distribution_10yr.map(x => x.count),
+                        data: (d.current_age_distribution_10yr || []).map(x => x.count),
                         backgroundColor: '#3498db'
                     }]
                 },

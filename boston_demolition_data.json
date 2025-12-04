@@ -12,7 +12,7 @@
     "intdem_count": 3469,
     "negative_raze_count": 5,
     "zero_raze_count": 3,
-    "avg_current_building_age": 75.04055005921667,
+    "avg_current_building_age": 96.30340490132292,
     "raze_status_by_lifespan": {
       "positive": {
         "open": 337,
@@ -40,7 +40,7 @@
     "intdem_count": 3469,
     "negative_raze_count": 5,
     "zero_raze_count": 3,
-    "avg_current_building_age": 75.04055005921667,
+    "avg_current_building_age": 96.30340490132292,
     "raze_status_by_lifespan": {
       "positive": {
         "open": 337,
@@ -61106,167 +61106,127 @@
   "current_age_distribution_10yr": [
     {
       "range": "0-10",
-      "count": 30075
+      "count": 242
     },
     {
       "range": "10-20",
-      "count": 79885
+      "count": 182
     },
     {
       "range": "20-30",
-      "count": 173040
+      "count": 318
     },
     {
       "range": "30-40",
-      "count": 195424
+      "count": 59
     },
     {
       "range": "40-50",
-      "count": 176192
+      "count": 74
     },
     {
       "range": "50-60",
-      "count": 203703
+      "count": 87
     },
     {
       "range": "60-70",
-      "count": 230054
+      "count": 118
     },
     {
       "range": "70-80",
-      "count": 218630
+      "count": 143
     },
     {
       "range": "80-90",
-      "count": 82954
+      "count": 129
     },
     {
       "range": "90-100",
-      "count": 100831
+      "count": 294
     },
     {
       "range": "100-110",
-      "count": 134364
+      "count": 558
     },
     {
       "range": "110-120",
-      "count": 81943
+      "count": 454
     },
     {
       "range": "120-130",
-      "count": 167855
+      "count": 1315
     },
     {
       "range": "130-140",
-      "count": 46127
+      "count": 323
     },
     {
       "range": "140-150",
-      "count": 37792
+      "count": 153
     },
     {
       "range": "150-160",
-      "count": 19515
+      "count": 67
     },
     {
       "range": "160-170",
-      "count": 10494
+      "count": 45
     },
     {
       "range": "170-180",
-      "count": 18189
+      "count": 26
     },
     {
       "range": "180-190",
-      "count": 6499
+      "count": 10
     },
     {
       "range": "190-200",
-      "count": 6736
+      "count": 7
     },
     {
       "range": "200-210",
-      "count": 5152
+      "count": 4
     },
     {
       "range": "210-220",
-      "count": 2901
+      "count": 1
     },
     {
       "range": "220-230",
-      "count": 10445
+      "count": 1
     },
     {
       "range": "230-240",
-      "count": 3648
+      "count": 0
     },
     {
       "range": "240-250",
-      "count": 3871
+      "count": 0
     },
     {
       "range": "250-260",
-      "count": 2351
+      "count": 0
     },
     {
       "range": "260-270",
-      "count": 1566
+      "count": 0
     },
     {
       "range": "270-280",
-      "count": 2521
+      "count": 0
     },
     {
       "range": "280-290",
-      "count": 1280
+      "count": 0
     },
     {
       "range": "290-300",
-      "count": 1097
+      "count": 0
     },
     {
       "range": "300-310",
-      "count": 948
-    },
-    {
-      "range": "310-320",
-      "count": 456
-    },
-    {
-      "range": "320-330",
-      "count": 1032
-    },
-    {
-      "range": "330-340",
-      "count": 304
-    },
-    {
-      "range": "340-350",
-      "count": 237
-    },
-    {
-      "range": "350-360",
-      "count": 141
-    },
-    {
-      "range": "360-370",
-      "count": 119
-    },
-    {
-      "range": "370-380",
-      "count": 94
-    },
-    {
-      "range": "380-390",
-      "count": 60
-    },
-    {
-      "range": "390-400",
-      "count": 17
-    },
-    {
-      "range": "400-410",
-      "count": 0
+      "count": 1
     }
   ],
   "yearly_age_distribution": {
@@ -73380,7 +73340,7 @@
   ],
   "metadata": {
     "year_range": "2009-2025",
-    "generated_date": "2025-11-30T20:41:24.837286",
+    "generated_date": "2025-12-03T22:52:38.227614",
     "total_ma_buildings": 2091488,
     "total_boston_buildings": 2091114,
     "total_boston_demolitions": 4985,

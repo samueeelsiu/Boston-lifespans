@@ -179,6 +179,11 @@ def process_demolition_data(
 
     pos_lifespan_df = df[df['lifespan'] > 0]
 
+    # Calculate avg age for cleaned current buildings (same logic as current_age_distribution)
+    current_buildings_for_avg = all_buildings_df[all_buildings_df['DEMOLITION_TYPE'].notna()]
+    current_buildings_for_avg = current_buildings_for_avg[
+        ~((current_buildings_for_avg['DEMOLITION_TYPE'] == 'RAZE') & (current_buildings_for_avg['lifespan'] > 0))]
+
     result['summary_stats'] = {
         'total_demolitions': int(len(df)),
         'average_lifespan': float(pos_lifespan_df['lifespan'].mean()) if not pos_lifespan_df.empty else 0,
@@ -187,7 +192,8 @@ def process_demolition_data(
         'intdem_count': int((df['DEMOLITION_TYPE'] == 'INTDEM').sum()),
         'negative_raze_count': sb_negative['close'],
         'zero_raze_count': sb_zero['close'],
-        'avg_current_building_age': float(all_buildings_df['current_age'].mean()) if not all_buildings_df.empty else 0,
+        'avg_current_building_age': float(
+            current_buildings_for_avg['current_age'].mean()) if not current_buildings_for_avg.empty else 0,
         # Update Global Avg
         'raze_status_by_lifespan': {
             'positive': sb_positive, 'zero': sb_zero, 'negative': sb_negative, 'total': sb_total
@@ -417,7 +423,13 @@ def process_demolition_data(
         bins = range(0, max_val + width, width)
         return [{'range': f"{b}-{b + width}", 'count': int(((series >= b) & (series < b + width)).sum())} for b in bins]
 
-    result['current_age_distribution_10yr'] = make_global_hist(all_buildings_df['current_age'], 10)
+    # Current Age Distribution - All buildings with valid DEMOLITION_TYPE
+    # Rule: Remove RAZE with positive lifespan (buildings that no longer exist)
+    current_buildings = all_buildings_df[all_buildings_df['DEMOLITION_TYPE'].notna()]
+    current_buildings = current_buildings[
+        ~((current_buildings['DEMOLITION_TYPE'] == 'RAZE') & (current_buildings['lifespan'] > 0))]
+
+    result['current_age_distribution_10yr'] = make_global_hist(current_buildings['current_age'], 10)
 
     # 2. Yearly Data for Advanced Stacked Charts
 
