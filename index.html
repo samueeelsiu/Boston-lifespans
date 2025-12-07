@@ -172,6 +172,9 @@
         .chart-container.hidden {
             display: none;
         }
+        .hidden {
+            display: none !important;
+        }
 
         /* Heatmap styles */
         .heatmap-container {
@@ -535,7 +538,7 @@
                     <div class="stat-number" id="avgLifespan">-</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Avg Building Age</div>
+                    <div class="stat-label">Average building age of current buildings (Boston)</div>
                     <div class="stat-number" id="avgBuildingAge">-</div>
                 </div>
                 <div class="stat-card">
@@ -630,28 +633,41 @@
                 <div id="foundationHeatmapContent"></div>
             </div>
 
-                        <div id="allChartContainer" class="chart-container hidden">
-                <h2 class="chart-title">All Types: Material Type vs Lifespan Distribution</h2>
-                <p class="chart-description">Stacked bar chart showing lifespan distribution for each material type (All demolition types combined)</p>
-                <canvas id="allChart"></canvas>
+
+            <div id="occupancyHeatmapContainer" class="chart-container">
+                <h2 class="chart-title">Occupancy Class vs Lifespan Heatmap</h2>
+                <p class="chart-description">Heatmap showing demolition counts for each occupancy class-lifespan combination</p>
+                <div id="occupancyHeatmapContent"></div>
             </div>
 
-            <div id="razeChartContainer" class="chart-container hidden">
-                <h2 class="chart-title">RAZE: Material Type vs Lifespan Distribution</h2>
-                <p class="chart-description">Stacked bar chart showing lifespan distribution for each material type (Complete demolition)</p>
-                <canvas id="razeChart"></canvas>
-            </div>
 
-            <div id="extdemChartContainer" class="chart-container hidden">
-                <h2 class="chart-title">EXTDEM: Material Type vs Lifespan Distribution</h2>
-                <p class="chart-description">Stacked bar chart showing lifespan distribution for each material type (Exterior demolition)</p>
-                <canvas id="extdemChart"></canvas>
-            </div>
+            
+            <div id="stackedViewContainer" class="hidden">
+                
+                <div class="chart-container">
+                    <h2 class="chart-title" id="materialStackedTitle">Material Type vs Lifespan Distribution</h2>
+                    <p class="chart-description">Stacked bar chart showing lifespan distribution by material</p>
+                    <div style="height: 400px; position: relative;">
+                        <canvas id="materialStackedChart"></canvas>
+                    </div>
+                </div>
 
-            <div id="intdemChartContainer" class="chart-container hidden">
-                <h2 class="chart-title">INTDEM: Material Type vs Lifespan Distribution</h2>
-                <p class="chart-description">Stacked bar chart showing lifespan distribution for each material type (Interior demolition)</p>
-                <canvas id="intdemChart"></canvas>
+                <div class="chart-container">
+                    <h2 class="chart-title" id="foundationStackedTitle">Foundation Type vs Lifespan Distribution</h2>
+                    <p class="chart-description">Stacked bar chart showing lifespan distribution by foundation</p>
+                    <div style="height: 400px; position: relative;">
+                        <canvas id="foundationStackedChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h2 class="chart-title" id="occupancyStackedTitle">Occupancy Class vs Lifespan Distribution</h2>
+                    <p class="chart-description">Stacked bar chart showing lifespan distribution by occupancy class</p>
+                    <div style="height: 400px; position: relative;">
+                        <canvas id="occupancyStackedChart"></canvas>
+                    </div>
+                </div>
+
             </div>
 
             <div class="chart-container">
@@ -749,6 +765,11 @@
                 <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
                     <h3 class="chart-title" style="font-size: 1.1em;">District Foundation vs. Lifespan Heatmap (RAZE Only)</h3>
                     <div id="zoningFoundationHeatmapContainer" style="overflow-x: auto;"></div>
+                </div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                    <h3 class="chart-title" style="font-size: 1.1em;">District Occupancy Class vs. Lifespan Heatmap (RAZE Only)</h3>
+                    <div id="zoningOccupancyHeatmapContainer" style="overflow-x: auto;"></div>
                 </div>
                 
                 </div>
@@ -1110,12 +1131,15 @@
             let sortedMaterials = Object.keys(sortTotals).sort((a, b) => sortTotals[b] - sortTotals[a]);
             sortedMaterials = sortedMaterials.slice(0, 20); 
 
+            const fixedOrder = ["Wood", "Masonry", "Concrete", "Steel", "Unknown"];
             sortedMaterials.sort((a, b) => {
-                const lowerA = a.toLowerCase();
-                const lowerB = b.toLowerCase();
-                if (lowerA === 'unknown') return 1;  
-                if (lowerB === 'unknown') return -1; 
-                return sortTotals[b] - sortTotals[a];
+                let idxA = fixedOrder.indexOf(a);
+                let idxB = fixedOrder.indexOf(b);
+                
+                if (idxA === -1) idxA = 999;
+                if (idxB === -1) idxB = 999;
+                
+                return idxA - idxB;
             });
             
             // Determine Columns
@@ -1358,6 +1382,144 @@
             document.getElementById('foundationHeatmapContent').innerHTML = html;
         }
 
+        function createOccupancyHeatmap(demoType, binSize, displayMode) {
+            const binKey = `bin_${binSize}`;
+            const metricInput = document.querySelector('input[name="globalMetric"]:checked');
+            const metricVal = metricInput ? metricInput.value : 'count';
+            
+            const isPct = metricVal.includes('_pct');
+            const baseMetric = metricVal.replace('_pct', '');
+
+            const displaySource = (baseMetric === 'gfa') 
+                ? currentData.occupancy_lifespan_demo_gfa 
+                : currentData.occupancy_lifespan_demo;
+
+            const displayData = displaySource?.[demoType]?.[binKey] || {};
+            const sortSource = currentData.occupancy_lifespan_demo;
+
+            if (!sortSource || !sortSource[demoType] || !sortSource[demoType][binKey]) {
+                document.getElementById('occupancyHeatmapContent').innerHTML = `<div class="error-message">No data available.</div>`;
+                return;
+            }
+            const sortData = sortSource[demoType][binKey];
+
+            // Calculate Grand Total
+            let grandTotal = 0;
+            Object.values(displayData).forEach(bins => {
+                grandTotal += Object.values(bins).reduce((a, b) => a + b, 0);
+            });
+
+            // Sort Rows
+            const sortTotals = {};
+            Object.entries(sortData).forEach(([occ, lifespans]) => {
+                sortTotals[occ] = Object.values(lifespans).reduce((sum, val) => sum + val, 0);
+            });
+            
+            let sortedOccs = Object.keys(sortTotals).sort((a, b) => sortTotals[b] - sortTotals[a]);
+            sortedOccs = sortedOccs.slice(0, 20); 
+
+            sortedOccs.sort((a, b) => {
+                const lowerA = a.toLowerCase();
+                const lowerB = b.toLowerCase();
+                if (lowerA === 'unknown') return 1;  
+                if (lowerB === 'unknown') return -1; 
+                return sortTotals[b] - sortTotals[a];
+            });
+            
+            // Determine Columns
+            const allLifespanBins = new Set();
+            sortedOccs.forEach(occ => {
+                if(sortData[occ]) {
+                    Object.keys(sortData[occ]).forEach(bin => allLifespanBins.add(bin));
+                }
+            });
+            
+            const sortedLifespanBins = Array.from(allLifespanBins).sort((a, b) => {
+                const getFirstNum = (str) => parseInt(str.match(/\d+/)?.[0] || 0);
+                return getFirstNum(a) - getFirstNum(b);
+            });
+            
+            // Calculate Max Value
+            let maxValue = 0;
+            sortedOccs.forEach(occ => {
+                if (displayData[occ]) {
+                    Object.values(displayData[occ]).forEach(val => {
+                        if (isPct) {
+                            const pct = grandTotal > 0 ? (val / grandTotal * 100) : 0;
+                            maxValue = Math.max(maxValue, pct);
+                        } else {
+                            maxValue = Math.max(maxValue, val);
+                        }
+                    });
+                }
+            });
+            
+            // Generate HTML
+            let html = '<div class="heatmap-container">';
+            html += '<table class="heatmap-table">';
+            html += '<thead><tr>';
+            html += '<th class="material-header">Occupancy Class</th>'; // Header Name
+            sortedLifespanBins.forEach(bin => {
+                html += `<th>${bin.replace(' years', '')}</th>`;
+            });
+            html += '<th>Total</th>'; 
+            html += '</tr></thead>';
+            html += '<tbody>';
+            
+            sortedOccs.forEach(occ => {
+                html += '<tr>';
+                html += `<td class="material-name">${occ}</td>`;
+                
+                let rowTotal = 0;
+                if (displayData[occ]) {
+                    rowTotal = Object.values(displayData[occ]).reduce((a,b)=>a+b,0);
+                }
+
+                sortedLifespanBins.forEach(bin => {
+                    const value = displayData[occ]?.[bin] || 0;
+                    
+                    let displayValue = "";
+                    let colorValue = 0;
+
+                    if (isPct) {
+                        const pct = grandTotal > 0 ? (value / grandTotal * 100) : 0;
+                        colorValue = pct;
+                        displayValue = value > 0 ? pct.toFixed(2) + '%' : '';
+                    } else {
+                        colorValue = value;
+                        displayValue = value > 0 ? value.toLocaleString() : '';
+                    }
+                    
+                    const bgColor = getPlasmaColor(colorValue, maxValue);
+                    const intensity = maxValue > 0 ? colorValue / maxValue : 0;
+                    const textColor = intensity > 0.5 ? 'white' : '#333';
+                    
+                    html += `<td style="background-color: ${bgColor}; color: ${textColor};">`;
+                    html += `<div class="heatmap-cell">${displayValue}</div>`;
+                    html += '</td>';
+                });
+                
+                html += `<td style="background-color: #f8f9fa; font-weight: bold;">${rowTotal.toLocaleString()}</td>`;
+                html += '</tr>';
+            });
+            html += '</tbody></table></div>';
+            
+            html += '<div class="heatmap-legend">';
+            html += '<div class="legend-gradient">';
+            html += `<span>0${isPct ? '%' : ''}</span><div class="gradient-bar"></div>`;
+            html += `<span>${maxValue.toLocaleString(undefined, {maximumFractionDigits: 2})}${isPct ? '%' : ''}</span></div>`;
+
+            let metricLabel = '';
+            if (baseMetric === 'gfa') metricLabel = 'Estimated GFA';
+            else metricLabel = 'Count';
+            if (isPct) metricLabel += ' (% of Grand Total)';
+
+            html += `<div>Metric: <strong>${metricLabel}</strong></div>`;
+            html += '</div>';
+            
+            document.getElementById('occupancyHeatmapContent').innerHTML = html;
+        }
+
         function setVisualizationType(type) {
             currentVisualization = type;
             document.getElementById('heatmapBtn').classList.toggle('active', type === 'heatmap');
@@ -1369,32 +1531,35 @@
             if (!currentData) return;
             const globalMaxAge = computeGlobalMaxAge(currentData);
             const binSize = parseInt(document.getElementById('lifespanBinSize').value);
-            const displayMode = document.getElementById('viewMode').value;
             
+            // 1. Heatmap View
             if (currentVisualization === 'heatmap') {
                 document.getElementById('heatmapContainer').classList.remove('hidden');
                 document.getElementById('foundationHeatmapContainer').classList.remove('hidden');
-                document.getElementById('allChartContainer').classList.add('hidden');
-                document.getElementById('razeChartContainer').classList.add('hidden');
-                document.getElementById('extdemChartContainer').classList.add('hidden');
-                document.getElementById('intdemChartContainer').classList.add('hidden');
+                document.getElementById('occupancyHeatmapContainer').classList.remove('hidden'); // 确保显示 Occupancy Heatmap
+                
+                document.getElementById('stackedViewContainer').classList.add('hidden'); // 隐藏 Stacked View
                 
                 const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
-                createHeatmap(demolitionView, binSize, displayMode);
-                createFoundationHeatmap(demolitionView, binSize, displayMode);
-            } else {
+                
+                createHeatmap(demolitionView, binSize);
+                createFoundationHeatmap(demolitionView, binSize);
+                createOccupancyHeatmap(demolitionView, binSize);
+            } 
+            // 2. Stacked Bar View
+            else {
                 document.getElementById('heatmapContainer').classList.add('hidden');
                 document.getElementById('foundationHeatmapContainer').classList.add('hidden');
-                updateDemolitionView(); // This will show the correct stacked chart
+                document.getElementById('occupancyHeatmapContainer').classList.add('hidden');
+                
+                document.getElementById('stackedViewContainer').classList.remove('hidden'); // 显示 Stacked View
+                
+                updateStackedBarCharts(); 
             }
-            createLifespanChart(currentData, globalMaxAge);
 
-            const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
-            // Convert 'all' to 'All' to match JSON keys
+            createLifespanChart(currentData, globalMaxAge);
             const currentAgeData = currentData.current_age_distribution_10yr || [];
             createCurrentAgeChart(currentAgeData, binSize, globalMaxAge);
-
-
             createAgeDistributionChart(currentData.yearly_age_distribution);
             createConstructionEraChart(currentData.yearly_construction_era);
             createLifespanStripPlot(currentData.lifespan_by_year_boxplot);
@@ -1551,10 +1716,6 @@
             updateStats(demolitionView);
             
             if (currentVisualization === 'stacked') {
-                document.getElementById('allChartContainer').classList.toggle('hidden', demolitionView !== 'all');
-                document.getElementById('razeChartContainer').classList.toggle('hidden', demolitionView !== 'RAZE');
-                document.getElementById('extdemChartContainer').classList.toggle('hidden', demolitionView !== 'EXTDEM');
-                document.getElementById('intdemChartContainer').classList.toggle('hidden', demolitionView !== 'INTDEM');
                 updateStackedBarCharts();
             } else {
                  updateVisualization();
@@ -1563,7 +1724,7 @@
             if (currentData) {
                 createYearlyChart(currentData.yearly_stacked);
                 createLifespanChart(currentData);
-                createMaterialBoxplot(currentData, demolitionView); // Pass demolition type to boxplot
+                createMaterialBoxplot(currentData, demolitionView); 
             }
 
             if (map && mapData) {
@@ -1572,85 +1733,133 @@
         }
 
         function updateStackedBarCharts() {
-            if (!currentData || !currentData.material_lifespan_demo) return;
+            if (!currentData) return;
             const binSize = parseInt(document.getElementById('lifespanBinSize').value);
-            const displayMode = document.getElementById('viewMode').value;
             const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
-            createStackedBarChart(demolitionView, binSize, displayMode);
+
+            document.getElementById('materialStackedTitle').innerText = `Material Type vs Lifespan (${demolitionView})`;
+            document.getElementById('foundationStackedTitle').innerText = `Foundation Type vs Lifespan (${demolitionView})`;
+            document.getElementById('occupancyStackedTitle').innerText = `Occupancy Class vs Lifespan (${demolitionView})`;
+
+
+            renderGenericStackedChart('materialStackedChart', 'material', demolitionView, binSize);
+            renderGenericStackedChart('foundationStackedChart', 'foundation', demolitionView, binSize);
+            renderGenericStackedChart('occupancyStackedChart', 'occupancy', demolitionView, binSize);
         }
 
-        function createStackedBarChart(demoType, binSize, displayMode) {
-            const canvasId = demoType.toLowerCase() + 'Chart';
+
+        function renderGenericStackedChart(canvasId, category, demoType, binSize) {
             const ctx = document.getElementById(canvasId)?.getContext('2d');
-            if(!ctx) return; // Exit if canvas not found
+            if (!ctx) return;
             
             if (charts[canvasId]) charts[canvasId].destroy();
-            
+
+            const metricInput = document.querySelector('input[name="globalMetric"]:checked');
+            const metricVal = metricInput ? metricInput.value : 'count';
+            const isPct = metricVal.includes('_pct'); 
+            const isGfa = metricVal.includes('gfa');  
+
+            let dataKey = `${category}_lifespan_demo`;
+            if (isGfa) dataKey += `_gfa`;
+
             const binKey = `bin_${binSize}`;
-            const demoData = currentData.material_lifespan_demo[demoType];
             
-            if (!demoData || !demoData[binKey]) {
-                console.error(`No data for ${demoType} with bin size ${binSize}`);
-                return;
+            if (!currentData[dataKey] || !currentData[dataKey][demoType] || !currentData[dataKey][demoType][binKey]) {
+                return; 
             }
-            
-            const materialData = demoData[binKey];
-            
-            const materialTotals = {};
-            Object.entries(materialData).forEach(([material, lifespans]) => {
-                materialTotals[material] = Object.values(lifespans).reduce((sum, val) => sum + val, 0);
+
+            const rawData = currentData[dataKey][demoType][binKey]; 
+
+            const categoryTotals = {};
+            let grandTotal = 0; 
+
+            Object.entries(rawData).forEach(([catName, binData]) => {
+                const catSum = Object.values(binData).reduce((sum, val) => sum + val, 0);
+                categoryTotals[catName] = catSum;
+                grandTotal += catSum; 
             });
-            
-            const sortedMaterials = Object.keys(materialTotals).sort((a, b) => materialTotals[b] - materialTotals[a]);
-            
-            const lifespanTotals = {};
-            sortedMaterials.forEach(material => {
-                Object.entries(materialData[material]).forEach(([bin, count]) => {
-                    lifespanTotals[bin] = (lifespanTotals[bin] || 0) + count;
-                });
+
+            let sortedCategories = Object.keys(categoryTotals).sort((a, b) => categoryTotals[b] - categoryTotals[a]);
+            sortedCategories = sortedCategories.slice(0, 15);
+            const allBins = new Set();
+            sortedCategories.forEach(cat => {
+                Object.keys(rawData[cat] || {}).forEach(b => allBins.add(b));
             });
-            
-            const sortedLifespanBins = Object.keys(lifespanTotals).sort((a, b) => lifespanTotals[b] - lifespanTotals[a]);
-            
-            const colors = getLifespanColors(sortedLifespanBins.length);
-            
-            const datasets = sortedLifespanBins.map((lifespanBin, index) => {
-                const data = sortedMaterials.map(material => {
-                    const value = materialData[material]?.[lifespanBin] || 0;
-                    if (displayMode === 'percentage') {
-                        const total = materialTotals[material];
-                        return total > 0 ? (value / total) * 100 : 0;
+            const sortedBins = Array.from(allBins).sort((a, b) => {
+                const getFirstNum = (str) => parseInt(str.match(/\d+/)?.[0] || 0);
+                return getFirstNum(a) - getFirstNum(b);
+            });
+
+            const colors = getLifespanColors(sortedBins.length); 
+
+            const datasets = sortedBins.map((binLabel, index) => {
+                const dataPoints = sortedCategories.map(cat => {
+                    const val = rawData[cat]?.[binLabel] || 0;
+                    
+                    if (isPct) {
+
+                        return grandTotal > 0 ? (val / grandTotal * 100) : 0;
                     }
-                    return value;
+                    return val;
                 });
-                
+
                 return {
-                    label: lifespanBin,
-                    data: data,
+                    label: binLabel,
+                    data: dataPoints,
                     backgroundColor: colors[index],
                     borderWidth: 0.5,
-                    borderColor: 'rgba(255, 255, 255, 0.5)'
+                    borderColor: 'rgba(255, 255, 255, 0.2)'
                 };
             });
-            
+
+            let yAxisTitle = 'Count';
+            if (isGfa) yAxisTitle = 'GFA (sq meters)';
+            if (isPct) yAxisTitle = 'Percentage of Grand Total (%)'; 
+
             charts[canvasId] = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: sortedMaterials, datasets: datasets },
+                data: {
+                    labels: sortedCategories,
+                    datasets: datasets
+                },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { stacked: true, title: { display: true, text: 'Material Type' } },
-                        y: { stacked: true, title: { display: true, text: displayMode === 'percentage' ? 'Percentage (%)' : 'Count' }, max: displayMode === 'percentage' ? 100 : undefined }
+                        x: { 
+                            stacked: true, 
+                            title: { display: true, text: category.charAt(0).toUpperCase() + category.slice(1) }
+                        },
+                        y: { 
+                            stacked: true, 
+                            title: { display: true, text: yAxisTitle },
+
+                            max: undefined 
+                        }
                     },
                     plugins: {
-                        legend: { display: true, position: 'right', reverse: true },
+                        legend: { display: true, position: 'right', reverse: true }, 
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    const label = context.dataset.label;
-                                    const value = context.parsed.y;
-                                    return `${label}: ${displayMode === 'percentage' ? value.toFixed(1) + '%' : value}`;
+                                    let label = context.dataset.label || '';
+                                    let val = context.parsed.y;
+                                    if (label) label += ': ';
+                                    
+                                    if (isPct) {
+                                        label += val.toFixed(2) + '%';
+                                    } else {
+                                        label += val.toLocaleString();
+                                    }
+                                    return label;
+                                },
+                                footer: function(tooltipItems) {
+                                    if (!isPct) return '';
+                                    let total = 0;
+                                    tooltipItems.forEach(function(tooltipItem) {
+                                        total += tooltipItem.parsed.y;
+                                    });
+                                    return 'Category Total: ' + total.toFixed(2) + '% of All Data';
                                 }
                             }
                         }
@@ -2278,13 +2487,25 @@
             });
 
             let materials = Object.keys(dataForSorting);
-            materials.sort((a, b) => {
-                const lowerA = a.toLowerCase();
-                const lowerB = b.toLowerCase();
-                if (lowerA === 'unknown') return 1;
-                if (lowerB === 'unknown') return -1;
-                return materialTotals[b] - materialTotals[a]; 
-            });
+
+            if (containerId === 'zoningHeatmapContainer') {
+                const fixedOrder = ["Wood", "Masonry", "Concrete", "Steel", "Unknown"];
+                materials.sort((a, b) => {
+                    let idxA = fixedOrder.indexOf(a);
+                    let idxB = fixedOrder.indexOf(b);
+                    if (idxA === -1) idxA = 999;
+                    if (idxB === -1) idxB = 999;
+                    return idxA - idxB;
+                });
+            } else {
+                materials.sort((a, b) => {
+                    const lowerA = a.toLowerCase();
+                    const lowerB = b.toLowerCase();
+                    if (lowerA === 'unknown') return 1;
+                    if (lowerB === 'unknown') return -1;
+                    return materialTotals[b] - materialTotals[a]; 
+                });
+            }
 
             // Columns
             const allBins = new Set();
@@ -2473,6 +2694,10 @@
 
 
             renderZoneHeatmap(fndDisplayData, fndCountData, 'zoningFoundationHeatmapContainer', isPct);
+            const occCountData = (d.heatmap_data_occupancy && d.heatmap_data_occupancy['count']) ? d.heatmap_data_occupancy['count'] : {};
+            const occDisplayData = (d.heatmap_data_occupancy && d.heatmap_data_occupancy[baseMetric]) ? d.heatmap_data_occupancy[baseMetric] : {};
+            
+            renderZoneHeatmap(occDisplayData, occCountData, 'zoningOccupancyHeatmapContainer', isPct);
         }
 
 

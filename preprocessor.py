@@ -135,6 +135,12 @@ def process_demolition_data(
     all_buildings_df['foundation_group'] = all_buildings_df['foundation_type'].map(foundation_map).fillna(
         all_buildings_df['foundation_type']).fillna('Unknown')
 
+    if 'OCC_CLS' not in df.columns: df['OCC_CLS'] = 'Unknown'
+    if 'OCC_CLS' not in all_buildings_df.columns: all_buildings_df['OCC_CLS'] = 'Unknown'
+
+    df['occupancy_group'] = df['OCC_CLS'].fillna('Unknown').str.strip()
+    all_buildings_df['occupancy_group'] = all_buildings_df['OCC_CLS'].fillna('Unknown').str.strip()
+
     print("   Mapping DEMOLITION_STATUS to Open/Close...")
     if 'DEMOLITION_STATUS' in df.columns:
         def simple_status_check(val):
@@ -284,6 +290,31 @@ def process_demolition_data(
                 heatmap_gfa[fnd] = bins_g
         return {'count': heatmap_counts, 'gfa': heatmap_gfa}
 
+    def make_district_occupancy_heatmap(d_df, bin_size=20):
+        heatmap_counts = {}
+        heatmap_gfa = {}
+        if d_df.empty: return {'count': {}, 'gfa': {}}
+
+        top_occs = d_df['occupancy_group'].value_counts().head(15).index.tolist()
+
+        for occ in top_occs:
+            occ_df = d_df[d_df['occupancy_group'] == occ]
+            if len(occ_df) == 0: continue
+            bins_c = {}
+            bins_g = {}
+            for i in range(0, 200, bin_size):
+                label = f"{i}-{i + bin_size}"
+                mask = (occ_df['lifespan'] >= i) & (occ_df['lifespan'] < i + bin_size)
+                subset = occ_df[mask]
+                count = len(subset)
+                if count > 0:
+                    bins_c[label] = int(count)
+                    bins_g[label] = int(subset['Est GFA sqmeters'].sum())
+            if bins_c:
+                heatmap_counts[occ] = bins_c
+                heatmap_gfa[occ] = bins_g
+        return {'count': heatmap_counts, 'gfa': heatmap_gfa}
+
     for dist in all_districts:
         # 1. Get Demolished data for this district (from df)
         d_demo_df = df[df['Zoning_District'] == dist]
@@ -314,6 +345,7 @@ def process_demolition_data(
             'demolished_age_distribution_10yr': make_hist(r_pos['lifespan']),
             'heatmap_data': make_district_heatmap(r_pos, bin_size=20),
             'heatmap_data_foundation': make_district_foundation_heatmap(r_pos, bin_size=20),
+            'heatmap_data_occupancy': make_district_occupancy_heatmap(r_pos, bin_size=20),
             'positive_raze_points': points,
 
 
@@ -375,7 +407,6 @@ def process_demolition_data(
     foundation_lifespan_demo = {}
     foundation_lifespan_demo_gfa = {}
 
-    # === 这里是你漏掉逻辑的地方，请替换原来的空循环 ===
     for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'all']:
         foundation_lifespan_demo[demo_type] = {}
         foundation_lifespan_demo_gfa[demo_type] = {}
@@ -412,6 +443,48 @@ def process_demolition_data(
 
     result['foundation_lifespan_demo'] = foundation_lifespan_demo
     result['foundation_lifespan_demo_gfa'] = foundation_lifespan_demo_gfa
+
+    print("10. Generating Occupancy Heatmap data...")
+    occupancy_lifespan_demo = {}
+    occupancy_lifespan_demo_gfa = {}
+
+    for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'all']:
+        occupancy_lifespan_demo[demo_type] = {}
+        occupancy_lifespan_demo_gfa[demo_type] = {}
+
+        if demo_type == 'all':
+            type_df = df
+        else:
+            type_df = df[df['DEMOLITION_TYPE'] == demo_type]
+
+        for bin_size in bin_sizes:
+            bin_key = f'bin_{bin_size}'
+            occupancy_lifespan_demo[demo_type][bin_key] = {}
+            occupancy_lifespan_demo_gfa[demo_type][bin_key] = {}
+
+            # 使用 occupancy_group
+            for occ in type_df['occupancy_group'].unique():
+                occ_df = type_df[type_df['occupancy_group'] == occ]
+                if len(occ_df) == 0: continue
+
+                bins_c = {}
+                bins_g = {}
+
+                for i in range(0, 200, bin_size):
+                    label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
+                    mask = (occ_df['lifespan'] >= i) & (occ_df['lifespan'] < i + bin_size)
+                    subset = occ_df[mask]
+                    count = len(subset)
+                    if count > 0:
+                        bins_c[label] = int(count)
+                        bins_g[label] = int(subset['Est GFA sqmeters'].sum())
+
+                if bins_c:
+                    occupancy_lifespan_demo[demo_type][bin_key][occ] = bins_c
+                    occupancy_lifespan_demo_gfa[demo_type][bin_key][occ] = bins_g
+
+    result['occupancy_lifespan_demo'] = occupancy_lifespan_demo
+    result['occupancy_lifespan_demo_gfa'] = occupancy_lifespan_demo_gfa
 
     print("9. Generating Advanced Chart Data (Current Age, Eras, Strip Plot)...")
 

@@ -46425,6 +46425,10 @@
         "count": {},
         "gfa": {}
       },
+      "heatmap_data_occupancy": {
+        "count": {},
+        "gfa": {}
+      },
       "positive_raze_points": [],
       "count_total": 145,
       "avg_current_age": 115.34848484848484,
@@ -46623,6 +46627,50 @@
           },
           "Unknown": {
             "120-140": 180
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "40-60": 1,
+            "60-80": 3,
+            "100-120": 5
+          },
+          "Commercial": {
+            "60-80": 1,
+            "80-100": 2,
+            "100-120": 2
+          },
+          "Industrial": {
+            "100-120": 1
+          },
+          "Unclassified": {
+            "120-140": 1
+          },
+          "Assembly": {
+            "60-80": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "40-60": 195,
+            "60-80": 384,
+            "100-120": 695
+          },
+          "Commercial": {
+            "60-80": 200,
+            "80-100": 943,
+            "100-120": 1390
+          },
+          "Industrial": {
+            "100-120": 2230
+          },
+          "Unclassified": {
+            "120-140": 180
+          },
+          "Assembly": {
+            "60-80": 290
           }
         }
       },
@@ -47070,6 +47118,52 @@
           },
           "Pier": {
             "120-140": 58
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "0-20": 2,
+            "20-40": 1,
+            "40-60": 1,
+            "80-100": 2,
+            "100-120": 3,
+            "120-140": 6,
+            "140-160": 1,
+            "160-180": 1
+          },
+          "Industrial": {
+            "20-40": 1,
+            "100-120": 1
+          },
+          "Commercial": {
+            "120-140": 1
+          },
+          "Assembly": {
+            "120-140": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "0-20": 4229,
+            "20-40": 1967,
+            "40-60": 255,
+            "80-100": 6503,
+            "100-120": 4507,
+            "120-140": 880,
+            "140-160": 397,
+            "160-180": 190
+          },
+          "Industrial": {
+            "20-40": 2039,
+            "100-120": 1538
+          },
+          "Commercial": {
+            "120-140": 1511
+          },
+          "Assembly": {
+            "120-140": 226
           }
         }
       },
@@ -47522,6 +47616,50 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "0-20": 2,
+            "100-120": 1,
+            "120-140": 2
+          },
+          "Commercial": {
+            "80-100": 3,
+            "100-120": 2
+          },
+          "Government": {
+            "80-100": 3
+          },
+          "Unclassified": {
+            "0-20": 1,
+            "120-140": 1
+          },
+          "Industrial": {
+            "60-80": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "0-20": 15664,
+            "100-120": 147,
+            "120-140": 4709
+          },
+          "Commercial": {
+            "80-100": 2582,
+            "100-120": 3228
+          },
+          "Government": {
+            "80-100": 6524
+          },
+          "Unclassified": {
+            "0-20": 8423,
+            "120-140": 20796
+          },
+          "Industrial": {
+            "60-80": 3377
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.346240441011325,
@@ -47810,6 +47948,18 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Utility and Misc": {
+            "80-100": 1
+          }
+        },
+        "gfa": {
+          "Utility and Misc": {
+            "80-100": 193105
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.33921619151604,
@@ -47996,6 +48146,34 @@
           "Basement": {
             "0-20": 2337,
             "100-120": 2798
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "0-20": 1,
+            "100-120": 1,
+            "140-160": 1
+          },
+          "Unclassified": {
+            "0-20": 1
+          },
+          "Commercial": {
+            "40-60": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "0-20": 2337,
+            "100-120": 2798,
+            "140-160": 54562
+          },
+          "Unclassified": {
+            "0-20": 16634
+          },
+          "Commercial": {
+            "40-60": 254
           }
         }
       },
@@ -48228,6 +48406,28 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Commercial": {
+            "0-20": 1,
+            "40-60": 1,
+            "100-120": 1
+          },
+          "Education": {
+            "100-120": 1
+          }
+        },
+        "gfa": {
+          "Commercial": {
+            "0-20": 56652,
+            "40-60": 30737,
+            "100-120": 545794
+          },
+          "Education": {
+            "100-120": 1007
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.35385271521459,
@@ -48372,6 +48572,10 @@
         "gfa": {}
       },
       "heatmap_data_foundation": {
+        "count": {},
+        "gfa": {}
+      },
+      "heatmap_data_occupancy": {
         "count": {},
         "gfa": {}
       },
@@ -48633,6 +48837,76 @@
           },
           "Pier": {
             "120-140": 200
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "0-20": 2,
+            "80-100": 2,
+            "100-120": 8,
+            "120-140": 11,
+            "140-160": 1
+          },
+          "Commercial": {
+            "0-20": 1,
+            "40-60": 1,
+            "60-80": 1,
+            "100-120": 4
+          },
+          "Unclassified": {
+            "0-20": 2,
+            "60-80": 1,
+            "80-100": 1
+          },
+          "Industrial": {
+            "40-60": 1,
+            "60-80": 1,
+            "80-100": 1
+          },
+          "Government": {
+            "60-80": 2
+          },
+          "Assembly": {
+            "60-80": 1
+          },
+          "Education": {
+            "100-120": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "0-20": 1508,
+            "80-100": 3232,
+            "100-120": 3223,
+            "120-140": 2963,
+            "140-160": 85
+          },
+          "Commercial": {
+            "0-20": 344,
+            "40-60": 3219,
+            "60-80": 129,
+            "100-120": 1558
+          },
+          "Unclassified": {
+            "0-20": 1284,
+            "60-80": 485,
+            "80-100": 84
+          },
+          "Industrial": {
+            "40-60": 678,
+            "60-80": 7833,
+            "80-100": 1855
+          },
+          "Government": {
+            "60-80": 2117
+          },
+          "Assembly": {
+            "60-80": 0
+          },
+          "Education": {
+            "100-120": 524
           }
         }
       },
@@ -49129,6 +49403,10 @@
         "count": {},
         "gfa": {}
       },
+      "heatmap_data_occupancy": {
+        "count": {},
+        "gfa": {}
+      },
       "positive_raze_points": [],
       "count_total": 61,
       "avg_current_age": 25.024390243902438,
@@ -49200,6 +49478,10 @@
         "gfa": {}
       },
       "heatmap_data_foundation": {
+        "count": {},
+        "gfa": {}
+      },
+      "heatmap_data_occupancy": {
         "count": {},
         "gfa": {}
       },
@@ -49350,6 +49632,18 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Industrial": {
+            "120-140": 1
+          }
+        },
+        "gfa": {
+          "Industrial": {
+            "120-140": 47231
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.35030647798683,
@@ -49434,6 +49728,10 @@
         "count": {},
         "gfa": {}
       },
+      "heatmap_data_occupancy": {
+        "count": {},
+        "gfa": {}
+      },
       "positive_raze_points": [],
       "count_total": 7,
       "avg_current_age": 20.4,
@@ -49465,6 +49763,10 @@
         "gfa": {}
       },
       "heatmap_data_foundation": {
+        "count": {},
+        "gfa": {}
+      },
+      "heatmap_data_occupancy": {
         "count": {},
         "gfa": {}
       },
@@ -49547,6 +49849,10 @@
         "gfa": {}
       },
       "heatmap_data_foundation": {
+        "count": {},
+        "gfa": {}
+      },
+      "heatmap_data_occupancy": {
         "count": {},
         "gfa": {}
       },
@@ -49701,6 +50007,18 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Commercial": {
+            "100-120": 1
+          }
+        },
+        "gfa": {
+          "Commercial": {
+            "100-120": 238
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.36031853463318,
@@ -49846,6 +50164,18 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "80-100": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "80-100": 22534
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.36339678461691,
@@ -49934,6 +50264,10 @@
         "count": {},
         "gfa": {}
       },
+      "heatmap_data_occupancy": {
+        "count": {},
+        "gfa": {}
+      },
       "positive_raze_points": [],
       "count_total": 24,
       "avg_current_age": 72.0,
@@ -50005,6 +50339,10 @@
         "gfa": {}
       },
       "heatmap_data_foundation": {
+        "count": {},
+        "gfa": {}
+      },
+      "heatmap_data_occupancy": {
         "count": {},
         "gfa": {}
       },
@@ -50167,6 +50505,18 @@
         },
         "gfa": {
           "Slab": {
+            "160-180": 19784
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Commercial": {
+            "160-180": 1
+          }
+        },
+        "gfa": {
+          "Commercial": {
             "160-180": 19784
           }
         }
@@ -50404,6 +50754,42 @@
             "100-120": 112
           },
           "Crawl Space": {
+            "140-160": 944
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Government": {
+            "80-100": 4
+          },
+          "Residential": {
+            "20-40": 1,
+            "60-80": 1,
+            "100-120": 1,
+            "140-160": 1
+          },
+          "Education": {
+            "80-100": 1
+          },
+          "Commercial": {
+            "140-160": 1
+          }
+        },
+        "gfa": {
+          "Government": {
+            "80-100": 4604
+          },
+          "Residential": {
+            "20-40": 656,
+            "60-80": 269,
+            "100-120": 112,
+            "140-160": 116
+          },
+          "Education": {
+            "80-100": 1546
+          },
+          "Commercial": {
             "140-160": 944
           }
         }
@@ -50817,6 +51203,64 @@
           "Unknown": {
             "0-20": 73,
             "80-100": 51
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "0-20": 2,
+            "20-40": 1,
+            "60-80": 2,
+            "80-100": 5,
+            "100-120": 6,
+            "120-140": 4,
+            "140-160": 1
+          },
+          "Commercial": {
+            "0-20": 1,
+            "40-60": 1,
+            "60-80": 3,
+            "80-100": 1
+          },
+          "Industrial": {
+            "0-20": 1,
+            "40-60": 1,
+            "60-80": 1
+          },
+          "Assembly": {
+            "60-80": 1
+          },
+          "Education": {
+            "120-140": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "0-20": 353,
+            "20-40": 126,
+            "60-80": 175,
+            "80-100": 815,
+            "100-120": 1080,
+            "120-140": 704,
+            "140-160": 309
+          },
+          "Commercial": {
+            "0-20": 73,
+            "40-60": 1957,
+            "60-80": 1773,
+            "80-100": 190
+          },
+          "Industrial": {
+            "0-20": 4367,
+            "40-60": 26311,
+            "60-80": 217
+          },
+          "Assembly": {
+            "60-80": 189
+          },
+          "Education": {
+            "120-140": 8242
           }
         }
       },
@@ -51359,6 +51803,46 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "20-40": 1,
+            "60-80": 1,
+            "80-100": 1,
+            "100-120": 1,
+            "120-140": 1
+          },
+          "Commercial": {
+            "60-80": 1,
+            "80-100": 1
+          },
+          "Industrial": {
+            "80-100": 1
+          },
+          "Assembly": {
+            "40-60": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "20-40": 643,
+            "60-80": 121,
+            "80-100": 309,
+            "100-120": 421,
+            "120-140": 477
+          },
+          "Commercial": {
+            "60-80": 352,
+            "80-100": 1557
+          },
+          "Industrial": {
+            "80-100": 410
+          },
+          "Assembly": {
+            "40-60": 56
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.27808079005228,
@@ -51675,6 +52159,28 @@
           },
           "Unknown": {
             "80-100": 54
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Commercial": {
+            "60-80": 1,
+            "80-100": 3
+          },
+          "Residential": {
+            "100-120": 2,
+            "120-140": 1
+          }
+        },
+        "gfa": {
+          "Commercial": {
+            "60-80": 109,
+            "80-100": 909
+          },
+          "Residential": {
+            "100-120": 714,
+            "120-140": 211
           }
         }
       },
@@ -52046,6 +52552,70 @@
           },
           "Unknown": {
             "80-100": 903
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "20-40": 1,
+            "40-60": 1,
+            "60-80": 2,
+            "80-100": 6,
+            "100-120": 22,
+            "120-140": 14,
+            "180-200": 1
+          },
+          "Commercial": {
+            "40-60": 1,
+            "60-80": 3,
+            "80-100": 3,
+            "100-120": 1,
+            "120-140": 2
+          },
+          "Education": {
+            "60-80": 3
+          },
+          "Unclassified": {
+            "60-80": 1,
+            "80-100": 2
+          },
+          "Government": {
+            "100-120": 1
+          },
+          "Assembly": {
+            "80-100": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "20-40": 93,
+            "40-60": 4969,
+            "60-80": 2169,
+            "80-100": 1864,
+            "100-120": 5577,
+            "120-140": 3659,
+            "180-200": 148
+          },
+          "Commercial": {
+            "40-60": 3320,
+            "60-80": 516,
+            "80-100": 4915,
+            "100-120": 188,
+            "120-140": 486
+          },
+          "Education": {
+            "60-80": 1059
+          },
+          "Unclassified": {
+            "60-80": 199,
+            "80-100": 1086
+          },
+          "Government": {
+            "100-120": 1548
+          },
+          "Assembly": {
+            "80-100": 204
           }
         }
       },
@@ -52881,6 +53451,38 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "60-80": 1,
+            "80-100": 4,
+            "100-120": 6,
+            "120-140": 1,
+            "140-160": 1
+          },
+          "Industrial": {
+            "80-100": 1
+          },
+          "Commercial": {
+            "100-120": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "60-80": 284,
+            "80-100": 565,
+            "100-120": 1382,
+            "120-140": 150,
+            "140-160": 121
+          },
+          "Industrial": {
+            "80-100": 1721
+          },
+          "Commercial": {
+            "100-120": 273
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.27355799364225,
@@ -53339,6 +53941,66 @@
             "40-60": 1645,
             "60-80": 1124,
             "100-120": 149
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "20-40": 2,
+            "40-60": 1,
+            "60-80": 4,
+            "100-120": 9,
+            "120-140": 6
+          },
+          "Commercial": {
+            "0-20": 1,
+            "60-80": 1,
+            "80-100": 3,
+            "100-120": 2,
+            "120-140": 1
+          },
+          "Government": {
+            "40-60": 1,
+            "60-80": 2,
+            "120-140": 1
+          },
+          "Assembly": {
+            "20-40": 1,
+            "40-60": 1,
+            "100-120": 1
+          },
+          "Industrial": {
+            "40-60": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "20-40": 659,
+            "40-60": 148,
+            "60-80": 645,
+            "100-120": 2759,
+            "120-140": 1520
+          },
+          "Commercial": {
+            "0-20": 943,
+            "60-80": 529,
+            "80-100": 4542,
+            "100-120": 3081,
+            "120-140": 951
+          },
+          "Government": {
+            "40-60": 753,
+            "60-80": 2030,
+            "120-140": 20930
+          },
+          "Assembly": {
+            "20-40": 2567,
+            "40-60": 892,
+            "100-120": 399
+          },
+          "Industrial": {
+            "40-60": 1149
           }
         }
       },
@@ -53988,6 +54650,62 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "80-100": 1,
+            "100-120": 7,
+            "120-140": 1,
+            "140-160": 2
+          },
+          "Commercial": {
+            "80-100": 3,
+            "100-120": 1,
+            "120-140": 2
+          },
+          "Assembly": {
+            "100-120": 1,
+            "120-140": 1
+          },
+          "Government": {
+            "60-80": 1,
+            "100-120": 1
+          },
+          "Education": {
+            "100-120": 1
+          },
+          "Industrial": {
+            "120-140": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "80-100": 317,
+            "100-120": 6176,
+            "120-140": 3401,
+            "140-160": 503
+          },
+          "Commercial": {
+            "80-100": 3119,
+            "100-120": 775,
+            "120-140": 1632
+          },
+          "Assembly": {
+            "100-120": 9991,
+            "120-140": 248
+          },
+          "Government": {
+            "60-80": 211,
+            "100-120": 574
+          },
+          "Education": {
+            "100-120": 1171
+          },
+          "Industrial": {
+            "120-140": 256
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.30414366845006,
@@ -54413,6 +55131,34 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Commercial": {
+            "60-80": 2,
+            "80-100": 1,
+            "100-120": 1
+          },
+          "Residential": {
+            "140-160": 1
+          },
+          "Industrial": {
+            "60-80": 1
+          }
+        },
+        "gfa": {
+          "Commercial": {
+            "60-80": 2781,
+            "80-100": 2245,
+            "100-120": 11806
+          },
+          "Residential": {
+            "140-160": 235
+          },
+          "Industrial": {
+            "60-80": 311
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.32690962059629,
@@ -54626,6 +55372,20 @@
         },
         "gfa": {
           "Slab": {
+            "40-60": 0,
+            "120-140": 6435
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Commercial": {
+            "40-60": 1,
+            "120-140": 1
+          }
+        },
+        "gfa": {
+          "Commercial": {
             "40-60": 0,
             "120-140": 6435
           }
@@ -54944,6 +55704,62 @@
           "Unknown": {
             "40-60": 19810,
             "100-120": 44
+          }
+        }
+      },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Residential": {
+            "0-20": 3,
+            "80-100": 5,
+            "100-120": 11,
+            "120-140": 5,
+            "180-200": 1
+          },
+          "Commercial": {
+            "40-60": 3,
+            "60-80": 6,
+            "80-100": 2,
+            "120-140": 3
+          },
+          "Education": {
+            "20-40": 1,
+            "40-60": 2,
+            "60-80": 1
+          },
+          "Assembly": {
+            "100-120": 1,
+            "120-140": 1
+          },
+          "Unclassified": {
+            "100-120": 1
+          }
+        },
+        "gfa": {
+          "Residential": {
+            "0-20": 29100,
+            "80-100": 1139,
+            "100-120": 2795,
+            "120-140": 9236,
+            "180-200": 83
+          },
+          "Commercial": {
+            "40-60": 44902,
+            "60-80": 3249,
+            "80-100": 930,
+            "120-140": 5921
+          },
+          "Education": {
+            "20-40": 463,
+            "40-60": 19810,
+            "60-80": 3720
+          },
+          "Assembly": {
+            "100-120": 2480,
+            "120-140": 162
+          },
+          "Unclassified": {
+            "100-120": 16479
           }
         }
       },
@@ -55603,6 +56419,34 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Commercial": {
+            "60-80": 1,
+            "100-120": 3
+          },
+          "Residential": {
+            "20-40": 1,
+            "100-120": 1
+          },
+          "Education": {
+            "120-140": 1
+          }
+        },
+        "gfa": {
+          "Commercial": {
+            "60-80": 185,
+            "100-120": 12083
+          },
+          "Residential": {
+            "20-40": 21706,
+            "100-120": 11007
+          },
+          "Education": {
+            "120-140": 9330
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.34008654100346,
@@ -55778,6 +56622,18 @@
           }
         }
       },
+      "heatmap_data_occupancy": {
+        "count": {
+          "Unclassified": {
+            "0-20": 1
+          }
+        },
+        "gfa": {
+          "Unclassified": {
+            "0-20": 6154
+          }
+        }
+      },
       "positive_raze_points": [
         {
           "lat": 42.344367918091855,
@@ -55874,6 +56730,10 @@
         "count": {},
         "gfa": {}
       },
+      "heatmap_data_occupancy": {
+        "count": {},
+        "gfa": {}
+      },
       "positive_raze_points": [],
       "count_total": 32,
       "avg_current_age": 69.96551724137932,
@@ -55948,6 +56808,10 @@
         "count": {},
         "gfa": {}
       },
+      "heatmap_data_occupancy": {
+        "count": {},
+        "gfa": {}
+      },
       "positive_raze_points": [],
       "count_total": 12,
       "avg_current_age": 66.0909090909091,
@@ -56019,6 +56883,10 @@
         "gfa": {}
       },
       "heatmap_data_foundation": {
+        "count": {},
+        "gfa": {}
+      },
+      "heatmap_data_occupancy": {
         "count": {},
         "gfa": {}
       },
@@ -56097,6 +56965,10 @@
         "gfa": {}
       },
       "heatmap_data_foundation": {
+        "count": {},
+        "gfa": {}
+      },
+      "heatmap_data_occupancy": {
         "count": {},
         "gfa": {}
       },
@@ -61099,6 +61971,2870 @@
           "0-50 years": 10413,
           "50-100 years": 193,
           "100-150 years": 189
+        }
+      }
+    }
+  },
+  "occupancy_lifespan_demo": {
+    "RAZE": {
+      "bin_10": {
+        "Industrial": {
+          "0-10 years": 2,
+          "30-40 years": 1,
+          "40-50 years": 2,
+          "50-60 years": 1,
+          "70-80 years": 4,
+          "80-90 years": 3,
+          "100-110 years": 2,
+          "120-130 years": 2
+        },
+        "Residential": {
+          "0-10 years": 46,
+          "10-20 years": 7,
+          "20-30 years": 6,
+          "30-40 years": 2,
+          "40-50 years": 2,
+          "50-60 years": 2,
+          "60-70 years": 8,
+          "70-80 years": 6,
+          "80-90 years": 14,
+          "90-100 years": 13,
+          "100-110 years": 41,
+          "110-120 years": 43,
+          "120-130 years": 37,
+          "130-140 years": 15,
+          "140-150 years": 7,
+          "150+ years": 2,
+          "160+ years": 1,
+          "180+ years": 2
+        },
+        "Commercial": {
+          "0-10 years": 14,
+          "10-20 years": 4,
+          "40-50 years": 5,
+          "50-60 years": 5,
+          "60-70 years": 9,
+          "70-80 years": 11,
+          "80-90 years": 14,
+          "90-100 years": 8,
+          "100-110 years": 12,
+          "110-120 years": 7,
+          "120-130 years": 10,
+          "140-150 years": 1,
+          "160+ years": 1
+        },
+        "Unclassified": {
+          "0-10 years": 9,
+          "10-20 years": 1,
+          "70-80 years": 2,
+          "80-90 years": 2,
+          "90-100 years": 1,
+          "110-120 years": 1,
+          "120-130 years": 2
+        },
+        "Government": {
+          "40-50 years": 1,
+          "60-70 years": 2,
+          "70-80 years": 3,
+          "80-90 years": 7,
+          "100-110 years": 2,
+          "120-130 years": 1
+        },
+        "Assembly": {
+          "30-40 years": 1,
+          "40-50 years": 1,
+          "50-60 years": 1,
+          "60-70 years": 3,
+          "90-100 years": 1,
+          "100-110 years": 3,
+          "120-130 years": 3
+        },
+        "Education": {
+          "0-10 years": 2,
+          "30-40 years": 1,
+          "40-50 years": 1,
+          "50-60 years": 1,
+          "60-70 years": 2,
+          "70-80 years": 2,
+          "90-100 years": 1,
+          "100-110 years": 1,
+          "110-120 years": 2,
+          "120-130 years": 2
+        },
+        "Utility and Misc": {
+          "90-100 years": 1
+        }
+      },
+      "bin_20": {
+        "Industrial": {
+          "0-20 years": 2,
+          "20-40 years": 1,
+          "40-60 years": 3,
+          "60-80 years": 4,
+          "80-100 years": 3,
+          "100-120 years": 2,
+          "120-140 years": 2
+        },
+        "Residential": {
+          "0-20 years": 53,
+          "20-40 years": 8,
+          "40-60 years": 4,
+          "60-80 years": 14,
+          "80-100 years": 27,
+          "100-120 years": 84,
+          "120-140 years": 52,
+          "140-160 years": 9,
+          "160+ years": 1,
+          "180+ years": 2
+        },
+        "Commercial": {
+          "0-20 years": 18,
+          "40-60 years": 10,
+          "60-80 years": 20,
+          "80-100 years": 22,
+          "100-120 years": 19,
+          "120-140 years": 10,
+          "140-160 years": 1,
+          "160+ years": 1
+        },
+        "Unclassified": {
+          "0-20 years": 10,
+          "60-80 years": 2,
+          "80-100 years": 3,
+          "100-120 years": 1,
+          "120-140 years": 2
+        },
+        "Government": {
+          "40-60 years": 1,
+          "60-80 years": 5,
+          "80-100 years": 7,
+          "100-120 years": 2,
+          "120-140 years": 1
+        },
+        "Assembly": {
+          "20-40 years": 1,
+          "40-60 years": 2,
+          "60-80 years": 3,
+          "80-100 years": 1,
+          "100-120 years": 3,
+          "120-140 years": 3
+        },
+        "Education": {
+          "0-20 years": 2,
+          "20-40 years": 1,
+          "40-60 years": 2,
+          "60-80 years": 4,
+          "80-100 years": 1,
+          "100-120 years": 3,
+          "120-140 years": 2
+        },
+        "Utility and Misc": {
+          "80-100 years": 1
+        }
+      },
+      "bin_25": {
+        "Industrial": {
+          "0-25 years": 2,
+          "25-50 years": 3,
+          "50-75 years": 1,
+          "75-100 years": 7,
+          "100-125 years": 4
+        },
+        "Residential": {
+          "0-25 years": 56,
+          "25-50 years": 7,
+          "50-75 years": 14,
+          "75-100 years": 29,
+          "100-125 years": 111,
+          "125-150 years": 32,
+          "150+ years": 3,
+          "175+ years": 2
+        },
+        "Commercial": {
+          "0-25 years": 18,
+          "25-50 years": 5,
+          "50-75 years": 21,
+          "75-100 years": 26,
+          "100-125 years": 28,
+          "125-150 years": 2,
+          "150+ years": 1
+        },
+        "Unclassified": {
+          "0-25 years": 10,
+          "75-100 years": 5,
+          "100-125 years": 3
+        },
+        "Government": {
+          "25-50 years": 1,
+          "50-75 years": 4,
+          "75-100 years": 8,
+          "100-125 years": 2,
+          "125-150 years": 1
+        },
+        "Assembly": {
+          "25-50 years": 2,
+          "50-75 years": 4,
+          "75-100 years": 1,
+          "100-125 years": 4,
+          "125-150 years": 2
+        },
+        "Education": {
+          "0-25 years": 2,
+          "25-50 years": 2,
+          "50-75 years": 3,
+          "75-100 years": 3,
+          "100-125 years": 4,
+          "125-150 years": 1
+        },
+        "Utility and Misc": {
+          "75-100 years": 1
+        }
+      },
+      "bin_30": {
+        "Industrial": {
+          "0-30 years": 2,
+          "30-60 years": 4,
+          "60-90 years": 7,
+          "90-120 years": 2,
+          "120-150 years": 2
+        },
+        "Residential": {
+          "0-30 years": 59,
+          "30-60 years": 6,
+          "60-90 years": 28,
+          "90-120 years": 97,
+          "120-150 years": 59,
+          "150+ years": 3,
+          "180+ years": 2
+        },
+        "Commercial": {
+          "0-30 years": 18,
+          "30-60 years": 10,
+          "60-90 years": 34,
+          "90-120 years": 27,
+          "120-150 years": 11,
+          "150+ years": 1
+        },
+        "Unclassified": {
+          "0-30 years": 10,
+          "60-90 years": 4,
+          "90-120 years": 2,
+          "120-150 years": 2
+        },
+        "Government": {
+          "30-60 years": 1,
+          "60-90 years": 12,
+          "90-120 years": 2,
+          "120-150 years": 1
+        },
+        "Assembly": {
+          "30-60 years": 3,
+          "60-90 years": 3,
+          "90-120 years": 4,
+          "120-150 years": 3
+        },
+        "Education": {
+          "0-30 years": 2,
+          "30-60 years": 3,
+          "60-90 years": 4,
+          "90-120 years": 4,
+          "120-150 years": 2
+        },
+        "Utility and Misc": {
+          "90-120 years": 1
+        }
+      },
+      "bin_50": {
+        "Industrial": {
+          "0-50 years": 5,
+          "50-100 years": 8,
+          "100-150 years": 4
+        },
+        "Residential": {
+          "0-50 years": 63,
+          "50-100 years": 43,
+          "100-150 years": 143,
+          "150+ years": 5
+        },
+        "Commercial": {
+          "0-50 years": 23,
+          "50-100 years": 47,
+          "100-150 years": 30,
+          "150+ years": 1
+        },
+        "Unclassified": {
+          "0-50 years": 10,
+          "50-100 years": 5,
+          "100-150 years": 3
+        },
+        "Government": {
+          "0-50 years": 1,
+          "50-100 years": 12,
+          "100-150 years": 3
+        },
+        "Assembly": {
+          "0-50 years": 2,
+          "50-100 years": 5,
+          "100-150 years": 6
+        },
+        "Education": {
+          "0-50 years": 4,
+          "50-100 years": 6,
+          "100-150 years": 5
+        },
+        "Utility and Misc": {
+          "50-100 years": 1
+        }
+      }
+    },
+    "EXTDEM": {
+      "bin_10": {
+        "Industrial": {
+          "20-30 years": 2,
+          "40-50 years": 1,
+          "50-60 years": 1,
+          "70-80 years": 4,
+          "80-90 years": 1,
+          "90-100 years": 2,
+          "100-110 years": 2,
+          "110-120 years": 3,
+          "120-130 years": 1
+        },
+        "Commercial": {
+          "0-10 years": 8,
+          "10-20 years": 3,
+          "20-30 years": 4,
+          "30-40 years": 7,
+          "40-50 years": 7,
+          "50-60 years": 13,
+          "60-70 years": 7,
+          "70-80 years": 9,
+          "80-90 years": 18,
+          "90-100 years": 17,
+          "100-110 years": 14,
+          "110-120 years": 19,
+          "120-130 years": 8
+        },
+        "Residential": {
+          "0-10 years": 63,
+          "10-20 years": 24,
+          "20-30 years": 14,
+          "30-40 years": 3,
+          "40-50 years": 1,
+          "50-60 years": 8,
+          "60-70 years": 20,
+          "70-80 years": 18,
+          "80-90 years": 39,
+          "90-100 years": 81,
+          "100-110 years": 97,
+          "110-120 years": 153,
+          "120-130 years": 73,
+          "130-140 years": 37,
+          "140-150 years": 19,
+          "150+ years": 2,
+          "160+ years": 4,
+          "180+ years": 1
+        },
+        "Unclassified": {
+          "0-10 years": 2,
+          "10-20 years": 1,
+          "30-40 years": 1,
+          "40-50 years": 1,
+          "50-60 years": 1,
+          "70-80 years": 1,
+          "80-90 years": 1,
+          "90-100 years": 2,
+          "100-110 years": 5,
+          "110-120 years": 4,
+          "120-130 years": 6
+        },
+        "Education": {
+          "0-10 years": 3,
+          "10-20 years": 2,
+          "20-30 years": 2,
+          "60-70 years": 1,
+          "90-100 years": 2,
+          "100-110 years": 2,
+          "110-120 years": 10,
+          "120-130 years": 6
+        },
+        "Government": {
+          "40-50 years": 2,
+          "60-70 years": 1,
+          "70-80 years": 1,
+          "80-90 years": 3,
+          "100-110 years": 4,
+          "110-120 years": 3,
+          "120-130 years": 1,
+          "160+ years": 1
+        },
+        "Assembly": {
+          "30-40 years": 1,
+          "40-50 years": 2,
+          "50-60 years": 1,
+          "60-70 years": 2,
+          "90-100 years": 1,
+          "110-120 years": 1,
+          "120-130 years": 2,
+          "160+ years": 1
+        },
+        "Utility and Misc": {
+          "50-60 years": 1,
+          "60-70 years": 1,
+          "70-80 years": 1
+        }
+      },
+      "bin_20": {
+        "Industrial": {
+          "20-40 years": 2,
+          "40-60 years": 2,
+          "60-80 years": 4,
+          "80-100 years": 3,
+          "100-120 years": 5,
+          "120-140 years": 1
+        },
+        "Commercial": {
+          "0-20 years": 11,
+          "20-40 years": 11,
+          "40-60 years": 20,
+          "60-80 years": 16,
+          "80-100 years": 35,
+          "100-120 years": 33,
+          "120-140 years": 8
+        },
+        "Residential": {
+          "0-20 years": 87,
+          "20-40 years": 17,
+          "40-60 years": 9,
+          "60-80 years": 38,
+          "80-100 years": 120,
+          "100-120 years": 250,
+          "120-140 years": 110,
+          "140-160 years": 21,
+          "160+ years": 4,
+          "180+ years": 1
+        },
+        "Unclassified": {
+          "0-20 years": 3,
+          "20-40 years": 1,
+          "40-60 years": 2,
+          "60-80 years": 1,
+          "80-100 years": 3,
+          "100-120 years": 9,
+          "120-140 years": 6
+        },
+        "Education": {
+          "0-20 years": 5,
+          "20-40 years": 2,
+          "60-80 years": 1,
+          "80-100 years": 2,
+          "100-120 years": 12,
+          "120-140 years": 6
+        },
+        "Government": {
+          "40-60 years": 2,
+          "60-80 years": 2,
+          "80-100 years": 3,
+          "100-120 years": 7,
+          "120-140 years": 1,
+          "160+ years": 1
+        },
+        "Assembly": {
+          "20-40 years": 1,
+          "40-60 years": 3,
+          "60-80 years": 2,
+          "80-100 years": 1,
+          "100-120 years": 1,
+          "120-140 years": 2,
+          "160+ years": 1
+        },
+        "Utility and Misc": {
+          "40-60 years": 1,
+          "60-80 years": 2
+        }
+      },
+      "bin_25": {
+        "Industrial": {
+          "25-50 years": 3,
+          "50-75 years": 3,
+          "75-100 years": 5,
+          "100-125 years": 6
+        },
+        "Commercial": {
+          "0-25 years": 15,
+          "25-50 years": 14,
+          "50-75 years": 29,
+          "75-100 years": 35,
+          "100-125 years": 40,
+          "125-150 years": 1
+        },
+        "Residential": {
+          "0-25 years": 98,
+          "25-50 years": 7,
+          "50-75 years": 38,
+          "75-100 years": 128,
+          "100-125 years": 303,
+          "125-150 years": 76,
+          "150+ years": 6,
+          "175+ years": 1
+        },
+        "Unclassified": {
+          "0-25 years": 3,
+          "25-50 years": 2,
+          "50-75 years": 2,
+          "75-100 years": 3,
+          "100-125 years": 14,
+          "125-150 years": 1
+        },
+        "Education": {
+          "0-25 years": 6,
+          "25-50 years": 1,
+          "50-75 years": 1,
+          "75-100 years": 2,
+          "100-125 years": 16,
+          "125-150 years": 2
+        },
+        "Government": {
+          "25-50 years": 2,
+          "50-75 years": 2,
+          "75-100 years": 3,
+          "100-125 years": 8,
+          "150+ years": 1
+        },
+        "Assembly": {
+          "25-50 years": 3,
+          "50-75 years": 3,
+          "75-100 years": 1,
+          "100-125 years": 3,
+          "150+ years": 1
+        },
+        "Utility and Misc": {
+          "50-75 years": 3
+        }
+      },
+      "bin_30": {
+        "Industrial": {
+          "0-30 years": 2,
+          "30-60 years": 2,
+          "60-90 years": 5,
+          "90-120 years": 7,
+          "120-150 years": 1
+        },
+        "Commercial": {
+          "0-30 years": 15,
+          "30-60 years": 27,
+          "60-90 years": 34,
+          "90-120 years": 50,
+          "120-150 years": 8
+        },
+        "Residential": {
+          "0-30 years": 101,
+          "30-60 years": 12,
+          "60-90 years": 77,
+          "90-120 years": 331,
+          "120-150 years": 129,
+          "150+ years": 6,
+          "180+ years": 2
+        },
+        "Unclassified": {
+          "0-30 years": 3,
+          "30-60 years": 3,
+          "60-90 years": 2,
+          "90-120 years": 11,
+          "120-150 years": 6
+        },
+        "Education": {
+          "0-30 years": 7,
+          "60-90 years": 1,
+          "90-120 years": 14,
+          "120-150 years": 6
+        },
+        "Government": {
+          "30-60 years": 2,
+          "60-90 years": 5,
+          "90-120 years": 7,
+          "120-150 years": 1,
+          "150+ years": 1
+        },
+        "Assembly": {
+          "30-60 years": 4,
+          "60-90 years": 2,
+          "90-120 years": 2,
+          "120-150 years": 2,
+          "150+ years": 1
+        },
+        "Utility and Misc": {
+          "30-60 years": 1,
+          "60-90 years": 2
+        }
+      },
+      "bin_50": {
+        "Industrial": {
+          "0-50 years": 3,
+          "50-100 years": 8,
+          "100-150 years": 6
+        },
+        "Commercial": {
+          "0-50 years": 29,
+          "50-100 years": 64,
+          "100-150 years": 41
+        },
+        "Residential": {
+          "0-50 years": 105,
+          "50-100 years": 166,
+          "100-150 years": 379,
+          "150+ years": 7
+        },
+        "Unclassified": {
+          "0-50 years": 5,
+          "50-100 years": 5,
+          "100-150 years": 15
+        },
+        "Education": {
+          "0-50 years": 7,
+          "50-100 years": 3,
+          "100-150 years": 18
+        },
+        "Government": {
+          "0-50 years": 2,
+          "50-100 years": 5,
+          "100-150 years": 8,
+          "150+ years": 1
+        },
+        "Assembly": {
+          "0-50 years": 3,
+          "50-100 years": 4,
+          "100-150 years": 3,
+          "150+ years": 1
+        },
+        "Utility and Misc": {
+          "50-100 years": 3
+        }
+      }
+    },
+    "INTDEM": {
+      "bin_10": {
+        "Residential": {
+          "0-10 years": 28,
+          "10-20 years": 132,
+          "20-30 years": 77,
+          "30-40 years": 17,
+          "40-50 years": 18,
+          "50-60 years": 40,
+          "60-70 years": 58,
+          "70-80 years": 58,
+          "80-90 years": 128,
+          "90-100 years": 263,
+          "100-110 years": 320,
+          "110-120 years": 606,
+          "120-130 years": 380,
+          "130-140 years": 148,
+          "140-150 years": 58,
+          "150+ years": 41,
+          "160+ years": 22,
+          "170+ years": 13,
+          "180+ years": 4,
+          "190+ years": 5
+        },
+        "Industrial": {
+          "0-10 years": 3,
+          "10-20 years": 3,
+          "20-30 years": 5,
+          "30-40 years": 2,
+          "40-50 years": 7,
+          "50-60 years": 5,
+          "60-70 years": 2,
+          "70-80 years": 3,
+          "80-90 years": 2,
+          "90-100 years": 13,
+          "100-110 years": 12,
+          "110-120 years": 17,
+          "120-130 years": 6
+        },
+        "Commercial": {
+          "0-10 years": 8,
+          "10-20 years": 31,
+          "20-30 years": 19,
+          "30-40 years": 30,
+          "40-50 years": 24,
+          "50-60 years": 36,
+          "60-70 years": 22,
+          "70-80 years": 41,
+          "80-90 years": 52,
+          "90-100 years": 80,
+          "100-110 years": 58,
+          "110-120 years": 74,
+          "120-130 years": 55,
+          "130-140 years": 1,
+          "140-150 years": 2,
+          "150+ years": 1,
+          "160+ years": 1,
+          "180+ years": 1
+        },
+        "Government": {
+          "0-10 years": 1,
+          "10-20 years": 5,
+          "40-50 years": 3,
+          "50-60 years": 2,
+          "60-70 years": 3,
+          "70-80 years": 2,
+          "90-100 years": 4,
+          "100-110 years": 6,
+          "110-120 years": 5,
+          "120-130 years": 8,
+          "150+ years": 1
+        },
+        "Unclassified": {
+          "0-10 years": 9,
+          "10-20 years": 14,
+          "20-30 years": 6,
+          "30-40 years": 4,
+          "40-50 years": 4,
+          "50-60 years": 4,
+          "60-70 years": 3,
+          "70-80 years": 4,
+          "80-90 years": 4,
+          "90-100 years": 9,
+          "100-110 years": 8,
+          "110-120 years": 22,
+          "120-130 years": 12,
+          "130-140 years": 1,
+          "140-150 years": 2
+        },
+        "Education": {
+          "0-10 years": 5,
+          "10-20 years": 14,
+          "20-30 years": 13,
+          "30-40 years": 11,
+          "40-50 years": 7,
+          "50-60 years": 8,
+          "60-70 years": 2,
+          "70-80 years": 6,
+          "80-90 years": 7,
+          "90-100 years": 27,
+          "100-110 years": 15,
+          "110-120 years": 60,
+          "120-130 years": 23,
+          "130-140 years": 1,
+          "150+ years": 1,
+          "160+ years": 1
+        },
+        "Utility and Misc": {
+          "10-20 years": 1,
+          "50-60 years": 2,
+          "60-70 years": 1,
+          "110-120 years": 1,
+          "120-130 years": 1
+        },
+        "Assembly": {
+          "10-20 years": 1,
+          "20-30 years": 3,
+          "30-40 years": 1,
+          "40-50 years": 1,
+          "50-60 years": 2,
+          "60-70 years": 1,
+          "70-80 years": 2,
+          "80-90 years": 4,
+          "90-100 years": 2,
+          "100-110 years": 7,
+          "110-120 years": 15,
+          "120-130 years": 13,
+          "130-140 years": 2
+        }
+      },
+      "bin_20": {
+        "Residential": {
+          "0-20 years": 160,
+          "20-40 years": 94,
+          "40-60 years": 58,
+          "60-80 years": 116,
+          "80-100 years": 391,
+          "100-120 years": 926,
+          "120-140 years": 528,
+          "140-160 years": 99,
+          "160+ years": 35,
+          "180+ years": 9
+        },
+        "Industrial": {
+          "0-20 years": 6,
+          "20-40 years": 7,
+          "40-60 years": 12,
+          "60-80 years": 5,
+          "80-100 years": 15,
+          "100-120 years": 29,
+          "120-140 years": 6
+        },
+        "Commercial": {
+          "0-20 years": 39,
+          "20-40 years": 49,
+          "40-60 years": 60,
+          "60-80 years": 63,
+          "80-100 years": 132,
+          "100-120 years": 132,
+          "120-140 years": 56,
+          "140-160 years": 3,
+          "160+ years": 1,
+          "180+ years": 1
+        },
+        "Government": {
+          "0-20 years": 6,
+          "40-60 years": 5,
+          "60-80 years": 5,
+          "80-100 years": 4,
+          "100-120 years": 11,
+          "120-140 years": 8,
+          "140-160 years": 1
+        },
+        "Unclassified": {
+          "0-20 years": 23,
+          "20-40 years": 10,
+          "40-60 years": 8,
+          "60-80 years": 7,
+          "80-100 years": 13,
+          "100-120 years": 30,
+          "120-140 years": 13,
+          "140-160 years": 2
+        },
+        "Education": {
+          "0-20 years": 19,
+          "20-40 years": 24,
+          "40-60 years": 15,
+          "60-80 years": 8,
+          "80-100 years": 34,
+          "100-120 years": 75,
+          "120-140 years": 24,
+          "140-160 years": 1,
+          "160+ years": 1
+        },
+        "Utility and Misc": {
+          "0-20 years": 1,
+          "40-60 years": 2,
+          "60-80 years": 1,
+          "100-120 years": 1,
+          "120-140 years": 1
+        },
+        "Assembly": {
+          "0-20 years": 1,
+          "20-40 years": 4,
+          "40-60 years": 3,
+          "60-80 years": 3,
+          "80-100 years": 6,
+          "100-120 years": 22,
+          "120-140 years": 15
+        }
+      },
+      "bin_25": {
+        "Residential": {
+          "0-25 years": 222,
+          "25-50 years": 50,
+          "50-75 years": 122,
+          "75-100 years": 425,
+          "100-125 years": 1165,
+          "125-150 years": 347,
+          "150+ years": 67,
+          "175+ years": 18
+        },
+        "Industrial": {
+          "0-25 years": 8,
+          "25-50 years": 12,
+          "50-75 years": 9,
+          "75-100 years": 16,
+          "100-125 years": 32,
+          "125-150 years": 3
+        },
+        "Commercial": {
+          "0-25 years": 52,
+          "25-50 years": 60,
+          "50-75 years": 77,
+          "75-100 years": 154,
+          "100-125 years": 175,
+          "125-150 years": 15,
+          "150+ years": 2,
+          "175+ years": 1
+        },
+        "Government": {
+          "0-25 years": 6,
+          "25-50 years": 3,
+          "50-75 years": 5,
+          "75-100 years": 6,
+          "100-125 years": 17,
+          "125-150 years": 2,
+          "150+ years": 1
+        },
+        "Unclassified": {
+          "0-25 years": 26,
+          "25-50 years": 11,
+          "50-75 years": 8,
+          "75-100 years": 16,
+          "100-125 years": 36,
+          "125-150 years": 9
+        },
+        "Education": {
+          "0-25 years": 22,
+          "25-50 years": 28,
+          "50-75 years": 15,
+          "75-100 years": 35,
+          "100-125 years": 93,
+          "125-150 years": 6,
+          "150+ years": 2
+        },
+        "Utility and Misc": {
+          "0-25 years": 1,
+          "50-75 years": 3,
+          "100-125 years": 2
+        },
+        "Assembly": {
+          "0-25 years": 4,
+          "25-50 years": 2,
+          "50-75 years": 3,
+          "75-100 years": 8,
+          "100-125 years": 33,
+          "125-150 years": 4
+        }
+      },
+      "bin_30": {
+        "Residential": {
+          "0-30 years": 237,
+          "30-60 years": 75,
+          "60-90 years": 244,
+          "90-120 years": 1189,
+          "120-150 years": 586,
+          "150+ years": 76,
+          "180+ years": 9
+        },
+        "Industrial": {
+          "0-30 years": 11,
+          "30-60 years": 14,
+          "60-90 years": 7,
+          "90-120 years": 42,
+          "120-150 years": 6
+        },
+        "Commercial": {
+          "0-30 years": 58,
+          "30-60 years": 90,
+          "60-90 years": 115,
+          "90-120 years": 212,
+          "120-150 years": 58,
+          "150+ years": 2,
+          "180+ years": 1
+        },
+        "Government": {
+          "0-30 years": 6,
+          "30-60 years": 5,
+          "60-90 years": 5,
+          "90-120 years": 15,
+          "120-150 years": 8,
+          "150+ years": 1
+        },
+        "Unclassified": {
+          "0-30 years": 29,
+          "30-60 years": 12,
+          "60-90 years": 11,
+          "90-120 years": 39,
+          "120-150 years": 15
+        },
+        "Education": {
+          "0-30 years": 32,
+          "30-60 years": 26,
+          "60-90 years": 15,
+          "90-120 years": 102,
+          "120-150 years": 24,
+          "150+ years": 2
+        },
+        "Utility and Misc": {
+          "0-30 years": 1,
+          "30-60 years": 2,
+          "60-90 years": 1,
+          "90-120 years": 1,
+          "120-150 years": 1
+        },
+        "Assembly": {
+          "0-30 years": 4,
+          "30-60 years": 4,
+          "60-90 years": 7,
+          "90-120 years": 24,
+          "120-150 years": 15
+        }
+      },
+      "bin_50": {
+        "Residential": {
+          "0-50 years": 272,
+          "50-100 years": 547,
+          "100-150 years": 1512,
+          "150+ years": 85
+        },
+        "Industrial": {
+          "0-50 years": 20,
+          "50-100 years": 25,
+          "100-150 years": 35
+        },
+        "Commercial": {
+          "0-50 years": 112,
+          "50-100 years": 231,
+          "100-150 years": 190,
+          "150+ years": 3
+        },
+        "Government": {
+          "0-50 years": 9,
+          "50-100 years": 11,
+          "100-150 years": 19,
+          "150+ years": 1
+        },
+        "Unclassified": {
+          "0-50 years": 37,
+          "50-100 years": 24,
+          "100-150 years": 45
+        },
+        "Education": {
+          "0-50 years": 50,
+          "50-100 years": 50,
+          "100-150 years": 99,
+          "150+ years": 2
+        },
+        "Utility and Misc": {
+          "0-50 years": 1,
+          "50-100 years": 3,
+          "100-150 years": 2
+        },
+        "Assembly": {
+          "0-50 years": 6,
+          "50-100 years": 11,
+          "100-150 years": 37
+        }
+      }
+    },
+    "all": {
+      "bin_10": {
+        "Residential": {
+          "0-10 years": 137,
+          "10-20 years": 163,
+          "20-30 years": 97,
+          "30-40 years": 22,
+          "40-50 years": 21,
+          "50-60 years": 50,
+          "60-70 years": 86,
+          "70-80 years": 82,
+          "80-90 years": 181,
+          "90-100 years": 357,
+          "100-110 years": 458,
+          "110-120 years": 802,
+          "120-130 years": 490,
+          "130-140 years": 200,
+          "140-150 years": 84,
+          "150+ years": 45,
+          "160+ years": 27,
+          "170+ years": 13,
+          "180+ years": 7,
+          "190+ years": 5
+        },
+        "Industrial": {
+          "0-10 years": 5,
+          "10-20 years": 3,
+          "20-30 years": 7,
+          "30-40 years": 3,
+          "40-50 years": 10,
+          "50-60 years": 7,
+          "60-70 years": 2,
+          "70-80 years": 11,
+          "80-90 years": 6,
+          "90-100 years": 15,
+          "100-110 years": 16,
+          "110-120 years": 20,
+          "120-130 years": 9
+        },
+        "Commercial": {
+          "0-10 years": 30,
+          "10-20 years": 38,
+          "20-30 years": 23,
+          "30-40 years": 37,
+          "40-50 years": 36,
+          "50-60 years": 54,
+          "60-70 years": 38,
+          "70-80 years": 61,
+          "80-90 years": 84,
+          "90-100 years": 105,
+          "100-110 years": 84,
+          "110-120 years": 100,
+          "120-130 years": 73,
+          "130-140 years": 1,
+          "140-150 years": 3,
+          "150+ years": 1,
+          "160+ years": 2,
+          "180+ years": 1
+        },
+        "Government": {
+          "0-10 years": 1,
+          "10-20 years": 5,
+          "40-50 years": 6,
+          "50-60 years": 2,
+          "60-70 years": 6,
+          "70-80 years": 6,
+          "80-90 years": 10,
+          "90-100 years": 4,
+          "100-110 years": 12,
+          "110-120 years": 8,
+          "120-130 years": 10,
+          "150+ years": 1,
+          "160+ years": 1
+        },
+        "Unclassified": {
+          "0-10 years": 20,
+          "10-20 years": 16,
+          "20-30 years": 6,
+          "30-40 years": 5,
+          "40-50 years": 5,
+          "50-60 years": 5,
+          "60-70 years": 3,
+          "70-80 years": 7,
+          "80-90 years": 7,
+          "90-100 years": 12,
+          "100-110 years": 13,
+          "110-120 years": 27,
+          "120-130 years": 20,
+          "130-140 years": 1,
+          "140-150 years": 2
+        },
+        "Education": {
+          "0-10 years": 10,
+          "10-20 years": 16,
+          "20-30 years": 15,
+          "30-40 years": 12,
+          "40-50 years": 8,
+          "50-60 years": 9,
+          "60-70 years": 5,
+          "70-80 years": 8,
+          "80-90 years": 7,
+          "90-100 years": 30,
+          "100-110 years": 18,
+          "110-120 years": 72,
+          "120-130 years": 31,
+          "130-140 years": 1,
+          "150+ years": 1,
+          "160+ years": 1
+        },
+        "Utility and Misc": {
+          "10-20 years": 1,
+          "50-60 years": 3,
+          "60-70 years": 2,
+          "70-80 years": 1,
+          "90-100 years": 1,
+          "110-120 years": 1,
+          "120-130 years": 1
+        },
+        "Assembly": {
+          "10-20 years": 1,
+          "20-30 years": 3,
+          "30-40 years": 3,
+          "40-50 years": 4,
+          "50-60 years": 4,
+          "60-70 years": 6,
+          "70-80 years": 2,
+          "80-90 years": 4,
+          "90-100 years": 4,
+          "100-110 years": 10,
+          "110-120 years": 16,
+          "120-130 years": 18,
+          "130-140 years": 2,
+          "160+ years": 1
+        }
+      },
+      "bin_20": {
+        "Residential": {
+          "0-20 years": 300,
+          "20-40 years": 119,
+          "40-60 years": 71,
+          "60-80 years": 168,
+          "80-100 years": 538,
+          "100-120 years": 1260,
+          "120-140 years": 690,
+          "140-160 years": 129,
+          "160+ years": 40,
+          "180+ years": 12
+        },
+        "Industrial": {
+          "0-20 years": 8,
+          "20-40 years": 10,
+          "40-60 years": 17,
+          "60-80 years": 13,
+          "80-100 years": 21,
+          "100-120 years": 36,
+          "120-140 years": 9
+        },
+        "Commercial": {
+          "0-20 years": 68,
+          "20-40 years": 60,
+          "40-60 years": 90,
+          "60-80 years": 99,
+          "80-100 years": 189,
+          "100-120 years": 184,
+          "120-140 years": 74,
+          "140-160 years": 4,
+          "160+ years": 2,
+          "180+ years": 1
+        },
+        "Government": {
+          "0-20 years": 6,
+          "40-60 years": 8,
+          "60-80 years": 12,
+          "80-100 years": 14,
+          "100-120 years": 20,
+          "120-140 years": 10,
+          "140-160 years": 1,
+          "160+ years": 1
+        },
+        "Unclassified": {
+          "0-20 years": 36,
+          "20-40 years": 11,
+          "40-60 years": 10,
+          "60-80 years": 10,
+          "80-100 years": 19,
+          "100-120 years": 40,
+          "120-140 years": 21,
+          "140-160 years": 2
+        },
+        "Education": {
+          "0-20 years": 26,
+          "20-40 years": 27,
+          "40-60 years": 17,
+          "60-80 years": 13,
+          "80-100 years": 37,
+          "100-120 years": 90,
+          "120-140 years": 32,
+          "140-160 years": 1,
+          "160+ years": 1
+        },
+        "Utility and Misc": {
+          "0-20 years": 1,
+          "40-60 years": 3,
+          "60-80 years": 3,
+          "80-100 years": 1,
+          "100-120 years": 1,
+          "120-140 years": 1
+        },
+        "Assembly": {
+          "0-20 years": 1,
+          "20-40 years": 6,
+          "40-60 years": 8,
+          "60-80 years": 8,
+          "80-100 years": 8,
+          "100-120 years": 26,
+          "120-140 years": 20,
+          "160+ years": 1
+        }
+      },
+      "bin_25": {
+        "Residential": {
+          "0-25 years": 376,
+          "25-50 years": 64,
+          "50-75 years": 174,
+          "75-100 years": 582,
+          "100-125 years": 1579,
+          "125-150 years": 455,
+          "150+ years": 76,
+          "175+ years": 21
+        },
+        "Industrial": {
+          "0-25 years": 10,
+          "25-50 years": 18,
+          "50-75 years": 13,
+          "75-100 years": 28,
+          "100-125 years": 42,
+          "125-150 years": 3
+        },
+        "Commercial": {
+          "0-25 years": 85,
+          "25-50 years": 79,
+          "50-75 years": 127,
+          "75-100 years": 215,
+          "100-125 years": 243,
+          "125-150 years": 18,
+          "150+ years": 3,
+          "175+ years": 1
+        },
+        "Government": {
+          "0-25 years": 6,
+          "25-50 years": 6,
+          "50-75 years": 11,
+          "75-100 years": 17,
+          "100-125 years": 27,
+          "125-150 years": 3,
+          "150+ years": 2
+        },
+        "Unclassified": {
+          "0-25 years": 39,
+          "25-50 years": 13,
+          "50-75 years": 10,
+          "75-100 years": 24,
+          "100-125 years": 53,
+          "125-150 years": 10
+        },
+        "Education": {
+          "0-25 years": 30,
+          "25-50 years": 31,
+          "50-75 years": 19,
+          "75-100 years": 40,
+          "100-125 years": 113,
+          "125-150 years": 9,
+          "150+ years": 2
+        },
+        "Utility and Misc": {
+          "0-25 years": 1,
+          "50-75 years": 6,
+          "75-100 years": 1,
+          "100-125 years": 2
+        },
+        "Assembly": {
+          "0-25 years": 4,
+          "25-50 years": 7,
+          "50-75 years": 10,
+          "75-100 years": 10,
+          "100-125 years": 40,
+          "125-150 years": 6,
+          "150+ years": 1
+        }
+      },
+      "bin_30": {
+        "Residential": {
+          "0-30 years": 397,
+          "30-60 years": 93,
+          "60-90 years": 349,
+          "90-120 years": 1617,
+          "120-150 years": 774,
+          "150+ years": 85,
+          "180+ years": 13
+        },
+        "Industrial": {
+          "0-30 years": 15,
+          "30-60 years": 20,
+          "60-90 years": 19,
+          "90-120 years": 51,
+          "120-150 years": 9
+        },
+        "Commercial": {
+          "0-30 years": 91,
+          "30-60 years": 127,
+          "60-90 years": 183,
+          "90-120 years": 289,
+          "120-150 years": 77,
+          "150+ years": 3,
+          "180+ years": 1
+        },
+        "Government": {
+          "0-30 years": 6,
+          "30-60 years": 8,
+          "60-90 years": 22,
+          "90-120 years": 24,
+          "120-150 years": 10,
+          "150+ years": 2
+        },
+        "Unclassified": {
+          "0-30 years": 42,
+          "30-60 years": 15,
+          "60-90 years": 17,
+          "90-120 years": 52,
+          "120-150 years": 23
+        },
+        "Education": {
+          "0-30 years": 41,
+          "30-60 years": 29,
+          "60-90 years": 20,
+          "90-120 years": 120,
+          "120-150 years": 32,
+          "150+ years": 2
+        },
+        "Utility and Misc": {
+          "0-30 years": 1,
+          "30-60 years": 3,
+          "60-90 years": 3,
+          "90-120 years": 2,
+          "120-150 years": 1
+        },
+        "Assembly": {
+          "0-30 years": 4,
+          "30-60 years": 11,
+          "60-90 years": 12,
+          "90-120 years": 30,
+          "120-150 years": 20,
+          "150+ years": 1
+        }
+      },
+      "bin_50": {
+        "Residential": {
+          "0-50 years": 440,
+          "50-100 years": 756,
+          "100-150 years": 2034,
+          "150+ years": 97
+        },
+        "Industrial": {
+          "0-50 years": 28,
+          "50-100 years": 41,
+          "100-150 years": 45
+        },
+        "Commercial": {
+          "0-50 years": 164,
+          "50-100 years": 342,
+          "100-150 years": 261,
+          "150+ years": 4
+        },
+        "Government": {
+          "0-50 years": 12,
+          "50-100 years": 28,
+          "100-150 years": 30,
+          "150+ years": 2
+        },
+        "Unclassified": {
+          "0-50 years": 52,
+          "50-100 years": 34,
+          "100-150 years": 63
+        },
+        "Education": {
+          "0-50 years": 61,
+          "50-100 years": 59,
+          "100-150 years": 122,
+          "150+ years": 2
+        },
+        "Utility and Misc": {
+          "0-50 years": 1,
+          "50-100 years": 7,
+          "100-150 years": 2
+        },
+        "Assembly": {
+          "0-50 years": 11,
+          "50-100 years": 20,
+          "100-150 years": 46,
+          "150+ years": 1
+        }
+      }
+    }
+  },
+  "occupancy_lifespan_demo_gfa": {
+    "RAZE": {
+      "bin_10": {
+        "Industrial": {
+          "0-10 years": 4955,
+          "30-40 years": 2039,
+          "40-50 years": 27461,
+          "50-60 years": 678,
+          "70-80 years": 11739,
+          "80-90 years": 3987,
+          "100-110 years": 3768,
+          "120-130 years": 47487
+        },
+        "Residential": {
+          "0-10 years": 36762,
+          "10-20 years": 31499,
+          "20-30 years": 25116,
+          "30-40 years": 736,
+          "40-50 years": 5225,
+          "50-60 years": 343,
+          "60-70 years": 2984,
+          "70-80 years": 1064,
+          "80-90 years": 5749,
+          "90-100 years": 31533,
+          "100-110 years": 21754,
+          "110-120 years": 21645,
+          "120-130 years": 24574,
+          "130-140 years": 3340,
+          "140-150 years": 55817,
+          "150+ years": 513,
+          "160+ years": 190,
+          "180+ years": 231
+        },
+        "Commercial": {
+          "0-10 years": 38181,
+          "10-20 years": 58014,
+          "40-50 years": 79236,
+          "50-60 years": 5796,
+          "60-70 years": 4560,
+          "70-80 years": 5266,
+          "80-90 years": 14077,
+          "90-100 years": 7859,
+          "100-110 years": 563898,
+          "110-120 years": 16520,
+          "120-130 years": 16938,
+          "140-150 years": 944,
+          "160+ years": 19784
+        },
+        "Unclassified": {
+          "0-10 years": 36674,
+          "10-20 years": 6154,
+          "70-80 years": 684,
+          "80-90 years": 987,
+          "90-100 years": 182,
+          "110-120 years": 16479,
+          "120-130 years": 20976
+        },
+        "Government": {
+          "40-50 years": 753,
+          "60-70 years": 2117,
+          "70-80 years": 2242,
+          "80-90 years": 11129,
+          "100-110 years": 2122,
+          "120-130 years": 20930
+        },
+        "Assembly": {
+          "30-40 years": 2567,
+          "40-50 years": 56,
+          "50-60 years": 892,
+          "60-70 years": 480,
+          "90-100 years": 204,
+          "100-110 years": 12871,
+          "120-130 years": 636
+        },
+        "Education": {
+          "0-10 years": 3939,
+          "30-40 years": 463,
+          "40-50 years": 19329,
+          "50-60 years": 480,
+          "60-70 years": 4337,
+          "70-80 years": 442,
+          "90-100 years": 1546,
+          "100-110 years": 1007,
+          "110-120 years": 1695,
+          "120-130 years": 17573
+        },
+        "Utility and Misc": {
+          "90-100 years": 193105
+        }
+      },
+      "bin_20": {
+        "Industrial": {
+          "0-20 years": 4955,
+          "20-40 years": 2039,
+          "40-60 years": 28139,
+          "60-80 years": 11739,
+          "80-100 years": 3987,
+          "100-120 years": 3768,
+          "120-140 years": 47487
+        },
+        "Residential": {
+          "0-20 years": 68262,
+          "20-40 years": 25853,
+          "40-60 years": 5569,
+          "60-80 years": 4049,
+          "80-100 years": 37282,
+          "100-120 years": 43399,
+          "120-140 years": 27915,
+          "140-160 years": 56331,
+          "160+ years": 190,
+          "180+ years": 231
+        },
+        "Commercial": {
+          "0-20 years": 96195,
+          "40-60 years": 85032,
+          "60-80 years": 9826,
+          "80-100 years": 21937,
+          "100-120 years": 580418,
+          "120-140 years": 16938,
+          "140-160 years": 944,
+          "160+ years": 19784
+        },
+        "Unclassified": {
+          "0-20 years": 42828,
+          "60-80 years": 684,
+          "80-100 years": 1170,
+          "100-120 years": 16479,
+          "120-140 years": 20976
+        },
+        "Government": {
+          "40-60 years": 753,
+          "60-80 years": 4360,
+          "80-100 years": 11129,
+          "100-120 years": 2122,
+          "120-140 years": 20930
+        },
+        "Assembly": {
+          "20-40 years": 2567,
+          "40-60 years": 949,
+          "60-80 years": 480,
+          "80-100 years": 204,
+          "100-120 years": 12871,
+          "120-140 years": 636
+        },
+        "Education": {
+          "0-20 years": 3939,
+          "20-40 years": 463,
+          "40-60 years": 19810,
+          "60-80 years": 4779,
+          "80-100 years": 1546,
+          "100-120 years": 2703,
+          "120-140 years": 17573
+        },
+        "Utility and Misc": {
+          "80-100 years": 193105
+        }
+      },
+      "bin_25": {
+        "Industrial": {
+          "0-25 years": 4955,
+          "25-50 years": 29500,
+          "50-75 years": 678,
+          "75-100 years": 15726,
+          "100-125 years": 51256
+        },
+        "Residential": {
+          "0-25 years": 92225,
+          "25-50 years": 7115,
+          "50-75 years": 4175,
+          "75-100 years": 37501,
+          "100-125 years": 58049,
+          "125-150 years": 69083,
+          "150+ years": 704,
+          "175+ years": 231
+        },
+        "Commercial": {
+          "0-25 years": 96195,
+          "25-50 years": 79236,
+          "50-75 years": 12089,
+          "75-100 years": 25470,
+          "100-125 years": 597206,
+          "125-150 years": 1095,
+          "150+ years": 19784
+        },
+        "Unclassified": {
+          "0-25 years": 42828,
+          "75-100 years": 1855,
+          "100-125 years": 37456
+        },
+        "Government": {
+          "25-50 years": 753,
+          "50-75 years": 4148,
+          "75-100 years": 11340,
+          "100-125 years": 2122,
+          "125-150 years": 20930
+        },
+        "Assembly": {
+          "25-50 years": 2624,
+          "50-75 years": 1372,
+          "75-100 years": 204,
+          "100-125 years": 13119,
+          "125-150 years": 388
+        },
+        "Education": {
+          "0-25 years": 3939,
+          "25-50 years": 19792,
+          "50-75 years": 4818,
+          "75-100 years": 1988,
+          "100-125 years": 10945,
+          "125-150 years": 9330
+        },
+        "Utility and Misc": {
+          "75-100 years": 193105
+        }
+      },
+      "bin_30": {
+        "Industrial": {
+          "0-30 years": 4955,
+          "30-60 years": 30179,
+          "60-90 years": 15726,
+          "90-120 years": 3768,
+          "120-150 years": 47487
+        },
+        "Residential": {
+          "0-30 years": 93379,
+          "30-60 years": 6306,
+          "60-90 years": 9799,
+          "90-120 years": 74933,
+          "120-150 years": 83732,
+          "150+ years": 704,
+          "180+ years": 231
+        },
+        "Commercial": {
+          "0-30 years": 96195,
+          "30-60 years": 85032,
+          "60-90 years": 23904,
+          "90-120 years": 588277,
+          "120-150 years": 17882,
+          "150+ years": 19784
+        },
+        "Unclassified": {
+          "0-30 years": 42828,
+          "60-90 years": 1672,
+          "90-120 years": 16662,
+          "120-150 years": 20976
+        },
+        "Government": {
+          "30-60 years": 753,
+          "60-90 years": 15489,
+          "90-120 years": 2122,
+          "120-150 years": 20930
+        },
+        "Assembly": {
+          "30-60 years": 3517,
+          "60-90 years": 480,
+          "90-120 years": 13076,
+          "120-150 years": 636
+        },
+        "Education": {
+          "0-30 years": 3939,
+          "30-60 years": 20273,
+          "60-90 years": 4779,
+          "90-120 years": 4249,
+          "120-150 years": 17573
+        },
+        "Utility and Misc": {
+          "90-120 years": 193105
+        }
+      },
+      "bin_50": {
+        "Industrial": {
+          "0-50 years": 34456,
+          "50-100 years": 16405,
+          "100-150 years": 51256
+        },
+        "Residential": {
+          "0-50 years": 99341,
+          "50-100 years": 41676,
+          "100-150 years": 127132,
+          "150+ years": 935
+        },
+        "Commercial": {
+          "0-50 years": 175431,
+          "50-100 years": 37560,
+          "100-150 years": 598301,
+          "150+ years": 19784
+        },
+        "Unclassified": {
+          "0-50 years": 42828,
+          "50-100 years": 1855,
+          "100-150 years": 37456
+        },
+        "Government": {
+          "0-50 years": 753,
+          "50-100 years": 15489,
+          "100-150 years": 23053
+        },
+        "Assembly": {
+          "0-50 years": 2624,
+          "50-100 years": 1577,
+          "100-150 years": 13508
+        },
+        "Education": {
+          "0-50 years": 23731,
+          "50-100 years": 6806,
+          "100-150 years": 20276
+        },
+        "Utility and Misc": {
+          "50-100 years": 193105
+        }
+      }
+    },
+    "EXTDEM": {
+      "bin_10": {
+        "Industrial": {
+          "20-30 years": 25704,
+          "40-50 years": 742,
+          "50-60 years": 5536,
+          "70-80 years": 10747,
+          "80-90 years": 30101,
+          "90-100 years": 7941,
+          "100-110 years": 2235,
+          "110-120 years": 15553,
+          "120-130 years": 15762
+        },
+        "Commercial": {
+          "0-10 years": 19895,
+          "10-20 years": 6594,
+          "20-30 years": 51459,
+          "30-40 years": 51558,
+          "40-50 years": 39643,
+          "50-60 years": 164447,
+          "60-70 years": 17094,
+          "70-80 years": 29725,
+          "80-90 years": 23404,
+          "90-100 years": 109513,
+          "100-110 years": 105056,
+          "110-120 years": 78850,
+          "120-130 years": 22581
+        },
+        "Residential": {
+          "0-10 years": 30698,
+          "10-20 years": 162684,
+          "20-30 years": 19801,
+          "30-40 years": 736,
+          "40-50 years": 4841,
+          "50-60 years": 2163,
+          "60-70 years": 3706,
+          "70-80 years": 10408,
+          "80-90 years": 23387,
+          "90-100 years": 45953,
+          "100-110 years": 51497,
+          "110-120 years": 139385,
+          "120-130 years": 49985,
+          "130-140 years": 10665,
+          "140-150 years": 8367,
+          "150+ years": 446,
+          "160+ years": 1321,
+          "180+ years": 284
+        },
+        "Unclassified": {
+          "0-10 years": 1724,
+          "10-20 years": 1997,
+          "30-40 years": 143,
+          "40-50 years": 64552,
+          "50-60 years": 2763,
+          "70-80 years": 487,
+          "80-90 years": 19373,
+          "90-100 years": 3366,
+          "100-110 years": 16089,
+          "110-120 years": 25057,
+          "120-130 years": 19330
+        },
+        "Education": {
+          "0-10 years": 29091,
+          "10-20 years": 55592,
+          "20-30 years": 21396,
+          "60-70 years": 62166,
+          "90-100 years": 6721,
+          "100-110 years": 4062,
+          "110-120 years": 82960,
+          "120-130 years": 37800
+        },
+        "Government": {
+          "40-50 years": 1461,
+          "60-70 years": 2046,
+          "70-80 years": 205,
+          "80-90 years": 2176,
+          "100-110 years": 25929,
+          "110-120 years": 3611,
+          "120-130 years": 1186,
+          "160+ years": 626
+        },
+        "Assembly": {
+          "30-40 years": 18620,
+          "40-50 years": 126171,
+          "50-60 years": 684,
+          "60-70 years": 75171,
+          "90-100 years": 4362,
+          "110-120 years": 822,
+          "120-130 years": 4002,
+          "160+ years": 179
+        },
+        "Utility and Misc": {
+          "50-60 years": 5589,
+          "60-70 years": 5742,
+          "70-80 years": 10323
+        }
+      },
+      "bin_20": {
+        "Industrial": {
+          "20-40 years": 25704,
+          "40-60 years": 6278,
+          "60-80 years": 10747,
+          "80-100 years": 38042,
+          "100-120 years": 17789,
+          "120-140 years": 15762
+        },
+        "Commercial": {
+          "0-20 years": 26490,
+          "20-40 years": 103017,
+          "40-60 years": 204090,
+          "60-80 years": 46820,
+          "80-100 years": 132918,
+          "100-120 years": 183906,
+          "120-140 years": 22581
+        },
+        "Residential": {
+          "0-20 years": 193383,
+          "20-40 years": 20537,
+          "40-60 years": 7004,
+          "60-80 years": 14114,
+          "80-100 years": 69341,
+          "100-120 years": 190883,
+          "120-140 years": 60650,
+          "140-160 years": 8813,
+          "160+ years": 1321,
+          "180+ years": 284
+        },
+        "Unclassified": {
+          "0-20 years": 3721,
+          "20-40 years": 143,
+          "40-60 years": 67316,
+          "60-80 years": 487,
+          "80-100 years": 22739,
+          "100-120 years": 41146,
+          "120-140 years": 19330
+        },
+        "Education": {
+          "0-20 years": 84684,
+          "20-40 years": 21396,
+          "60-80 years": 62166,
+          "80-100 years": 6721,
+          "100-120 years": 87023,
+          "120-140 years": 37800
+        },
+        "Government": {
+          "40-60 years": 1461,
+          "60-80 years": 2252,
+          "80-100 years": 2176,
+          "100-120 years": 29540,
+          "120-140 years": 1186,
+          "160+ years": 626
+        },
+        "Assembly": {
+          "20-40 years": 18620,
+          "40-60 years": 126855,
+          "60-80 years": 75171,
+          "80-100 years": 4362,
+          "100-120 years": 822,
+          "120-140 years": 4002,
+          "160+ years": 179
+        },
+        "Utility and Misc": {
+          "40-60 years": 5589,
+          "60-80 years": 16066
+        }
+      },
+      "bin_25": {
+        "Industrial": {
+          "25-50 years": 26447,
+          "50-75 years": 7019,
+          "75-100 years": 47306,
+          "100-125 years": 33551
+        },
+        "Commercial": {
+          "0-25 years": 77949,
+          "25-50 years": 91201,
+          "50-75 years": 211268,
+          "75-100 years": 132918,
+          "100-125 years": 206270,
+          "125-150 years": 217
+        },
+        "Residential": {
+          "0-25 years": 212575,
+          "25-50 years": 6186,
+          "50-75 years": 14017,
+          "75-100 years": 71601,
+          "100-125 years": 230445,
+          "125-150 years": 29456,
+          "150+ years": 1767,
+          "175+ years": 284
+        },
+        "Unclassified": {
+          "0-25 years": 3721,
+          "25-50 years": 64696,
+          "50-75 years": 3251,
+          "75-100 years": 22739,
+          "100-125 years": 59032,
+          "125-150 years": 1444
+        },
+        "Education": {
+          "0-25 years": 84727,
+          "25-50 years": 21353,
+          "50-75 years": 62166,
+          "75-100 years": 6721,
+          "100-125 years": 112625,
+          "125-150 years": 12198
+        },
+        "Government": {
+          "25-50 years": 1461,
+          "50-75 years": 2252,
+          "75-100 years": 2176,
+          "100-125 years": 30727,
+          "150+ years": 626
+        },
+        "Assembly": {
+          "25-50 years": 144791,
+          "50-75 years": 75855,
+          "75-100 years": 4362,
+          "100-125 years": 4824,
+          "150+ years": 179
+        },
+        "Utility and Misc": {
+          "50-75 years": 21655
+        }
+      },
+      "bin_30": {
+        "Industrial": {
+          "0-30 years": 25704,
+          "30-60 years": 6278,
+          "60-90 years": 40849,
+          "90-120 years": 25730,
+          "120-150 years": 15762
+        },
+        "Commercial": {
+          "0-30 years": 77949,
+          "30-60 years": 255649,
+          "60-90 years": 70225,
+          "90-120 years": 293420,
+          "120-150 years": 22581
+        },
+        "Residential": {
+          "0-30 years": 213184,
+          "30-60 years": 7741,
+          "60-90 years": 37501,
+          "90-120 years": 236837,
+          "120-150 years": 69018,
+          "150+ years": 1767,
+          "180+ years": 27108
+        },
+        "Unclassified": {
+          "0-30 years": 3721,
+          "30-60 years": 67459,
+          "60-90 years": 19861,
+          "90-120 years": 44512,
+          "120-150 years": 19330
+        },
+        "Education": {
+          "0-30 years": 106081,
+          "60-90 years": 62166,
+          "90-120 years": 93744,
+          "120-150 years": 37800
+        },
+        "Government": {
+          "30-60 years": 1461,
+          "60-90 years": 4428,
+          "90-120 years": 29540,
+          "120-150 years": 1186,
+          "150+ years": 626
+        },
+        "Assembly": {
+          "30-60 years": 145475,
+          "60-90 years": 75171,
+          "90-120 years": 5184,
+          "120-150 years": 4002,
+          "150+ years": 179
+        },
+        "Utility and Misc": {
+          "30-60 years": 5589,
+          "60-90 years": 16066
+        }
+      },
+      "bin_50": {
+        "Industrial": {
+          "0-50 years": 26447,
+          "50-100 years": 54326,
+          "100-150 years": 33551
+        },
+        "Commercial": {
+          "0-50 years": 169151,
+          "50-100 years": 344186,
+          "100-150 years": 206487
+        },
+        "Residential": {
+          "0-50 years": 218762,
+          "50-100 years": 85618,
+          "100-150 years": 259901,
+          "150+ years": 2052
+        },
+        "Unclassified": {
+          "0-50 years": 68417,
+          "50-100 years": 25990,
+          "100-150 years": 60477
+        },
+        "Education": {
+          "0-50 years": 106081,
+          "50-100 years": 68888,
+          "100-150 years": 124823
+        },
+        "Government": {
+          "0-50 years": 1461,
+          "50-100 years": 4428,
+          "100-150 years": 30727,
+          "150+ years": 626
+        },
+        "Assembly": {
+          "0-50 years": 144791,
+          "50-100 years": 80218,
+          "100-150 years": 4824,
+          "150+ years": 179
+        },
+        "Utility and Misc": {
+          "50-100 years": 21655
+        }
+      }
+    },
+    "INTDEM": {
+      "bin_10": {
+        "Residential": {
+          "0-10 years": 237411,
+          "10-20 years": 1148940,
+          "20-30 years": 750102,
+          "30-40 years": 743595,
+          "40-50 years": 115471,
+          "50-60 years": 340871,
+          "60-70 years": 18160,
+          "70-80 years": 95664,
+          "80-90 years": 80908,
+          "90-100 years": 356582,
+          "100-110 years": 313135,
+          "110-120 years": 1185254,
+          "120-130 years": 653085,
+          "130-140 years": 154244,
+          "140-150 years": 56562,
+          "150+ years": 85069,
+          "160+ years": 36202,
+          "170+ years": 5594,
+          "180+ years": 1713,
+          "190+ years": 27647
+        },
+        "Industrial": {
+          "0-10 years": 235557,
+          "10-20 years": 131877,
+          "20-30 years": 205489,
+          "30-40 years": 172364,
+          "40-50 years": 772669,
+          "50-60 years": 1587718,
+          "60-70 years": 132941,
+          "70-80 years": 103531,
+          "80-90 years": 46922,
+          "90-100 years": 547572,
+          "100-110 years": 204180,
+          "110-120 years": 406838,
+          "120-130 years": 127204
+        },
+        "Commercial": {
+          "0-10 years": 38666,
+          "10-20 years": 812152,
+          "20-30 years": 319330,
+          "30-40 years": 1543935,
+          "40-50 years": 964670,
+          "50-60 years": 604373,
+          "60-70 years": 159242,
+          "70-80 years": 760257,
+          "80-90 years": 188726,
+          "90-100 years": 526223,
+          "100-110 years": 573458,
+          "110-120 years": 538745,
+          "120-130 years": 543296,
+          "130-140 years": 1765,
+          "140-150 years": 342460,
+          "150+ years": 1289,
+          "160+ years": 8114,
+          "180+ years": 12945
+        },
+        "Government": {
+          "0-10 years": 1140,
+          "10-20 years": 128573,
+          "40-50 years": 208413,
+          "50-60 years": 2453,
+          "60-70 years": 21165,
+          "70-80 years": 37538,
+          "90-100 years": 14653,
+          "100-110 years": 80475,
+          "110-120 years": 61632,
+          "120-130 years": 59751,
+          "150+ years": 4441
+        },
+        "Unclassified": {
+          "0-10 years": 176594,
+          "10-20 years": 292952,
+          "20-30 years": 120074,
+          "30-40 years": 29632,
+          "40-50 years": 83369,
+          "50-60 years": 126230,
+          "60-70 years": 31140,
+          "70-80 years": 77194,
+          "80-90 years": 153538,
+          "90-100 years": 171257,
+          "100-110 years": 76010,
+          "110-120 years": 132170,
+          "120-130 years": 60318,
+          "130-140 years": 1599,
+          "140-150 years": 4952
+        },
+        "Education": {
+          "0-10 years": 190872,
+          "10-20 years": 391956,
+          "20-30 years": 286053,
+          "30-40 years": 115418,
+          "40-50 years": 164533,
+          "50-60 years": 201954,
+          "60-70 years": 17049,
+          "70-80 years": 63034,
+          "80-90 years": 111750,
+          "90-100 years": 962422,
+          "100-110 years": 225752,
+          "110-120 years": 821765,
+          "120-130 years": 260466,
+          "130-140 years": 293,
+          "150+ years": 2808,
+          "160+ years": 857
+        },
+        "Utility and Misc": {
+          "10-20 years": 25355,
+          "50-60 years": 939443,
+          "60-70 years": 4113,
+          "110-120 years": 222880,
+          "120-130 years": 367
+        },
+        "Assembly": {
+          "10-20 years": 39378,
+          "20-30 years": 232864,
+          "30-40 years": 3372,
+          "40-50 years": 7729,
+          "50-60 years": 136780,
+          "60-70 years": 2602,
+          "70-80 years": 78633,
+          "80-90 years": 16932,
+          "90-100 years": 3965,
+          "100-110 years": 23105,
+          "110-120 years": 115414,
+          "120-130 years": 55452,
+          "130-140 years": 672
+        }
+      },
+      "bin_20": {
+        "Residential": {
+          "0-20 years": 1386352,
+          "20-40 years": 1493697,
+          "40-60 years": 456343,
+          "60-80 years": 113825,
+          "80-100 years": 437491,
+          "100-120 years": 1498389,
+          "120-140 years": 807330,
+          "140-160 years": 141632,
+          "160+ years": 41797,
+          "180+ years": 29361
+        },
+        "Industrial": {
+          "0-20 years": 367434,
+          "20-40 years": 377854,
+          "40-60 years": 2360388,
+          "60-80 years": 236472,
+          "80-100 years": 594495,
+          "100-120 years": 611018,
+          "120-140 years": 127204
+        },
+        "Commercial": {
+          "0-20 years": 850819,
+          "20-40 years": 1863265,
+          "40-60 years": 1569044,
+          "60-80 years": 919499,
+          "80-100 years": 714950,
+          "100-120 years": 1112203,
+          "120-140 years": 545062,
+          "140-160 years": 343749,
+          "160+ years": 8114,
+          "180+ years": 12945
+        },
+        "Government": {
+          "0-20 years": 129714,
+          "40-60 years": 210867,
+          "60-80 years": 58704,
+          "80-100 years": 14653,
+          "100-120 years": 142107,
+          "120-140 years": 59751,
+          "140-160 years": 4441
+        },
+        "Unclassified": {
+          "0-20 years": 469546,
+          "20-40 years": 149707,
+          "40-60 years": 209600,
+          "60-80 years": 108334,
+          "80-100 years": 324796,
+          "100-120 years": 208180,
+          "120-140 years": 61917,
+          "140-160 years": 4952
+        },
+        "Education": {
+          "0-20 years": 582828,
+          "20-40 years": 401471,
+          "40-60 years": 366487,
+          "60-80 years": 80083,
+          "80-100 years": 1074172,
+          "100-120 years": 1047517,
+          "120-140 years": 260759,
+          "140-160 years": 2808,
+          "160+ years": 857
+        },
+        "Utility and Misc": {
+          "0-20 years": 25355,
+          "40-60 years": 939443,
+          "60-80 years": 4113,
+          "100-120 years": 222880,
+          "120-140 years": 367
+        },
+        "Assembly": {
+          "0-20 years": 39378,
+          "20-40 years": 236236,
+          "40-60 years": 144509,
+          "60-80 years": 81236,
+          "80-100 years": 20898,
+          "100-120 years": 138520,
+          "120-140 years": 56125
+        }
+      },
+      "bin_25": {
+        "Residential": {
+          "0-25 years": 1964502,
+          "25-50 years": 1031019,
+          "50-75 years": 376947,
+          "75-100 years": 515240,
+          "100-125 years": 1868085,
+          "125-150 years": 494197,
+          "150+ years": 123473,
+          "175+ years": 32755
+        },
+        "Industrial": {
+          "0-25 years": 490641,
+          "25-50 years": 1027317,
+          "50-75 years": 1776873,
+          "75-100 years": 641812,
+          "100-125 years": 685279,
+          "125-150 years": 52943
+        },
+        "Commercial": {
+          "0-25 years": 934257,
+          "25-50 years": 2744498,
+          "50-75 years": 1267632,
+          "75-100 years": 971191,
+          "100-125 years": 1523498,
+          "125-150 years": 476228,
+          "150+ years": 9403,
+          "175+ years": 12945
+        },
+        "Government": {
+          "0-25 years": 129714,
+          "25-50 years": 208413,
+          "50-75 years": 23619,
+          "75-100 years": 52192,
+          "100-125 years": 193896,
+          "125-150 years": 7962,
+          "150+ years": 4441
+        },
+        "Unclassified": {
+          "0-25 years": 583286,
+          "25-50 years": 119336,
+          "50-75 years": 167949,
+          "75-100 years": 391412,
+          "100-125 years": 228116,
+          "125-150 years": 46934
+        },
+        "Education": {
+          "0-25 years": 658603,
+          "25-50 years": 490230,
+          "50-75 years": 280509,
+          "75-100 years": 1075701,
+          "100-125 years": 1267858,
+          "125-150 years": 40418,
+          "150+ years": 3665
+        },
+        "Utility and Misc": {
+          "0-25 years": 25355,
+          "50-75 years": 943556,
+          "100-125 years": 223247
+        },
+        "Assembly": {
+          "0-25 years": 272242,
+          "25-50 years": 11102,
+          "50-75 years": 139383,
+          "75-100 years": 99532,
+          "100-125 years": 186729,
+          "125-150 years": 7916
+        }
+      },
+      "bin_30": {
+        "Residential": {
+          "0-30 years": 2136455,
+          "30-60 years": 1199938,
+          "60-90 years": 194733,
+          "90-120 years": 1854972,
+          "120-150 years": 863892,
+          "150+ years": 126866,
+          "180+ years": 29361
+        },
+        "Industrial": {
+          "0-30 years": 572923,
+          "30-60 years": 2532753,
+          "60-90 years": 283395,
+          "90-120 years": 1158590,
+          "120-150 years": 127204
+        },
+        "Commercial": {
+          "0-30 years": 1170150,
+          "30-60 years": 3112979,
+          "60-90 years": 1108226,
+          "90-120 years": 1638426,
+          "120-150 years": 887523,
+          "150+ years": 9403,
+          "180+ years": 12945
+        },
+        "Government": {
+          "0-30 years": 129714,
+          "30-60 years": 210867,
+          "60-90 years": 58704,
+          "90-120 years": 156761,
+          "120-150 years": 59751,
+          "150+ years": 4441
+        },
+        "Unclassified": {
+          "0-30 years": 589621,
+          "30-60 years": 239232,
+          "60-90 years": 261873,
+          "90-120 years": 379438,
+          "120-150 years": 66870
+        },
+        "Education": {
+          "0-30 years": 868882,
+          "30-60 years": 481905,
+          "60-90 years": 191833,
+          "90-120 years": 2009939,
+          "120-150 years": 260759,
+          "150+ years": 3665
+        },
+        "Utility and Misc": {
+          "0-30 years": 25355,
+          "30-60 years": 939443,
+          "60-90 years": 4113,
+          "90-120 years": 222880,
+          "120-150 years": 367
+        },
+        "Assembly": {
+          "0-30 years": 272242,
+          "30-60 years": 147882,
+          "60-90 years": 98169,
+          "90-120 years": 142486,
+          "120-150 years": 56125
+        }
+      },
+      "bin_50": {
+        "Residential": {
+          "0-50 years": 2995521,
+          "50-100 years": 892187,
+          "100-150 years": 2362282,
+          "150+ years": 156228
+        },
+        "Industrial": {
+          "0-50 years": 1517958,
+          "50-100 years": 2418686,
+          "100-150 years": 738223
+        },
+        "Commercial": {
+          "0-50 years": 3678756,
+          "50-100 years": 2238823,
+          "100-150 years": 1999726,
+          "150+ years": 22348
+        },
+        "Government": {
+          "0-50 years": 338128,
+          "50-100 years": 75811,
+          "100-150 years": 201859,
+          "150+ years": 4441
+        },
+        "Unclassified": {
+          "0-50 years": 702623,
+          "50-100 years": 559362,
+          "100-150 years": 275050
+        },
+        "Education": {
+          "0-50 years": 1148834,
+          "50-100 years": 1356210,
+          "100-150 years": 1308276,
+          "150+ years": 3665
+        },
+        "Utility and Misc": {
+          "0-50 years": 25355,
+          "50-100 years": 943556,
+          "100-150 years": 223247
+        },
+        "Assembly": {
+          "0-50 years": 283344,
+          "50-100 years": 238915,
+          "100-150 years": 194646
+        }
+      }
+    },
+    "all": {
+      "bin_10": {
+        "Residential": {
+          "0-10 years": 304872,
+          "10-20 years": 1343124,
+          "20-30 years": 795020,
+          "30-40 years": 745068,
+          "40-50 years": 125538,
+          "50-60 years": 343378,
+          "60-70 years": 24851,
+          "70-80 years": 107137,
+          "80-90 years": 110044,
+          "90-100 years": 434070,
+          "100-110 years": 386387,
+          "110-120 years": 1346285,
+          "120-130 years": 727646,
+          "130-140 years": 168250,
+          "140-150 years": 120747,
+          "150+ years": 86029,
+          "160+ years": 37714,
+          "170+ years": 5594,
+          "180+ years": 2229,
+          "190+ years": 27647
+        },
+        "Industrial": {
+          "0-10 years": 240512,
+          "10-20 years": 131877,
+          "20-30 years": 231194,
+          "30-40 years": 174404,
+          "40-50 years": 800873,
+          "50-60 years": 1593933,
+          "60-70 years": 132941,
+          "70-80 years": 126018,
+          "80-90 years": 81012,
+          "90-100 years": 555513,
+          "100-110 years": 210184,
+          "110-120 years": 422392,
+          "120-130 years": 190454
+        },
+        "Commercial": {
+          "0-10 years": 96743,
+          "10-20 years": 876761,
+          "20-30 years": 370789,
+          "30-40 years": 1595493,
+          "40-50 years": 1083549,
+          "50-60 years": 774618,
+          "60-70 years": 180897,
+          "70-80 years": 795249,
+          "80-90 years": 226208,
+          "90-100 years": 643596,
+          "100-110 years": 1242413,
+          "110-120 years": 634115,
+          "120-130 years": 582816,
+          "130-140 years": 1765,
+          "140-150 years": 343405,
+          "150+ years": 1289,
+          "160+ years": 27898,
+          "180+ years": 12945
+        },
+        "Government": {
+          "0-10 years": 1140,
+          "10-20 years": 128573,
+          "40-50 years": 210628,
+          "50-60 years": 2453,
+          "60-70 years": 25329,
+          "70-80 years": 39986,
+          "80-90 years": 13306,
+          "90-100 years": 14653,
+          "100-110 years": 108527,
+          "110-120 years": 65243,
+          "120-130 years": 81868,
+          "150+ years": 4441,
+          "160+ years": 626
+        },
+        "Unclassified": {
+          "0-10 years": 214993,
+          "10-20 years": 301103,
+          "20-30 years": 120074,
+          "30-40 years": 29776,
+          "40-50 years": 147922,
+          "50-60 years": 128994,
+          "60-70 years": 31140,
+          "70-80 years": 78366,
+          "80-90 years": 173900,
+          "90-100 years": 174806,
+          "100-110 years": 92099,
+          "110-120 years": 173707,
+          "120-130 years": 100626,
+          "130-140 years": 1599,
+          "140-150 years": 4952
+        },
+        "Education": {
+          "0-10 years": 223903,
+          "10-20 years": 447549,
+          "20-30 years": 307450,
+          "30-40 years": 115881,
+          "40-50 years": 183862,
+          "50-60 years": 202435,
+          "60-70 years": 83553,
+          "70-80 years": 63476,
+          "80-90 years": 111750,
+          "90-100 years": 970690,
+          "100-110 years": 230822,
+          "110-120 years": 906421,
+          "120-130 years": 315839,
+          "130-140 years": 293,
+          "150+ years": 2808,
+          "160+ years": 857
+        },
+        "Utility and Misc": {
+          "10-20 years": 25355,
+          "50-60 years": 945032,
+          "60-70 years": 9855,
+          "70-80 years": 10323,
+          "90-100 years": 193105,
+          "110-120 years": 222880,
+          "120-130 years": 367
+        },
+        "Assembly": {
+          "10-20 years": 39378,
+          "20-30 years": 232864,
+          "30-40 years": 24560,
+          "40-50 years": 133957,
+          "50-60 years": 138357,
+          "60-70 years": 78254,
+          "70-80 years": 78633,
+          "80-90 years": 16932,
+          "90-100 years": 8533,
+          "100-110 years": 35977,
+          "110-120 years": 116237,
+          "120-130 years": 60091,
+          "130-140 years": 672,
+          "160+ years": 179
+        }
+      },
+      "bin_20": {
+        "Residential": {
+          "0-20 years": 1647997,
+          "20-40 years": 1540089,
+          "40-60 years": 468917,
+          "60-80 years": 131989,
+          "80-100 years": 544115,
+          "100-120 years": 1732673,
+          "120-140 years": 895896,
+          "140-160 years": 206777,
+          "160+ years": 43309,
+          "180+ years": 29876
+        },
+        "Industrial": {
+          "0-20 years": 372389,
+          "20-40 years": 405598,
+          "40-60 years": 2394806,
+          "60-80 years": 258959,
+          "80-100 years": 636525,
+          "100-120 years": 632577,
+          "120-140 years": 190454
+        },
+        "Commercial": {
+          "0-20 years": 973505,
+          "20-40 years": 1966283,
+          "40-60 years": 1858168,
+          "60-80 years": 976147,
+          "80-100 years": 869805,
+          "100-120 years": 1876528,
+          "120-140 years": 584582,
+          "140-160 years": 344694,
+          "160+ years": 27898,
+          "180+ years": 12945
+        },
+        "Government": {
+          "0-20 years": 129714,
+          "40-60 years": 213082,
+          "60-80 years": 65316,
+          "80-100 years": 27959,
+          "100-120 years": 173770,
+          "120-140 years": 81868,
+          "140-160 years": 4441,
+          "160+ years": 626
+        },
+        "Unclassified": {
+          "0-20 years": 516096,
+          "20-40 years": 149850,
+          "40-60 years": 276916,
+          "60-80 years": 109507,
+          "80-100 years": 348707,
+          "100-120 years": 265806,
+          "120-140 years": 102225,
+          "140-160 years": 4952
+        },
+        "Education": {
+          "0-20 years": 671452,
+          "20-40 years": 423331,
+          "40-60 years": 386297,
+          "60-80 years": 147029,
+          "80-100 years": 1082440,
+          "100-120 years": 1137243,
+          "120-140 years": 316133,
+          "140-160 years": 2808,
+          "160+ years": 857
+        },
+        "Utility and Misc": {
+          "0-20 years": 25355,
+          "40-60 years": 945032,
+          "60-80 years": 20179,
+          "80-100 years": 193105,
+          "100-120 years": 222880,
+          "120-140 years": 367
+        },
+        "Assembly": {
+          "0-20 years": 39378,
+          "20-40 years": 257425,
+          "40-60 years": 272314,
+          "60-80 years": 156888,
+          "80-100 years": 25465,
+          "100-120 years": 152214,
+          "120-140 years": 60763,
+          "160+ years": 179
+        }
+      },
+      "bin_25": {
+        "Residential": {
+          "0-25 years": 2269304,
+          "25-50 years": 1044321,
+          "50-75 years": 395139,
+          "75-100 years": 624343,
+          "100-125 years": 2156580,
+          "125-150 years": 592736,
+          "150+ years": 125945,
+          "175+ years": 33270
+        },
+        "Industrial": {
+          "0-25 years": 495596,
+          "25-50 years": 1083265,
+          "50-75 years": 1784571,
+          "75-100 years": 704846,
+          "100-125 years": 770088,
+          "125-150 years": 52943
+        },
+        "Commercial": {
+          "0-25 years": 1108403,
+          "25-50 years": 2914936,
+          "50-75 years": 1490990,
+          "75-100 years": 1129580,
+          "100-125 years": 2326975,
+          "125-150 years": 477540,
+          "150+ years": 29188,
+          "175+ years": 12945
+        },
+        "Government": {
+          "0-25 years": 129714,
+          "25-50 years": 210628,
+          "50-75 years": 30019,
+          "75-100 years": 65710,
+          "100-125 years": 226746,
+          "125-150 years": 28893,
+          "150+ years": 5068
+        },
+        "Unclassified": {
+          "0-25 years": 629836,
+          "25-50 years": 184032,
+          "50-75 years": 171201,
+          "75-100 years": 416007,
+          "100-125 years": 324604,
+          "125-150 years": 48379
+        },
+        "Education": {
+          "0-25 years": 747270,
+          "25-50 years": 531376,
+          "50-75 years": 347493,
+          "75-100 years": 1084411,
+          "100-125 years": 1391429,
+          "125-150 years": 61947,
+          "150+ years": 3665
+        },
+        "Utility and Misc": {
+          "0-25 years": 25355,
+          "50-75 years": 965212,
+          "75-100 years": 193105,
+          "100-125 years": 223247
+        },
+        "Assembly": {
+          "0-25 years": 272242,
+          "25-50 years": 158518,
+          "50-75 years": 216612,
+          "75-100 years": 104099,
+          "100-125 years": 204674,
+          "125-150 years": 8304,
+          "150+ years": 179
+        }
+      },
+      "bin_30": {
+        "Residential": {
+          "0-30 years": 2443018,
+          "30-60 years": 1213986,
+          "60-90 years": 242033,
+          "90-120 years": 2166743,
+          "120-150 years": 1016644,
+          "150+ years": 129338,
+          "180+ years": 56701
+        },
+        "Industrial": {
+          "0-30 years": 603583,
+          "30-60 years": 2569211,
+          "60-90 years": 339971,
+          "90-120 years": 1188090,
+          "120-150 years": 190454
+        },
+        "Commercial": {
+          "0-30 years": 1344295,
+          "30-60 years": 3453661,
+          "60-90 years": 1202356,
+          "90-120 years": 2520125,
+          "120-150 years": 927987,
+          "150+ years": 29188,
+          "180+ years": 12945
+        },
+        "Government": {
+          "0-30 years": 129714,
+          "30-60 years": 213082,
+          "60-90 years": 78622,
+          "90-120 years": 188424,
+          "120-150 years": 81868,
+          "150+ years": 5068
+        },
+        "Unclassified": {
+          "0-30 years": 636171,
+          "30-60 years": 306692,
+          "60-90 years": 283407,
+          "90-120 years": 440613,
+          "120-150 years": 107177
+        },
+        "Education": {
+          "0-30 years": 978903,
+          "30-60 years": 502179,
+          "60-90 years": 258779,
+          "90-120 years": 2107933,
+          "120-150 years": 316133,
+          "150+ years": 3665
+        },
+        "Utility and Misc": {
+          "0-30 years": 25355,
+          "30-60 years": 945032,
+          "60-90 years": 20179,
+          "90-120 years": 415985,
+          "120-150 years": 367
+        },
+        "Assembly": {
+          "0-30 years": 272242,
+          "30-60 years": 296875,
+          "60-90 years": 173820,
+          "90-120 years": 160748,
+          "120-150 years": 60763,
+          "150+ years": 179
+        }
+      },
+      "bin_50": {
+        "Residential": {
+          "0-50 years": 3313625,
+          "50-100 years": 1019483,
+          "100-150 years": 2749317,
+          "150+ years": 159215
+        },
+        "Industrial": {
+          "0-50 years": 1578861,
+          "50-100 years": 2489418,
+          "100-150 years": 823032
+        },
+        "Commercial": {
+          "0-50 years": 4023339,
+          "50-100 years": 2620571,
+          "100-150 years": 2804516,
+          "150+ years": 42133
+        },
+        "Government": {
+          "0-50 years": 340343,
+          "50-100 years": 95729,
+          "100-150 years": 255639,
+          "150+ years": 5068
+        },
+        "Unclassified": {
+          "0-50 years": 813869,
+          "50-100 years": 587208,
+          "100-150 years": 372984
+        },
+        "Education": {
+          "0-50 years": 1278646,
+          "50-100 years": 1431905,
+          "100-150 years": 1453376,
+          "150+ years": 3665
+        },
+        "Utility and Misc": {
+          "0-50 years": 25355,
+          "50-100 years": 1158317,
+          "100-150 years": 223247
+        },
+        "Assembly": {
+          "0-50 years": 430760,
+          "50-100 years": 320711,
+          "100-150 years": 212978,
+          "150+ years": 179
         }
       }
     }
@@ -73340,7 +77076,7 @@
   ],
   "metadata": {
     "year_range": "2009-2025",
-    "generated_date": "2025-12-03T22:52:38.227614",
+    "generated_date": "2025-12-06T23:26:16.468342",
     "total_ma_buildings": 2091488,
     "total_boston_buildings": 2091114,
     "total_boston_demolitions": 4985,
