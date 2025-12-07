@@ -1748,125 +1748,144 @@
         }
 
 
-        function renderGenericStackedChart(canvasId, category, demoType, binSize) {
-            const ctx = document.getElementById(canvasId)?.getContext('2d');
-            if (!ctx) return;
-            
-            if (charts[canvasId]) charts[canvasId].destroy();
+function renderGenericStackedChart(canvasId, category, demoType, binSize) {
+    const ctx = document.getElementById(canvasId)?.getContext('2d');
+    if (!ctx) return;
+    
+    if (charts[canvasId]) charts[canvasId].destroy();
 
-            const metricInput = document.querySelector('input[name="globalMetric"]:checked');
-            const metricVal = metricInput ? metricInput.value : 'count';
-            const isPct = metricVal.includes('_pct'); 
-            const isGfa = metricVal.includes('gfa');  
+    const metricInput = document.querySelector('input[name="globalMetric"]:checked');
+    const metricVal = metricInput ? metricInput.value : 'count';
+    const isPct = metricVal.includes('_pct'); 
+    const isGfa = metricVal.includes('gfa');  
 
-            let dataKey = `${category}_lifespan_demo`;
-            if (isGfa) dataKey += `_gfa`;
+    const binKey = `bin_${binSize}`;
+    
+    const sortDataKey = `${category}_lifespan_demo`; 
+    
+    let displayDataKey = sortDataKey;
+    if (isGfa) displayDataKey += `_gfa`;
 
-            const binKey = `bin_${binSize}`;
-            
-            if (!currentData[dataKey] || !currentData[dataKey][demoType] || !currentData[dataKey][demoType][binKey]) {
-                return; 
+    if (!currentData[displayDataKey] || !currentData[displayDataKey][demoType] || !currentData[displayDataKey][demoType][binKey]) {
+        return; 
+    }
+    if (!currentData[sortDataKey] || !currentData[sortDataKey][demoType] || !currentData[sortDataKey][demoType][binKey]) {
+        return; 
+    }
+
+    const sortingRawData = currentData[sortDataKey][demoType][binKey]; 
+    const displayRawData = currentData[displayDataKey][demoType][binKey]; 
+
+    const sortingTotals = {};
+    Object.entries(sortingRawData).forEach(([catName, binData]) => {
+        sortingTotals[catName] = Object.values(binData).reduce((sum, val) => sum + val, 0);
+    });
+
+    let displayGrandTotal = 0;
+    Object.values(displayRawData).forEach(binData => {
+        displayGrandTotal += Object.values(binData).reduce((sum, val) => sum + val, 0);
+    });
+
+    let sortedCategories = Object.keys(sortingTotals);
+
+    if (category === 'material') {
+        const fixedOrder = ["Wood", "Masonry", "Concrete", "Steel", "Unknown"];
+        sortedCategories.sort((a, b) => {
+            let idxA = fixedOrder.indexOf(a);
+            let idxB = fixedOrder.indexOf(b);
+            if (idxA === -1) idxA = 999;
+            if (idxB === -1) idxB = 999;
+            return idxA - idxB;
+        });
+    } else {
+        sortedCategories.sort((a, b) => sortingTotals[b] - sortingTotals[a]);
+    }
+
+    sortedCategories = sortedCategories.slice(0, 15);
+
+    const allBins = new Set();
+    sortedCategories.forEach(cat => {
+        Object.keys(displayRawData[cat] || {}).forEach(b => allBins.add(b));
+    });
+    const sortedBins = Array.from(allBins).sort((a, b) => {
+        const getFirstNum = (str) => parseInt(str.match(/\d+/)?.[0] || 0);
+        return getFirstNum(a) - getFirstNum(b);
+    });
+
+    const colors = getLifespanColors(sortedBins.length); 
+
+    const datasets = sortedBins.map((binLabel, index) => {
+        const dataPoints = sortedCategories.map(cat => {
+            const val = displayRawData[cat]?.[binLabel] || 0;
+            if (isPct) {
+                return displayGrandTotal > 0 ? (val / displayGrandTotal * 100) : 0;
             }
+            return val;
+        });
 
-            const rawData = currentData[dataKey][demoType][binKey]; 
+        return {
+            label: binLabel,
+            data: dataPoints,
+            backgroundColor: colors[index],
+            borderWidth: 0.5,
+            borderColor: 'rgba(255, 255, 255, 0.2)'
+        };
+    });
 
-            const categoryTotals = {};
-            let grandTotal = 0; 
+    let yAxisTitle = 'Count';
+    if (isGfa) yAxisTitle = 'GFA (sq meters)';
+    if (isPct) yAxisTitle = 'Percentage of Grand Total (%)'; 
 
-            Object.entries(rawData).forEach(([catName, binData]) => {
-                const catSum = Object.values(binData).reduce((sum, val) => sum + val, 0);
-                categoryTotals[catName] = catSum;
-                grandTotal += catSum; 
-            });
-
-            let sortedCategories = Object.keys(categoryTotals).sort((a, b) => categoryTotals[b] - categoryTotals[a]);
-            sortedCategories = sortedCategories.slice(0, 15);
-            const allBins = new Set();
-            sortedCategories.forEach(cat => {
-                Object.keys(rawData[cat] || {}).forEach(b => allBins.add(b));
-            });
-            const sortedBins = Array.from(allBins).sort((a, b) => {
-                const getFirstNum = (str) => parseInt(str.match(/\d+/)?.[0] || 0);
-                return getFirstNum(a) - getFirstNum(b);
-            });
-
-            const colors = getLifespanColors(sortedBins.length); 
-
-            const datasets = sortedBins.map((binLabel, index) => {
-                const dataPoints = sortedCategories.map(cat => {
-                    const val = rawData[cat]?.[binLabel] || 0;
-                    
-                    if (isPct) {
-
-                        return grandTotal > 0 ? (val / grandTotal * 100) : 0;
-                    }
-                    return val;
-                });
-
-                return {
-                    label: binLabel,
-                    data: dataPoints,
-                    backgroundColor: colors[index],
-                    borderWidth: 0.5,
-                    borderColor: 'rgba(255, 255, 255, 0.2)'
-                };
-            });
-
-            let yAxisTitle = 'Count';
-            if (isGfa) yAxisTitle = 'GFA (sq meters)';
-            if (isPct) yAxisTitle = 'Percentage of Grand Total (%)'; 
-
-            charts[canvasId] = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: sortedCategories,
-                    datasets: datasets
+    charts[canvasId] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: sortedCategories,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { 
+                    stacked: true, 
+                    title: { display: true, text: category.charAt(0).toUpperCase() + category.slice(1) }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { 
-                            stacked: true, 
-                            title: { display: true, text: category.charAt(0).toUpperCase() + category.slice(1) }
-                        },
-                        y: { 
-                            stacked: true, 
-                            title: { display: true, text: yAxisTitle },
-
-                            max: undefined 
-                        }
-                    },
-                    plugins: {
-                        legend: { display: true, position: 'right', reverse: true }, 
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    let val = context.parsed.y;
-                                    if (label) label += ': ';
-                                    
-                                    if (isPct) {
-                                        label += val.toFixed(2) + '%';
-                                    } else {
-                                        label += val.toLocaleString();
-                                    }
-                                    return label;
-                                },
-                                footer: function(tooltipItems) {
-                                    if (!isPct) return '';
-                                    let total = 0;
-                                    tooltipItems.forEach(function(tooltipItem) {
-                                        total += tooltipItem.parsed.y;
-                                    });
-                                    return 'Category Total: ' + total.toFixed(2) + '% of All Data';
-                                }
+                y: { 
+                    stacked: true, 
+                    title: { display: true, text: yAxisTitle },
+                    max: undefined 
+                }
+            },
+            plugins: {
+                legend: { display: true, position: 'right', reverse: true }, 
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            let val = context.parsed.y;
+                            if (label) label += ': ';
+                            
+                            if (isPct) {
+                                label += val.toFixed(2) + '%';
+                            } else {
+                                label += val.toLocaleString();
                             }
+                            return label;
+                        },
+                        footer: function(tooltipItems) {
+                            if (!isPct) return '';
+                            let total = 0;
+                            tooltipItems.forEach(function(tooltipItem) {
+                                total += tooltipItem.parsed.y;
+                            });
+                            return 'Category Total: ' + total.toFixed(2) + '% of All Data';
                         }
                     }
                 }
-            });
+            }
         }
+    });
+}
 
         function createYearlyChart(yearlyData) {
             const ctx = document.getElementById('yearlyChart').getContext('2d');
