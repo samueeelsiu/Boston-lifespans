@@ -77076,7 +77076,7 @@
   ],
   "metadata": {
     "year_range": "2009-2025",
-    "generated_date": "2025-12-06T23:26:16.468342",
+    "generated_date": "2025-12-10T03:26:45.385616",
     "total_ma_buildings": 2091488,
     "total_boston_buildings": 2091114,
     "total_boston_demolitions": 4985,
@@ -77093,7 +77093,7 @@
     {
       "material": "Wood",
       "count": 2658,
-      "avg_lifespan": 98.67080511662904,
+      "avg_lifespan": 103.51515151515152,
       "demolition_breakdown": {
         "RAZE": 265,
         "EXTDEM": 585,
@@ -77103,7 +77103,7 @@
     {
       "material": "Masonry",
       "count": 1362,
-      "avg_lifespan": 84.40969162995594,
+      "avg_lifespan": 84.24657534246575,
       "demolition_breakdown": {
         "RAZE": 108,
         "EXTDEM": 194,
@@ -77113,7 +77113,7 @@
     {
       "material": "Steel",
       "count": 389,
-      "avg_lifespan": 71.26735218508998,
+      "avg_lifespan": 84.46808510638297,
       "demolition_breakdown": {
         "RAZE": 60,
         "EXTDEM": 47,
@@ -77123,7 +77123,7 @@
     {
       "material": "Concrete",
       "count": 362,
-      "avg_lifespan": 70.51104972375691,
+      "avg_lifespan": 86.6774193548387,
       "demolition_breakdown": {
         "RAZE": 61,
         "EXTDEM": 95,
@@ -77133,7 +77133,7 @@
     {
       "material": "Unknown",
       "count": 214,
-      "avg_lifespan": 53.850467289719624,
+      "avg_lifespan": 67.6,
       "demolition_breakdown": {
         "RAZE": 50,
         "EXTDEM": 51,

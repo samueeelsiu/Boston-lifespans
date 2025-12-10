@@ -660,10 +660,15 @@ def process_demolition_data(
     mat_stats = []
     for mat in df['material_group'].unique():
         m_df = df[df['material_group'] == mat]
+
+
+        raze_pos_df = m_df[(m_df['DEMOLITION_TYPE'] == 'RAZE') & (m_df['lifespan'] > 0)]
+        avg_raze_lifespan = float(raze_pos_df['lifespan'].mean()) if not raze_pos_df.empty else 0.0
+
         mat_stats.append({
             'material': mat,
             'count': int(len(m_df)),
-            'avg_lifespan': float(m_df['lifespan'].mean()),
+            'avg_lifespan': avg_raze_lifespan,
             'demolition_breakdown': {
                 'RAZE': int((m_df['DEMOLITION_TYPE'] == 'RAZE').sum()),
                 'EXTDEM': int((m_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
