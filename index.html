@@ -223,16 +223,6 @@
             border-right: 2px solid #dee2e6;
         }
 
-        .heatmap-cell {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            font-weight: 500;
-        }
 
         .heatmap-table tr:hover td:not(.material-name) {
             opacity: 0.9;
@@ -405,6 +395,49 @@
             border-color: #2c3e50;
         }
 
+        .heatmap-cell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .heatmap-cell:hover {
+            z-index: 100;
+        }
+
+        .heatmap-tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 9999;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin-top: 5px;
+            pointer-events: none;
+        }
+
+        .heatmap-tooltip::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent rgba(0, 0, 0, 0.9) transparent;
+        }
+
+        .heatmap-cell:hover .heatmap-tooltip {
+            visibility: visible;
+        }
+
         .mini-stat { display: inline-block; margin-right: 10px; margin-bottom: 10px; vertical-align: top; }
         .badge { display:inline-block; padding:2px 10px; border-radius:999px; font-size:12px; line-height:1.6; border:1px solid; margin-right:6px; white-space:nowrap; }
         .badge-close { background:#e6ffed; border-color:#22c55e; color:#166534; }
@@ -511,33 +544,16 @@
         <div id="mainContent" style="display: none;">
             <div class="controls">
                 <div class="control-group">
-                    <label><strong>Demolition Type:</strong></label>
+                    <label>Demolition Type:</label>
                     <div class="radio-group">
+                        <label><input type="radio" name="demolitionView" value="RAZE" checked onchange="updateDemolitionView()"> RAZE</label>
+                        <label><input type="radio" name="demolitionView" value="EXTDEM" onchange="updateDemolitionView()"> EXTDEM</label>
+                        <label><input type="radio" name="demolitionView" value="INTDEM" onchange="updateDemolitionView()"> INTDEM</label>
                         <label><input type="radio" name="demolitionView" value="all" onchange="updateDemolitionView()"> All Types</label>
-                        <label><input type="radio" name="demolitionView" value="RAZE" checked onchange="updateDemolitionView()"> RAZE Only</label>
-                        <label><input type="radio" name="demolitionView" value="EXTDEM" onchange="updateDemolitionView()"> EXTDEM Only</label>
-                        <label><input type="radio" name="demolitionView" value="INTDEM" onchange="updateDemolitionView()"> INTDEM Only</label>
                     </div>
+                    <span style="font-size: 0.8em; color: #888; margin-left: 10px;">(Does not apply to Zoning District Deep Dive)</span>
                 </div>
                 
-                <div class="control-group">
-                    <label>Lifespan Bin Size:</label>
-                    <select id="lifespanBinSize" onchange="updateVisualization()">
-                        <option value="10">10 Years</option>
-                        <option value="20" selected>20 Years</option>
-                        <option value="25">25 Years</option>
-                        <option value="30">30 Years</option>
-                        <option value="50">50 Years</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <label>Display:</label>
-                    <select id="viewMode" onchange="updateVisualization()">
-                        <option value="count">Count</option>
-                        <option value="percentage">Percentage</option>
-                    </select>
-                </div>
 
             </div>
 
@@ -699,54 +715,66 @@
                             <button id="catOccupancyBtn" onclick="setCategory('occupancy')">Occupancy</button>
                         </div>
                         
-                        <div style="display: flex; gap: 10px; font-size: 0.9em; align-items: center; background: #f8f9fa; padding: 8px 12px; border-radius: 4px;">
-                            <span style="font-weight: 500;">Metric:</span>
-                            <label><input type="radio" name="deepDiveMetric" value="count" checked onchange="updateZoningDeepDive()"> Count</label>
-                            <label><input type="radio" name="deepDiveMetric" value="count_pct" onchange="updateZoningDeepDive()"> Count (%)</label>
-                            <label><input type="radio" name="deepDiveMetric" value="gfa" onchange="updateZoningDeepDive()"> GFA</label>
-                            <label><input type="radio" name="deepDiveMetric" value="gfa_pct" onchange="updateZoningDeepDive()"> GFA (%)</label>
+                        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                            <div style="display: flex; gap: 10px; font-size: 0.9em; align-items: center; background: #f8f9fa; padding: 8px 12px; border-radius: 4px;">
+                                <span style="font-weight: 500;">Bin Size:</span>
+                                <select id="heatmapBinSize" onchange="updateZoningDeepDive()" style="padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <option value="10">10 years</option>
+                                    <option value="20" selected>20 years</option>
+                                    <option value="25">25 years</option>
+                                    <option value="50">50 years</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; gap: 10px; font-size: 0.9em; align-items: center; background: #f8f9fa; padding: 8px 12px; border-radius: 4px;">
+                                <span style="font-weight: 500;">Metric:</span>
+                                <label><input type="radio" name="deepDiveMetric" value="count" checked onchange="updateZoningDeepDive()"> Count</label>
+                                <label><input type="radio" name="deepDiveMetric" value="count_pct" onchange="updateZoningDeepDive()"> Count (%)</label>
+                                <label><input type="radio" name="deepDiveMetric" value="gfa" onchange="updateZoningDeepDive()"> GFA</label>
+                                <label><input type="radio" name="deepDiveMetric" value="gfa_pct" onchange="updateZoningDeepDive()"> GFA (%)</label>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Stacked Heatmaps -->
-                    <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px;">
-                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
-                            <h4 id="heatmapDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Material vs. Lifespan (RAZE)</h4>
-                            <div id="zoningHeatmapDemo" style="overflow-x: auto;"></div>
-                        </div>
-                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
-                            <h4 id="heatmapCurrentTitle" style="text-align: center; margin-bottom: 10px;">Current: Material vs. Age</h4>
-                            <div id="zoningHeatmapCurrent" style="overflow-x: auto;"></div>
-                        </div>
+                    <!-- Heatmap 1: Demolished -->
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; position: relative; z-index: 10;">
+                        <h4 id="heatmapDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Material vs. Lifespan (RAZE)</h4>
+                        <div id="zoningHeatmapDemo" style="overflow-x: auto; padding-bottom: 60px;"></div>
                     </div>
 
-                    <!-- Side-by-side Boxplots -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    <!-- Heatmap 2: Current -->
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; position: relative; z-index: 9;">
+                        <h4 id="heatmapCurrentTitle" style="text-align: center; margin-bottom: 10px;">Current: Material vs. Age</h4>
+                        <div id="zoningHeatmapCurrent" style="overflow-x: auto; padding-bottom: 60px;"></div>
+                    </div>
+
+                    <!-- Boxplots: Side-by-side -->
+                    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                        <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px;">
                             <h4 id="boxplotDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Lifespan by Material (RAZE)</h4>
-                            <div style="height: 350px;"><canvas id="boxplotDemoChart"></canvas></div>
+                            <div style="height: 300px;"><canvas id="boxplotDemoChart"></canvas></div>
                         </div>
-                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                        <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px;">
                             <h4 id="boxplotCurrentTitle" style="text-align: center; margin-bottom: 10px;">Current: Age by Material</h4>
-                            <div style="height: 350px;"><canvas id="boxplotCurrentChart"></canvas></div>
+                            <div style="height: 300px;"><canvas id="boxplotCurrentChart"></canvas></div>
                         </div>
                     </div>
 
-                    <!-- Side-by-side Statistics -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    <!-- Statistics: Side-by-side -->
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px;">
                             <h4 id="statsDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Material Statistics</h4>
-                            <div style="max-height: 400px; overflow-y: auto;">
-                                <table class="material-table" id="statsDemoTable">
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <table class="material-table" id="statsDemoTable" style="width: 100%;">
                                     <thead><tr><th>Name</th><th>Count</th><th>Avg Lifespan</th></tr></thead>
                                     <tbody></tbody>
                                 </table>
                             </div>
                         </div>
-                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                        <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px;">
                             <h4 id="statsCurrentTitle" style="text-align: center; margin-bottom: 10px;">Current: Material Statistics</h4>
-                            <div style="max-height: 400px; overflow-y: auto;">
-                                <table class="material-table" id="statsCurrentTable">
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <table class="material-table" id="statsCurrentTable" style="width: 100%;">
                                     <thead><tr><th>Name</th><th>Count</th><th>Avg Age</th></tr></thead>
                                     <tbody></tbody>
                                 </table>
@@ -1503,11 +1531,10 @@
             document.getElementById('occupancyHeatmapContent').innerHTML = html;
         }
 
-
         function updateVisualization() {
             if (!currentData) return;
             const globalMaxAge = computeGlobalMaxAge(currentData);
-            const binSize = parseInt(document.getElementById('lifespanBinSize').value);
+            const binSize = 20; 
 
             createLifespanChart(currentData, globalMaxAge);
             const currentAgeData = currentData.current_age_distribution_10yr || [];
@@ -1664,7 +1691,7 @@
 
         function updateStackedBarCharts() {
             if (!currentData) return;
-            const binSize = parseInt(document.getElementById('lifespanBinSize').value);
+            const binSize = 20;
             const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
 
             document.getElementById('materialStackedTitle').innerText = `Material Type vs Lifespan (${demolitionView})`;
@@ -1891,7 +1918,7 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
             const ctx = document.getElementById('lifespanChart').getContext('2d');
             if (charts.lifespan) charts.lifespan.destroy();
             
-            const binSize = parseInt(document.getElementById('lifespanBinSize').value);
+            const binSize = 20;
             const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
             const useLogScale = document.getElementById('logScale').checked;
             const labels = [];
@@ -2411,7 +2438,7 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
         }
 
 
-        function renderZoneHeatmap(data, countData, containerId, isPct = false, allCategories = null) {
+        function renderZoneHeatmap(data, countData, containerId, isPct = false, allCategories = null, avgData = null) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
@@ -2441,7 +2468,7 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                 });
             });
 
-            // Build table with Total column 
+            // Build table with Total column
             let html = '<table class="heatmap-table" style="font-size: 0.85em;">';
             html += '<thead><tr><th class="material-header">Type</th>';
             sortedBins.forEach(bin => {
@@ -2453,10 +2480,19 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
             categories.forEach(cat => {
                 html += `<tr><td class="material-name">${cat}</td>`;
                 let rowTotal = 0;
+                let rowTotalForAvg = 0;
+                let rowWeightedSum = 0;
                 
                 sortedBins.forEach(bin => {
                     const val = data[cat]?.[bin] || 0;
+                    const count = countData[cat]?.[bin] || 0;
+                    const avg = avgData?.[cat]?.[bin];
                     rowTotal += val;
+                    
+                    if (count > 0 && avg) {
+                        rowTotalForAvg += count;
+                        rowWeightedSum += count * avg;
+                    }
                     
                     let colorVal, displayVal;
                     if (isPct && grandTotal > 0) {
@@ -2472,20 +2508,33 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                     const intensity = maxVal > 0 ? colorVal / maxVal : 0;
                     const color = intensity > 0.5 ? 'white' : '#333';
 
-                    html += `<td style="background-color:${bgColor}; color:${color}">${displayVal}</td>`;
+                    // 构建 tooltip 内容
+                    let tooltipText = `<strong>${cat}</strong> | ${bin} yrs<br>Count: ${count.toLocaleString()}`;
+                    if (avg !== undefined && avg !== null) {
+                        tooltipText += `<br>Avg: ${avg.toFixed(1)} yrs`;
+                    }
+
+                    html += `<td class="heatmap-cell" style="background-color:${bgColor}; color:${color};">${displayVal}<span class="heatmap-tooltip">${tooltipText}</span></td>`;
                 });
                 
                 const totalDisplay = isPct && grandTotal > 0 
                     ? ((rowTotal / grandTotal) * 100).toFixed(1) + '%'
                     : rowTotal.toLocaleString();
-                html += `<td style="background: #e9ecef; color: #333; font-weight: 600;">${totalDisplay}</td>`;
+                
+                // Total 列的 tooltip
+                let totalTooltipText = `<strong>${cat}</strong> | Total<br>Count: ${rowTotal.toLocaleString()}`;
+                if (rowTotalForAvg > 0) {
+                    const overallAvg = rowWeightedSum / rowTotalForAvg;
+                    totalTooltipText += `<br>Avg: ${overallAvg.toFixed(1)} yrs`;
+                }
+                
+                html += `<td class="heatmap-cell" style="background: #e9ecef; color: #333; font-weight: 600;">${totalDisplay}<span class="heatmap-tooltip">${totalTooltipText}</span></td>`;
                 html += '</tr>';
             });
             html += '</tbody></table>';
 
             container.innerHTML = html;
         }
-
 
         function updateZoningDeepDive() {
             const zoneName = document.getElementById('zoningDistrictFilter').value;
@@ -2507,7 +2556,6 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                 // For All Boston, zoom out and show all zoning overlays
                 zoningDeepDiveMap.setView([42.3601, -71.0589], 11);
                 
-                // 显示所有 zoning districts
                 if (globalZoningGeoJSON) {
                     zoningDistrictLayer = L.geoJSON(globalZoningGeoJSON, {
                         style: {
@@ -2604,6 +2652,10 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } }
             });
 
+            // Get bin size
+            const binSize = document.getElementById('heatmapBinSize').value;
+            const binKey = `bin_${binSize}`;
+
             // Get metric settings
             const metricInput = document.querySelector('input[name="deepDiveMetric"]:checked');
             const metricVal = metricInput ? metricInput.value : 'count';
@@ -2616,22 +2668,22 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
             let demoStatsData, currentStatsData;
 
             if (currentCategory === 'material') {
-                demoHeatmapData = d.heatmap_data;
-                currentHeatmapData = d.current_heatmap_material;
+                demoHeatmapData = d.heatmap_data?.[binKey];
+                currentHeatmapData = d.current_heatmap_material?.[binKey];
                 demoBoxplotData = d.boxplot_material;
                 currentBoxplotData = d.current_boxplot_material;
                 demoStatsData = d.stats_material;
                 currentStatsData = d.current_stats_material;
             } else if (currentCategory === 'foundation') {
-                demoHeatmapData = d.heatmap_data_foundation;
-                currentHeatmapData = d.current_heatmap_foundation;
+                demoHeatmapData = d.heatmap_data_foundation?.[binKey];
+                currentHeatmapData = d.current_heatmap_foundation?.[binKey];
                 demoBoxplotData = d.boxplot_foundation;
                 currentBoxplotData = d.current_boxplot_foundation;
                 demoStatsData = d.stats_foundation;
                 currentStatsData = d.current_stats_foundation;
             } else {
-                demoHeatmapData = d.heatmap_data_occupancy;
-                currentHeatmapData = d.current_heatmap_occupancy;
+                demoHeatmapData = d.heatmap_data_occupancy?.[binKey];
+                currentHeatmapData = d.current_heatmap_occupancy?.[binKey];
                 demoBoxplotData = d.boxplot_occupancy;
                 currentBoxplotData = d.current_boxplot_occupancy;
                 demoStatsData = d.stats_occupancy;
@@ -2643,12 +2695,14 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
             // Render Demolished Heatmap
             const demoCountData = (demoHeatmapData && demoHeatmapData['count']) ? demoHeatmapData['count'] : {};
             const demoDisplayData = (demoHeatmapData && demoHeatmapData[baseMetric]) ? demoHeatmapData[baseMetric] : {};
-            renderZoneHeatmap(demoDisplayData, demoCountData, 'zoningHeatmapDemo', isPct, allCategories);
+            const demoAvgData = (demoHeatmapData && demoHeatmapData['avg']) ? demoHeatmapData['avg'] : {};
+            renderZoneHeatmap(demoDisplayData, demoCountData, 'zoningHeatmapDemo', isPct, allCategories, demoAvgData);
 
             // Render Current Heatmap
             const currentCountData = (currentHeatmapData && currentHeatmapData['count']) ? currentHeatmapData['count'] : {};
             const currentDisplayData = (currentHeatmapData && currentHeatmapData[baseMetric]) ? currentHeatmapData[baseMetric] : {};
-            renderZoneHeatmap(currentDisplayData, currentCountData, 'zoningHeatmapCurrent', isPct, allCategories);
+            const currentAvgData = (currentHeatmapData && currentHeatmapData['avg']) ? currentHeatmapData['avg'] : {};
+            renderZoneHeatmap(currentDisplayData, currentCountData, 'zoningHeatmapCurrent', isPct, allCategories, currentAvgData);
 
             // Render Boxplots
             renderBoxplot('boxplotDemoChart', demoBoxplotData || {}, allCategories);

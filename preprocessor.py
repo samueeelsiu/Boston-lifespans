@@ -158,9 +158,10 @@ def process_demolition_data(
     # ==========================================
     result = {}
 
+    boston_demo_df = df[df['Zoning_District'].notna()]
     demo_avg = {}
     for dtype in ['RAZE', 'EXTDEM', 'INTDEM']:
-        sub = df[df['DEMOLITION_TYPE'] == dtype]
+        sub = boston_demo_df[boston_demo_df['DEMOLITION_TYPE'] == dtype]
         sub_pos = sub[sub['lifespan'] > 0]
         demo_avg[dtype] = float(sub_pos['lifespan'].mean()) if not sub_pos.empty else 0.0
 
@@ -193,7 +194,7 @@ def process_demolition_data(
 
     result['summary_stats'] = {
         'total_demolitions': int(len(boston_df)),
-        'average_lifespan': float(r_pos['lifespan'].mean()) if not r_pos.empty else 0, 
+        'average_lifespan': float(r_pos['lifespan'].mean()) if not r_pos.empty else 0,
         'raze_count': int(len(r_pos)), \
         'extdem_count': int((boston_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
         'intdem_count': int((boston_df['DEMOLITION_TYPE'] == 'INTDEM').sum()),
@@ -340,6 +341,40 @@ def process_demolition_data(
                 heatmap_gfa[grp] = bins_g
         return {'count': heatmap_counts, 'gfa': heatmap_gfa}
 
+    def make_all_bin_heatmaps(d_df, group_col, value_col='lifespan'):
+        result = {}
+        for bin_size in [10, 20, 25, 50]:
+            heatmap_counts = {}
+            heatmap_gfa = {}
+            heatmap_avg = {}
+            if d_df.empty:
+                result[f'bin_{bin_size}'] = {'count': {}, 'gfa': {}, 'avg': {}}
+                continue
+
+            top_groups = d_df[group_col].value_counts().head(15).index.tolist()
+
+            for grp in top_groups:
+                grp_df = d_df[d_df[group_col] == grp]
+                if len(grp_df) == 0: continue
+                bins_c = {}
+                bins_g = {}
+                bins_a = {}
+                for i in range(0, 200, bin_size):
+                    label = f"{i}-{i + bin_size}"
+                    mask = (grp_df[value_col] >= i) & (grp_df[value_col] < i + bin_size)
+                    subset = grp_df[mask]
+                    count = len(subset)
+                    if count > 0:
+                        bins_c[label] = int(count)
+                        bins_g[label] = int(subset['Est GFA sqmeters'].sum())
+                        bins_a[label] = float(subset[value_col].mean())
+                if bins_c:
+                    heatmap_counts[grp] = bins_c
+                    heatmap_gfa[grp] = bins_g
+                    heatmap_avg[grp] = bins_a
+            result[f'bin_{bin_size}'] = {'count': heatmap_counts, 'gfa': heatmap_gfa, 'avg': heatmap_avg}
+        return result
+
     def make_boxplot_data(d_df, group_col='material_group', value_col='lifespan'):
         boxplot_data = {}
         if d_df.empty: return boxplot_data
@@ -415,9 +450,9 @@ def process_demolition_data(
             'count_raze': int(len(r_pos)),
             'avg_raze_lifespan': float(r_pos['lifespan'].mean()) if len(r_pos) > 0 else 0,
             'demolished_age_distribution_10yr': make_hist(r_pos['lifespan']),
-            'heatmap_data': make_district_heatmap(r_pos, bin_size=20),
-            'heatmap_data_foundation': make_district_foundation_heatmap(r_pos, bin_size=20),
-            'heatmap_data_occupancy': make_district_occupancy_heatmap(r_pos, bin_size=20),
+            'heatmap_data': make_all_bin_heatmaps(r_pos, 'material_group', 'lifespan'),
+            'heatmap_data_foundation': make_all_bin_heatmaps(r_pos, 'foundation_group', 'lifespan'),
+            'heatmap_data_occupancy': make_all_bin_heatmaps(r_pos, 'occupancy_group', 'lifespan'),
             'positive_raze_points': points,
 
 
@@ -425,9 +460,9 @@ def process_demolition_data(
             'avg_current_age': float(d_all_df['current_age'].mean()) if len(d_all_df) > 0 else 0,
             'current_age_distribution_10yr': make_hist(d_all_df['current_age']),
 
-            'current_heatmap_material': make_current_heatmap(d_all_df, 20, 'material_group'),
-            'current_heatmap_foundation': make_current_heatmap(d_all_df, 20, 'foundation_group'),
-            'current_heatmap_occupancy': make_current_heatmap(d_all_df, 20, 'occupancy_group'),
+            'current_heatmap_material': make_all_bin_heatmaps(d_all_df, 'material_group', 'current_age'),
+            'current_heatmap_foundation': make_all_bin_heatmaps(d_all_df, 'foundation_group', 'current_age'),
+            'current_heatmap_occupancy': make_all_bin_heatmaps(d_all_df, 'occupancy_group', 'current_age'),
 
             'boxplot_material': make_boxplot_data(r_pos, 'material_group', 'lifespan'),
             'boxplot_foundation': make_boxplot_data(r_pos, 'foundation_group', 'lifespan'),
@@ -465,21 +500,21 @@ def process_demolition_data(
         'avg_raze_lifespan': float(all_raze_pos['lifespan'].mean()) if len(all_raze_pos) > 0 else 0,
         'demolished_age_distribution_10yr': make_hist(all_raze_pos['lifespan']),
         'positive_raze_points': all_points,
-        'heatmap_data': make_district_heatmap(all_raze_pos, 20),
-        'heatmap_data_foundation': make_district_foundation_heatmap(all_raze_pos, 20),
-        'heatmap_data_occupancy': make_district_occupancy_heatmap(all_raze_pos, 20),
-        'current_heatmap_material': make_current_heatmap(all_current, 20, 'material_group'),
-        'current_heatmap_foundation': make_current_heatmap(all_current, 20, 'foundation_group'),
-        'current_heatmap_occupancy': make_current_heatmap(all_current, 20, 'occupancy_group'),
+        'heatmap_data': make_all_bin_heatmaps(all_raze_pos, 'material_group', 'lifespan'),
+        'heatmap_data_foundation': make_all_bin_heatmaps(all_raze_pos, 'foundation_group', 'lifespan'),
+        'heatmap_data_occupancy': make_all_bin_heatmaps(all_raze_pos, 'occupancy_group', 'lifespan'),
+        'current_heatmap_material': make_all_bin_heatmaps(all_current, 'material_group', 'current_age'),
+        'current_heatmap_foundation': make_all_bin_heatmaps(all_current, 'foundation_group', 'current_age'),
+        'current_heatmap_occupancy': make_all_bin_heatmaps(all_current, 'occupancy_group', 'current_age'),
         'boxplot_material': make_boxplot_data(all_raze_pos, 'material_group', 'lifespan'),
         'boxplot_foundation': make_boxplot_data(all_raze_pos, 'foundation_group', 'lifespan'),
         'boxplot_occupancy': make_boxplot_data(all_raze_pos, 'occupancy_group', 'lifespan'),
         'current_boxplot_material': make_boxplot_data(all_current, 'material_group', 'current_age'),
         'current_boxplot_foundation': make_boxplot_data(all_current, 'foundation_group', 'current_age'),
         'current_boxplot_occupancy': make_boxplot_data(all_current, 'occupancy_group', 'current_age'),
-        'stats_material': make_stats_data(df, 'material_group', True),
-        'stats_foundation': make_stats_data(df, 'foundation_group', True),
-        'stats_occupancy': make_stats_data(df, 'occupancy_group', True),
+        'stats_material': make_stats_data(boston_df, 'material_group', True),
+        'stats_foundation': make_stats_data(boston_df, 'foundation_group', True),
+        'stats_occupancy': make_stats_data(boston_df, 'occupancy_group', True),
         'current_stats_material': make_stats_data(all_current, 'material_group', False),
         'current_stats_foundation': make_stats_data(all_current, 'foundation_group', False),
         'current_stats_occupancy': make_stats_data(all_current, 'occupancy_group', False),
