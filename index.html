@@ -835,10 +835,6 @@
             </div>
 
 
-            <div class="chart-container">
-                <h2 class="chart-title">Demolitions by City</h2>
-                <div class="city-grid" id="cityGrid"></div>
-            </div>
         </div>
     </div>
 
@@ -1653,17 +1649,6 @@
                 }
             }
 
-            if (data.city_stats) {
-                const cityGrid = document.getElementById('cityGrid');
-                cityGrid.innerHTML = '';
-                data.city_stats.forEach(city => {
-                    const div = document.createElement('div');
-                    div.className = 'city-item';
-                    div.innerHTML = `<div class="city-name">${city.city}</div><div class="city-count">${city.count.toLocaleString()} demolitions</div>`;
-                    cityGrid.appendChild(div);
-                });
-            }
-
             updateVisualization();
             createYearlyChart(data.yearly_stacked);
             updateStats('RAZE');
@@ -2438,7 +2423,7 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
         }
 
 
-        function renderZoneHeatmap(data, countData, containerId, isPct = false, allCategories = null, avgData = null) {
+        function renderZoneHeatmap(data, countData, containerId, isPct = false, allCategories = null, avgData = null, cutoff = 240, binSize = 20) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
@@ -2449,14 +2434,19 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                 return;
             }
 
+            const plusLabel = `${cutoff}+`;
+
             const allBins = new Set();
-            Object.values(data).forEach(bins => Object.keys(bins).forEach(b => allBins.add(b)));
-            if (allBins.size === 0) {
-                for (let i = 0; i < 200; i += 20) {
-                    allBins.add(`${i}-${i + 20}`);
-                }
+            for (let i = 0; i < cutoff; i += binSize) {
+                allBins.add(`${i}-${i + binSize}`);
             }
-            const sortedBins = Array.from(allBins).sort((a, b) => parseInt(a) - parseInt(b));
+            allBins.add(plusLabel);
+
+            const sortedBins = Array.from(allBins).sort((a, b) => {
+                if (a.includes('+')) return 1;
+                if (b.includes('+')) return -1;
+                return parseInt(a) - parseInt(b);
+            });
 
             // Calculate max value and grand total for percentage
             let maxVal = 0;
@@ -2508,7 +2498,6 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                     const intensity = maxVal > 0 ? colorVal / maxVal : 0;
                     const color = intensity > 0.5 ? 'white' : '#333';
 
-                    // 构建 tooltip 内容
                     let tooltipText = `<strong>${cat}</strong> | ${bin} yrs<br>Count: ${count.toLocaleString()}`;
                     if (avg !== undefined && avg !== null) {
                         tooltipText += `<br>Avg: ${avg.toFixed(1)} yrs`;
@@ -2521,7 +2510,6 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                     ? ((rowTotal / grandTotal) * 100).toFixed(1) + '%'
                     : rowTotal.toLocaleString();
                 
-                // Total 列的 tooltip
                 let totalTooltipText = `<strong>${cat}</strong> | Total<br>Count: ${rowTotal.toLocaleString()}`;
                 if (rowTotalForAvg > 0) {
                     const overallAvg = rowWeightedSum / rowTotalForAvg;
@@ -2692,17 +2680,21 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
 
             const allCategories = categoryOrders[currentCategory];
 
+            const demoCutoff = demoHeatmapData?.cutoff || 240;
+            const currentCutoff = currentHeatmapData?.cutoff || 240;
+            const binSizeNum = parseInt(binSize);
+
             // Render Demolished Heatmap
             const demoCountData = (demoHeatmapData && demoHeatmapData['count']) ? demoHeatmapData['count'] : {};
             const demoDisplayData = (demoHeatmapData && demoHeatmapData[baseMetric]) ? demoHeatmapData[baseMetric] : {};
             const demoAvgData = (demoHeatmapData && demoHeatmapData['avg']) ? demoHeatmapData['avg'] : {};
-            renderZoneHeatmap(demoDisplayData, demoCountData, 'zoningHeatmapDemo', isPct, allCategories, demoAvgData);
+            renderZoneHeatmap(demoDisplayData, demoCountData, 'zoningHeatmapDemo', isPct, allCategories, demoAvgData, demoCutoff, binSizeNum);
 
             // Render Current Heatmap
             const currentCountData = (currentHeatmapData && currentHeatmapData['count']) ? currentHeatmapData['count'] : {};
             const currentDisplayData = (currentHeatmapData && currentHeatmapData[baseMetric]) ? currentHeatmapData[baseMetric] : {};
             const currentAvgData = (currentHeatmapData && currentHeatmapData['avg']) ? currentHeatmapData['avg'] : {};
-            renderZoneHeatmap(currentDisplayData, currentCountData, 'zoningHeatmapCurrent', isPct, allCategories, currentAvgData);
+            renderZoneHeatmap(currentDisplayData, currentCountData, 'zoningHeatmapCurrent', isPct, allCategories, currentAvgData, currentCutoff, binSizeNum);
 
             // Render Boxplots
             renderBoxplot('boxplotDemoChart', demoBoxplotData || {}, allCategories);
