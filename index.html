@@ -466,37 +466,44 @@
                     <div>
                         <h4 style="margin-bottom: 10px; color: #3498db;">Data Processing & Cleaning</h4>
                         <ol style="margin-left: 20px; padding-left: 0; line-height: 1.5; color: #444; font-size: 0.9em;">
-                            <li style="margin-bottom: 6px;">
-                                <strong>Permit Matching Strategy:</strong> 
-                                Building Polygons were linked to Demolition Permits using a <strong>Nearest Neighbor Spatial Join</strong> with a <strong>5-meter search radius</strong> (EPSG:2249).
-                                
-                                <div style="background: #eef2f7; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-size: 0.9em; border-left: 3px solid #3498db; color: #555;">
-                                    <strong>Matching Stats (Total: 5,018):</strong><br>
-                                    <span style="color: #27ae60;">●</span> <strong>Exact Matches:</strong> 4,922 (98.1%)<br>
-                                    <span style="color: #e67e22;">●</span> <strong>Buffer Matches (<5m):</strong> 96 (1.9%)
-                                </div>
-                                <span style="color:#666; font-size:0.9em;">This logic ensures permits with slight geocoding offsets are correctly attributed to the nearest structure.</span>
-                            </li>
-                            
-                            <li style="margin-bottom: 6px;">
-                                <strong>Conflict Resolution:</strong> 
-                                Where multiple permits matched a single building, priority was given to <strong>Closed</strong> status and the <strong>Most Recent</strong> date.
+                            <li style="margin-bottom: 8px;">
+                                <strong>Strict Data Cleaning:</strong> 
+                                Raw permits were filtered for <code>RAZE</code>, <code>EXTDEM</code>, and <code>INTDEM</code> only. 
+                                <br><span style="color:#666; font-size:0.9em;">• <strong>Anti-Noise Filter:</strong> For <code>RAZE</code> records, a strictly defined "blacklist" (keywords like kitchen, plumbing, rewire) and permit-type check (excluding PL/E/G prefixes) was applied to remove ~7% of false-positive records (e.g., renovations disguised as demolition).</span>
                             </li>
 
-                            <li style="margin-bottom: 6px;">
+                            <li style="margin-bottom: 8px;">
+                                <strong>Permit Matching Strategy:</strong> 
+                                Building Polygons were linked to clean Demolition Permits using a <strong>Nearest Neighbor Spatial Join</strong> with a <strong>5-meter search radius</strong> (EPSG:2249).
+                                
+                                <div style="background: #eef2f7; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-size: 0.9em; border-left: 3px solid #3498db; color: #555;">
+                                    <strong>Matching Stats (Total: 4,976):</strong><br>
+                                    <span style="color: #27ae60;">●</span> <strong>Exact Matches:</strong> 4,882 (98.1%)<br>
+                                    <span style="color: #e67e22;">●</span> <strong>Buffer Matches (<5m):</strong> 94 (1.9%)
+                                </div>
+                            </li>
+                            
+                            <li style="margin-bottom: 8px;">
+                                <strong>Hierarchical Conflict Resolution:</strong> 
+                                Where multiple permits matched a single building, priority was determined by a <strong>Strict Hierarchy</strong> to ensure the most significant event is captured:
+                                <br>
+                                <span style="color:#666; font-size:0.9em;">
+                                    1. <strong>Worktype Rank:</strong> <span style="color:#e74c3c; font-weight:600;">RAZE</span> (Priority 1) > EXTDEM > INTDEM.<br>
+                                    2. <strong>Status Rank:</strong> <span style="color:#27ae60; font-weight:600;">Closed</span> > Open.<br>
+                                    3. <strong>Date:</strong> Most Recent.
+                                </span>
+                            </li>
+
+                            <li style="margin-bottom: 8px;">
                                 <strong>Geometry Conversion:</strong> 
                                 Post-matching, building footprints (Polygons) were converted to <strong>Centroids (Points)</strong> for visualization.
                             </li>
                             
-                            <li style="margin-bottom: 6px;">
+                            <li style="margin-bottom: 8px;">
                                 <strong>Geographic Filtering:</strong> Data was filtered to include only major Greater Boston municipalities (Boston, Cambridge, Somerville, etc.).
                             </li>
                             
-                            <li style="margin-bottom: 6px;">
-                                <strong>Spatial Integration:</strong> Demolition points were spatially joined with <code>Boston_Zoning_Subdistricts.geojson</code>.
-                            </li>
-                            
-                            <li style="margin-bottom: 6px;">
+                            <li style="margin-bottom: 8px;">
                                 <strong>Outlier Removal:</strong> Records with calculated lifespans <strong>≥ 500 years</strong> were removed.
                             </li>
                         </ol>
@@ -522,7 +529,7 @@
                                 <br><span style="color:#666; font-size:0.9em;">• Buildings with a <strong>RAZE</strong> permit but <strong>Lifespan ≤ 0</strong> are <span style="color:#27ae60; font-weight:500;">retained</span>. These "Demolished & Replaced" records represent the active structure currently on the parcel.</span>
                             </li>
                             <li style="margin-bottom: 8px;">
-                                <strong>Status Inference:</strong> Derived from <code>DEMOLITION_STATUS</code> using exclusion logic. Any record <em>not</em> explicitly 'Closed' (e.g., 'Open', 'Issued', 'Pending', or Null) is classified as <strong>Open</strong>.
+                                <strong>Status Inference:</strong> Derived from <code>DEMOLITION_STATUS</code> using exclusion logic. Any record <em>not</em> explicitly 'Closed' is classified as <strong>Open</strong>.
                             </li>
                         </ul>
                         
