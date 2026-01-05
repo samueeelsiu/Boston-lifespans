@@ -10,7 +10,7 @@ warnings.filterwarnings('ignore')
 
 
 def process_demolition_data(
-        gpkg_path='ma_structures_FINAL_with_YR_SOURCE.gpkg',
+        gpkg_path='ma_structures_lifespan_dash.gpkg',
         zoning_path='Boston_Zoning_Subdistricts.geojson'
 ):
     """
