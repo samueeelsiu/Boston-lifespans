@@ -161,10 +161,9 @@ def process_demolition_data(
     boston_df = df[df['Zoning_District'].notna()]
 
     demo_avg = {}
-    for dtype in ['RAZE', 'EXTDEM', 'INTDEM']:
-        sub = boston_df[boston_df['DEMOLITION_TYPE'] == dtype]
-        sub_pos = sub[sub['lifespan'] > 0]
-        demo_avg[dtype] = float(sub_pos['lifespan'].mean()) if not sub_pos.empty else 0.0
+    raze_sub = boston_df[boston_df['DEMOLITION_TYPE'] == 'RAZE']
+    raze_pos = raze_sub[raze_sub['lifespan'] > 0]
+    demo_avg['RAZE'] = float(raze_pos['lifespan'].mean()) if not raze_pos.empty else 0.0
 
     result['material_lifespan_demo_avg'] = demo_avg
 
@@ -193,8 +192,6 @@ def process_demolition_data(
         'total_demolitions': int(len(boston_df)),
         'average_lifespan': float(r_pos['lifespan'].mean()) if not r_pos.empty else 0,
         'raze_count': int(len(r_pos)),
-        'extdem_count': int((boston_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
-        'intdem_count': int((boston_df['DEMOLITION_TYPE'] == 'INTDEM').sum()),
         'negative_raze_count': sb_negative['close'],
         'zero_raze_count': sb_zero['close'],
         'avg_current_building_age': float(
@@ -442,121 +439,99 @@ def process_demolition_data(
     result['zoning_subdistrict_stats'] = sub_stats
 
     print("7. Generating Material Heatmap data...")
-    material_lifespan_demo = {}
-    material_lifespan_demo_gfa = {}
     bin_sizes = [10, 20, 25, 30, 50]
 
-    for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'all']:
-        material_lifespan_demo[demo_type] = {}
-        material_lifespan_demo_gfa[demo_type] = {}
-        if demo_type == 'all':
-            type_df = boston_df
-        else:
-            type_df = boston_df[boston_df['DEMOLITION_TYPE'] == demo_type]
+    material_lifespan_demo = {'RAZE': {}}
+    material_lifespan_demo_gfa = {'RAZE': {}}
+    type_df = boston_df
 
-        for bin_size in bin_sizes:
-            bin_key = f'bin_{bin_size}'
-            material_lifespan_demo[demo_type][bin_key] = {}
-            material_lifespan_demo_gfa[demo_type][bin_key] = {}
-            for mat in type_df['material_group'].unique():
-                mat_df = type_df[type_df['material_group'] == mat]
-                if len(mat_df) == 0: continue
-                bins_c = {}
-                bins_g = {}
-                for i in range(0, 200, bin_size):
-                    label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
-                    mask = (mat_df['lifespan'] >= i) & (mat_df['lifespan'] < i + bin_size)
-                    subset = mat_df[mask]
-                    count = len(subset)
-                    if count > 0:
-                        bins_c[label] = int(count)
-                        bins_g[label] = int(subset['Est GFA sqmeters'].sum())
-                if bins_c:
-                    material_lifespan_demo[demo_type][bin_key][mat] = bins_c
-                    material_lifespan_demo_gfa[demo_type][bin_key][mat] = bins_g
+    for bin_size in bin_sizes:
+        bin_key = f'bin_{bin_size}'
+        material_lifespan_demo['RAZE'][bin_key] = {}
+        material_lifespan_demo_gfa['RAZE'][bin_key] = {}
+        for mat in type_df['material_group'].unique():
+            mat_df = type_df[type_df['material_group'] == mat]
+            if len(mat_df) == 0: continue
+            bins_c = {}
+            bins_g = {}
+            for i in range(0, 200, bin_size):
+                label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
+                mask = (mat_df['lifespan'] >= i) & (mat_df['lifespan'] < i + bin_size)
+                subset = mat_df[mask]
+                count = len(subset)
+                if count > 0:
+                    bins_c[label] = int(count)
+                    bins_g[label] = int(subset['Est GFA sqmeters'].sum())
+            if bins_c:
+                material_lifespan_demo['RAZE'][bin_key][mat] = bins_c
+                material_lifespan_demo_gfa['RAZE'][bin_key][mat] = bins_g
 
     result['material_lifespan_demo'] = material_lifespan_demo
     result['material_lifespan_demo_gfa'] = material_lifespan_demo_gfa
 
     print("8. Generating Foundation Heatmap data...")
-    foundation_lifespan_demo = {}
-    foundation_lifespan_demo_gfa = {}
+    foundation_lifespan_demo = {'RAZE': {}}
+    foundation_lifespan_demo_gfa = {'RAZE': {}}
+    type_df = boston_df
 
-    for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'all']:
-        foundation_lifespan_demo[demo_type] = {}
-        foundation_lifespan_demo_gfa[demo_type] = {}
+    for bin_size in bin_sizes:
+        bin_key = f'bin_{bin_size}'
+        foundation_lifespan_demo['RAZE'][bin_key] = {}
+        foundation_lifespan_demo_gfa['RAZE'][bin_key] = {}
 
-        if demo_type == 'all':
-            type_df = boston_df
-        else:
-            type_df = boston_df[boston_df['DEMOLITION_TYPE'] == demo_type]
+        for fnd in type_df['foundation_group'].unique():
+            fnd_df = type_df[type_df['foundation_group'] == fnd]
+            if len(fnd_df) == 0: continue
 
-        for bin_size in bin_sizes:
-            bin_key = f'bin_{bin_size}'
-            foundation_lifespan_demo[demo_type][bin_key] = {}
-            foundation_lifespan_demo_gfa[demo_type][bin_key] = {}
+            bins_c = {}
+            bins_g = {}
 
-            for fnd in type_df['foundation_group'].unique():
-                fnd_df = type_df[type_df['foundation_group'] == fnd]
-                if len(fnd_df) == 0: continue
+            for i in range(0, 200, bin_size):
+                label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
+                mask = (fnd_df['lifespan'] >= i) & (fnd_df['lifespan'] < i + bin_size)
+                subset = fnd_df[mask]
+                count = len(subset)
+                if count > 0:
+                    bins_c[label] = int(count)
+                    bins_g[label] = int(subset['Est GFA sqmeters'].sum())
 
-                bins_c = {}
-                bins_g = {}
-
-                for i in range(0, 200, bin_size):
-                    label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
-                    mask = (fnd_df['lifespan'] >= i) & (fnd_df['lifespan'] < i + bin_size)
-                    subset = fnd_df[mask]
-                    count = len(subset)
-                    if count > 0:
-                        bins_c[label] = int(count)
-                        bins_g[label] = int(subset['Est GFA sqmeters'].sum())
-
-                if bins_c:
-                    foundation_lifespan_demo[demo_type][bin_key][fnd] = bins_c
-                    foundation_lifespan_demo_gfa[demo_type][bin_key][fnd] = bins_g
+            if bins_c:
+                foundation_lifespan_demo['RAZE'][bin_key][fnd] = bins_c
+                foundation_lifespan_demo_gfa['RAZE'][bin_key][fnd] = bins_g
 
     result['foundation_lifespan_demo'] = foundation_lifespan_demo
     result['foundation_lifespan_demo_gfa'] = foundation_lifespan_demo_gfa
 
     print("10. Generating Occupancy Heatmap data...")
-    occupancy_lifespan_demo = {}
-    occupancy_lifespan_demo_gfa = {}
 
-    for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'all']:
-        occupancy_lifespan_demo[demo_type] = {}
-        occupancy_lifespan_demo_gfa[demo_type] = {}
+    occupancy_lifespan_demo = {'RAZE': {}}
+    occupancy_lifespan_demo_gfa = {'RAZE': {}}
+    type_df = boston_df
 
-        if demo_type == 'all':
-            type_df = boston_df
-        else:
-            type_df = boston_df[boston_df['DEMOLITION_TYPE'] == demo_type]
+    for bin_size in bin_sizes:
+        bin_key = f'bin_{bin_size}'
+        occupancy_lifespan_demo['RAZE'][bin_key] = {}
+        occupancy_lifespan_demo_gfa['RAZE'][bin_key] = {}
 
-        for bin_size in bin_sizes:
-            bin_key = f'bin_{bin_size}'
-            occupancy_lifespan_demo[demo_type][bin_key] = {}
-            occupancy_lifespan_demo_gfa[demo_type][bin_key] = {}
+        for occ in type_df['occupancy_group'].unique():
+            occ_df = type_df[type_df['occupancy_group'] == occ]
+            if len(occ_df) == 0: continue
 
-            # 使用 occupancy_group
-            for occ in type_df['occupancy_group'].unique():
-                occ_df = type_df[type_df['occupancy_group'] == occ]
-                if len(occ_df) == 0: continue
+            bins_c = {}
+            bins_g = {}
 
-                bins_c = {}
-                bins_g = {}
+            for i in range(0, 200, bin_size):
+                label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
+                mask = (occ_df['lifespan'] >= i) & (occ_df['lifespan'] < i + bin_size)
+                subset = occ_df[mask]
+                count = len(subset)
+                if count > 0:
+                    bins_c[label] = int(count)
+                    bins_g[label] = int(subset['Est GFA sqmeters'].sum())
 
-                for i in range(0, 200, bin_size):
-                    label = f"{i}-{i + bin_size} years" if i < 150 else f"{i}+ years"
-                    mask = (occ_df['lifespan'] >= i) & (occ_df['lifespan'] < i + bin_size)
-                    subset = occ_df[mask]
-                    count = len(subset)
-                    if count > 0:
-                        bins_c[label] = int(count)
-                        bins_g[label] = int(subset['Est GFA sqmeters'].sum())
-
-                if bins_c:
-                    occupancy_lifespan_demo[demo_type][bin_key][occ] = bins_c
-                    occupancy_lifespan_demo_gfa[demo_type][bin_key][occ] = bins_g
+            if bins_c:
+                occupancy_lifespan_demo['RAZE'][bin_key][occ] = bins_c
+                occupancy_lifespan_demo_gfa['RAZE'][bin_key][occ] = bins_g
 
     result['occupancy_lifespan_demo'] = occupancy_lifespan_demo
     result['occupancy_lifespan_demo_gfa'] = occupancy_lifespan_demo_gfa
@@ -595,68 +570,45 @@ def process_demolition_data(
 
     for year in all_years:
         y_str = str(year)
-        yearly_age_dist[y_str] = {'All': {}}
-        yearly_era_dist[y_str] = {'All': {}}
+        yearly_age_dist[y_str] = {}
+        yearly_era_dist[y_str] = {}
 
         year_df = boston_df[boston_df['demolition_year'] == year]
+        sub_df = year_df[year_df['lifespan'] > 0]
 
-        # === A. Age Distribution Logic ===
-        for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'All']:
-            if demo_type == 'All':
-                sub_df = year_df[year_df['lifespan'] > 0]
-            else:
-                sub_df = year_df[(year_df['DEMOLITION_TYPE'] == demo_type) & (year_df['lifespan'] > 0)]
+        age_counts = {label: 0 for _, _, label in age_bins_def}
+        for start, end, label in age_bins_def:
+            c = len(sub_df[(sub_df['lifespan'] >= start) & (sub_df['lifespan'] < end)])
+            age_counts[label] = c
 
-            counts = {label: 0 for _, _, label in age_bins_def}
+        yearly_age_dist[y_str]['All'] = age_counts
+        yearly_age_dist[y_str]['RAZE'] = age_counts
 
-            for start, end, label in age_bins_def:
-                c = len(sub_df[(sub_df['lifespan'] >= start) & (sub_df['lifespan'] < end)])
-                counts[label] = c
+        era_counts = {label: 0 for _, _, label in eras_def}
+        for start, end, label in eras_def:
+            c = len(sub_df[(sub_df['year_built'] >= start) & (sub_df['year_built'] < end)])
+            era_counts[label] = c
 
-            yearly_age_dist[y_str][demo_type] = counts
-
-            # === B. Construction Era Logic ===
-            for demo_type in ['RAZE', 'EXTDEM', 'INTDEM', 'All']:
-                if demo_type == 'All':
-                    sub_df = year_df[year_df['lifespan'] > 0]
-                else:
-                    sub_df = year_df[(year_df['DEMOLITION_TYPE'] == demo_type) & (year_df['lifespan'] > 0)]
-
-                counts = {label: 0 for _, _, label in eras_def}
-
-                for start, end, label in eras_def:
-                    c = len(sub_df[(sub_df['year_built'] >= start) & (sub_df['year_built'] < end)])
-                    counts[label] = c
-
-                yearly_era_dist[y_str][demo_type] = counts
+        yearly_era_dist[y_str]['All'] = era_counts
+        yearly_era_dist[y_str]['RAZE'] = era_counts
 
     result['yearly_age_distribution'] = yearly_age_dist
     result['yearly_construction_era'] = yearly_era_dist
 
-    # 3. Strip Plot Data (Lifespan by Year Boxplot) (使用 boston_df)
-
-    strip_plot_data = {'All': []}
-    for t in ['RAZE', 'EXTDEM', 'INTDEM']:
-        strip_plot_data[t] = []
+    strip_plot_data = {'All': [], 'RAZE': []}
 
     for year in all_years:
         year_df = boston_df[boston_df['demolition_year'] == year]
+        lifespans = year_df['lifespan'].dropna().tolist()
+        positive_lifespans = [int(x) for x in lifespans if x > 0]
 
-        # For 'All'
-        lifespans_all = year_df['lifespan'].dropna().tolist()
-        strip_plot_data['All'].append({
+        entry = {
             'year': int(year),
-            'lifespans': [int(x) for x in lifespans_all if x > 0]  # Filter positive only
-        })
+            'lifespans': positive_lifespans
+        }
 
-        # For individual types
-        for dtype in ['RAZE', 'EXTDEM', 'INTDEM']:
-            sub = year_df[year_df['DEMOLITION_TYPE'] == dtype]
-            lifespans = sub['lifespan'].dropna().tolist()
-            strip_plot_data[dtype].append({
-                'year': int(year),
-                'lifespans': [int(x) for x in lifespans if x > 0]
-            })
+        strip_plot_data['All'].append(entry)
+        strip_plot_data['RAZE'].append(entry)
 
     result['lifespan_by_year_boxplot'] = strip_plot_data
 
@@ -673,8 +625,6 @@ def process_demolition_data(
         row = {
             'year': int(year),
             'RAZE': raze_pos_count,
-            'EXTDEM': int((y_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
-            'INTDEM': int((y_df['DEMOLITION_TYPE'] == 'INTDEM').sum()),
             'demolished_and_replaced': raze_neg_count
         }
 
@@ -693,11 +643,7 @@ def process_demolition_data(
         final_dist.append({
             'range': rng,
             'RAZE': int((sub_df['DEMOLITION_TYPE'] == 'RAZE').sum()),
-            'EXTDEM': int((sub_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
-            'INTDEM': int((sub_df['DEMOLITION_TYPE'] == 'INTDEM').sum()),
             'RAZE_closed': int((sub_df['DEMOLITION_TYPE'] == 'RAZE').sum()),
-            'EXTDEM_closed': int((sub_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
-            'INTDEM_closed': int((sub_df['DEMOLITION_TYPE'] == 'INTDEM').sum()),
         })
     result['lifespan_distribution'] = final_dist
     result['lifespan_distribution_closed'] = final_dist
@@ -733,16 +679,14 @@ def process_demolition_data(
             'count': int(len(m_df)),
             'avg_lifespan': avg_raze_lifespan,
             'demolition_breakdown': {
-                'RAZE': int((m_df['DEMOLITION_TYPE'] == 'RAZE').sum()),
-                'EXTDEM': int((m_df['DEMOLITION_TYPE'] == 'EXTDEM').sum()),
-                'INTDEM': int((m_df['DEMOLITION_TYPE'] == 'INTDEM').sum())
+                'RAZE': int((m_df['DEMOLITION_TYPE'] == 'RAZE').sum())
             }
         })
     mat_stats.sort(key=lambda x: x['count'], reverse=True)
     result['material_stats'] = mat_stats
 
     raw_boxplot = {}
-    for demo in ['RAZE', 'EXTDEM', 'INTDEM']:
+    for demo in ['RAZE']:
         raw_boxplot[demo] = {}
         for mat in mat_stats[:20]:
             m_df = boston_df[

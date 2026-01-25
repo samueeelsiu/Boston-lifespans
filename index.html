@@ -459,7 +459,7 @@
             <div class="methodology" style="background: #f8f9fa; padding: 25px; border-left: 5px solid #3498db; border-radius: 4px; margin-top: 20px;">
                 <h3 style="color: #2c3e50; margin-top: 0;">Data Source & Methodology</h3>
                 <p style="color: #555; margin-bottom: 15px;">
-                    This dashboard analyzes building demolition patterns in the Greater Boston area, combining NSI structural data with Boston zoning regulations.
+                    This dashboard analyzes building demolition patterns in Boston, combining NSI structural data with Boston zoning regulations.
                 </p>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
@@ -468,29 +468,44 @@
                         <ol style="margin-left: 20px; padding-left: 0; line-height: 1.5; color: #444; font-size: 0.9em;">
                             <li style="margin-bottom: 8px;">
                                 <strong>Strict Data Cleaning:</strong> 
-                                Raw permits were filtered for <code>RAZE</code>, <code>EXTDEM</code>, and <code>INTDEM</code> only. 
-                                <br><span style="color:#666; font-size:0.9em;">• <strong>Anti-Noise Filter:</strong> For <code>RAZE</code> records, a strictly defined "blacklist" (keywords like kitchen, plumbing, rewire) and permit-type check (excluding PL/E/G prefixes) was applied to remove ~7% of false-positive records (e.g., renovations disguised as demolition).</span>
+                                Raw permits were filtered for <code>RAZE</code> only. 
+                                <br><span style="color:#666; font-size:0.9em;">• <strong>Prefix Filtering:</strong> Excluded non-structural permit types (Plumbing, Electrical, Gas, Fire, Manhole).</span>
+                                <br><span style="color:#666; font-size:0.9em;">• <strong>Context-Aware Keyword Logic:</strong> Applied a "Smart Filter" to remove non-building structures (billboards, pools) and stand-alone auxiliary structures (pure garage/shed demolitions). As a <strong>"Rescue Logic"</strong> preserved records where garages were demolished <em>alongside</em> main residential or commercial structures.</span>
                             </li>
 
                             <li style="margin-bottom: 8px;">
                                 <strong>Permit Matching Strategy:</strong> 
-                                Building Polygons were linked to clean Demolition Permits using a <strong>Nearest Neighbor Spatial Join</strong> with a <strong>5-meter search radius</strong> (EPSG:2249).
+                                Building Polygons were linked to clean Demolition Permits using a <strong>Nearest Neighbor Spatial Join</strong> with a <strong>5-meter search radius</strong> (EPSG:26986).
                                 
-                                <div style="background: #eef2f7; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-size: 0.9em; border-left: 3px solid #3498db; color: #555;">
-                                    <strong>Matching Stats (Total: 5,360):</strong><br>
-                                    <span style="color: #27ae60;">●</span> <strong>Exact Matches:</strong> 4,882 (91.1%)<br>
-                                    <span style="color: #e67e22;">●</span> <strong>Buffer Matches (<5m):</strong> 478 (8.9%)
+                                <div style="background: #eef2f7; padding: 10px 12px; border-radius: 4px; margin: 8px 0; font-size: 0.9em; border-left: 3px solid #3498db; color: #555; line-height: 1.5;">
+                                    <strong style="color: #2c3e50;">Matching Pipeline Stats:</strong>
+                                    
+                                    <div style="margin-top: 5px;">
+                                        <span style="color: #2980b9;">●</span> <strong>Initial Spatial Matches:</strong> 699 (Raw)
+                                        <div style="margin-left: 16px; font-size: 0.85em; color: #666; background: rgba(255,255,255,0.5); padding: 2px 5px; border-radius: 3px;">
+                                            ├─ <strong>Exact Matches:</strong> 561 (80.3%)<br>
+                                            └─ <strong>Buffer Matches (<5m):</strong> 138 (19.7%)
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top: 4px;">
+                                        <span style="color: #e74c3c;">●</span> <strong>Excluded:</strong> 142
+                                        <span style="font-size: 0.85em; color: #999;">(Outside Zoning Districts / Invalid Year Built, etc)</span>
+                                    </div>
+
+                                    <div style="margin-top: 4px; border-top: 1px dashed #ccc; padding-top: 4px;">
+                                        <span style="color: #27ae60;">●</span> <strong>Final Analytical Dataset:</strong> <strong style="color: #27ae60;">557</strong> (Valid)
+                                    </div>
                                 </div>
                             </li>
                             
                             <li style="margin-bottom: 8px;">
                                 <strong>Hierarchical Conflict Resolution:</strong> 
-                                Where multiple permits matched a single building, priority was determined by a <strong>Strict Hierarchy</strong> to ensure the most significant event is captured:
+                                Permits were deduplicated by Address first, then matched to structures. Priority was determined by:
                                 <br>
                                 <span style="color:#666; font-size:0.9em;">
-                                    1. <strong>Worktype Rank:</strong> <span style="color:#e74c3c; font-weight:600;">RAZE</span> (Priority 1) > EXTDEM > INTDEM.<br>
-                                    2. <strong>Status Rank:</strong> <span style="color:#27ae60; font-weight:600;">Closed</span> > Open.<br>
-                                    3. <strong>Date:</strong> Most Recent.
+                                    1. <strong>Status Rank:</strong> <span style="color:#27ae60; font-weight:600;">Closed</span> > Open.<br>
+                                    2. <strong>Date:</strong> Most Recent.
                                 </span>
                             </li>
 
@@ -500,7 +515,7 @@
                             </li>
                             
                             <li style="margin-bottom: 8px;">
-                                <strong>Geographic Filtering:</strong> Data was filtered to include only major Greater Boston municipalities (Boston, Cambridge, Somerville, etc.).
+                                <strong>Geographic Filtering:</strong> Data was filtered to include only structures within defined Boston Zoning Districts.
                             </li>
                             
                             <li style="margin-bottom: 8px;">
@@ -529,14 +544,14 @@
                                 <br><span style="color:#666; font-size:0.9em;">• Buildings with a <strong>RAZE</strong> permit but <strong>Lifespan ≤ 0</strong> are <span style="color:#27ae60; font-weight:500;">retained</span>. These "Demolished & Replaced" records represent the active structure currently on the parcel.</span>
                             </li>
                             <li style="margin-bottom: 8px;">
-                                <strong>Status Inference:</strong> Derived from <code>DEMOLITION_STATUS</code> using exclusion logic. Any record <em>not</em> explicitly 'Closed' is classified as <strong>Open</strong>.
+                                <strong>Status Inference:</strong> Derived from <code>DEMOLITION_STATUS</code>. 'Closed' status is explicitly tracked; all others are classified as <strong>Open</strong>.
                             </li>
                         </ul>
                         
                         <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 0.9em; color: #666;">
                             <strong>Dataset Scope:</strong><br>
                             Source: <span class="stats-value" id="totalMABuildings" style="font-weight:600; color:#2c3e50;">-</span> MA buildings<br>
-                            Target: <span class="stats-value" id="bostonDemolitions" style="font-weight:600; color:#2c3e50;">-</span> Boston area records<br>
+                            Target: <span class="stats-value" id="bostonDemolitions" style="font-weight:600; color:#2c3e50;">-</span> Boston RAZE records<br>
                             Targeted Built Year Range: <span class="stats-value" id="yearBuiltRange" style="font-weight:600; color:#2c3e50;">-</span><br>
                             Permit Range: <span class="stats-value" id="dateRange" style="font-weight:600; color:#2c3e50;">-</span>
                         </div>
@@ -549,25 +564,11 @@
         <div id="loadingContainer" class="loading">Loading data...</div>
 
         <div id="mainContent" style="display: none;">
-            <div class="controls">
-                <div class="control-group">
-                    <label>Demolition Type:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="demolitionView" value="RAZE" checked onchange="updateDemolitionView()"> RAZE</label>
-                        <label><input type="radio" name="demolitionView" value="EXTDEM" onchange="updateDemolitionView()"> EXTDEM</label>
-                        <label><input type="radio" name="demolitionView" value="INTDEM" onchange="updateDemolitionView()"> INTDEM</label>
-                        <label><input type="radio" name="demolitionView" value="all" onchange="updateDemolitionView()"> All Types</label>
-                    </div>
-                    <span style="font-size: 0.8em; color: #888; margin-left: 10px;">(Does not apply to Zoning District Deep Dive)</span>
-                </div>
-                
-
-            </div>
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label">Total Demolitions</div>
-                    <div class="stat-number" id="totalDemo">-</div>
+                    <div class="stat-label">RAZE</div>
+                    <div class="stat-number" id="razeCount">-</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label" id="avgLifespanLabel">Average Lifespan</div>
@@ -576,18 +577,6 @@
                 <div class="stat-card">
                     <div class="stat-label">Average building age of current buildings (Boston)</div>
                     <div class="stat-number" id="avgBuildingAge">-</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">EXTDEM</div>
-                    <div class="stat-number" id="extdemCount">-</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">INTDEM</div>
-                    <div class="stat-number" id="intdemCount">-</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">RAZE</div>
-                    <div class="stat-number" id="razeCount">-</div>
                 </div>
             </div>
 
@@ -643,7 +632,7 @@
 
 
             <div class="chart-container" id="zoning-deep-dive">
-                <h2 class="chart-title">Zoning District Deep Dive(RAZE only)</h2>
+                <h2 class="chart-title">Zoning District Deep Dive</h2>
                 <p class="chart-description">Select a district to view detailed statistics, age distributions, and material analysis.</p>
                 
                 <div class="control-group" style="margin-bottom: 15px;">
@@ -745,7 +734,7 @@
 
                     <!-- Heatmap 1: Demolished -->
                     <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; position: relative; z-index: 10;">
-                        <h4 id="heatmapDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Material vs. Lifespan (RAZE)</h4>
+                        <h4 id="heatmapDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Material vs. Lifespan</h4>
                         <div id="zoningHeatmapDemo" style="overflow-x: auto; padding-bottom: 60px;"></div>
                     </div>
 
@@ -758,7 +747,7 @@
                     <!-- Boxplots: Side-by-side -->
                     <div style="display: flex; gap: 20px; margin-bottom: 20px;">
                         <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px;">
-                            <h4 id="boxplotDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Lifespan by Material (RAZE)</h4>
+                            <h4 id="boxplotDemoTitle" style="text-align: center; margin-bottom: 10px;">Demolished: Lifespan by Material</h4>
                             <div style="height: 300px;"><canvas id="boxplotDemoChart"></canvas></div>
                         </div>
                         <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px;">
@@ -871,17 +860,13 @@
 
 
         const colors = {
-            RAZE: 'rgba(13, 8, 135, 0.8)',  
-            EXTDEM: 'rgba(204, 71, 120, 0.8)', 
-            INTDEM: 'rgba(254, 206, 50, 0.8)', 
+            RAZE: 'rgba(13, 8, 135, 0.8)',
             single: 'rgba(126, 3, 168, 0.8)' ,
             demolished_and_replaced: 'rgba(0, 0, 0, 0.7)'
         };
 
         const borderColors = {
             RAZE: 'rgba(13, 8, 135, 1)',
-            EXTDEM: 'rgba(204, 71, 120, 1)',
-            INTDEM: 'rgba(254, 206, 50, 1)',
             single: 'rgba(126, 3, 168, 1)'
         };
         // Color scheme for stacked bar charts (Darkest for largest, lightest for smallest)
@@ -990,7 +975,7 @@
                 const div = L.DomUtil.create('div', 'map-legend');
                 div.innerHTML = '<h4>Type</h4>';
         
-                ['RAZE', 'EXTDEM', 'INTDEM'].forEach(type => {
+                ['RAZE'].forEach(type => {
                     div.innerHTML += `<div class="map-legend-item"><span class="map-legend-color" style="background-color: ${colors[type]}; border: 1px solid ${borderColors[type]}"></span><span>${type}</span></div>`;
                 });
                 return div;
@@ -1005,9 +990,9 @@
             document.getElementById('catOccupancyBtn').classList.toggle('active', cat === 'occupancy');
             
             const label = cat.charAt(0).toUpperCase() + cat.slice(1);
-            document.getElementById('heatmapDemoTitle').textContent = `Demolished: ${label} vs. Lifespan (RAZE)`;
+            document.getElementById('heatmapDemoTitle').textContent = `Demolished: ${label} vs. Lifespan`;
             document.getElementById('heatmapCurrentTitle').textContent = `Current: ${label} vs. Age`;
-            document.getElementById('boxplotDemoTitle').textContent = `Demolished: Lifespan by ${label} (RAZE)`;
+            document.getElementById('boxplotDemoTitle').textContent = `Demolished: Lifespan by ${label}`;
             document.getElementById('boxplotCurrentTitle').textContent = `Current: Age by ${label}`;
             document.getElementById('statsDemoTitle').textContent = `Demolished: ${label} Statistics`;
             document.getElementById('statsCurrentTitle').textContent = `Current: ${label} Statistics`;
@@ -1073,35 +1058,6 @@
             });
         }
 
-        // NEW function to aggregate data for 'All Types'
-        function aggregateAllTypesData(data) {
-            const aggregated = {};
-            if (!data.RAZE) return aggregated;
-
-            const binSizes = Object.keys(data.RAZE); // e.g., ['bin_10', 'bin_20', ...]
-
-            binSizes.forEach(binKey => {
-                aggregated[binKey] = {};
-                const allMaterials = new Set([...Object.keys(data.RAZE[binKey]), ...Object.keys(data.EXTDEM[binKey]), ...Object.keys(data.INTDEM[binKey])]);
-
-                allMaterials.forEach(material => {
-                    aggregated[binKey][material] = {};
-                    const allLifespanBins = new Set([
-                        ...Object.keys(data.RAZE[binKey][material] || {}),
-                        ...Object.keys(data.EXTDEM[binKey][material] || {}),
-                        ...Object.keys(data.INTDEM[binKey][material] || {})
-                    ]);
-
-                    allLifespanBins.forEach(lifespanBin => {
-                        const razeCount = data.RAZE[binKey][material]?.[lifespanBin] || 0;
-                        const extdemCount = data.EXTDEM[binKey][material]?.[lifespanBin] || 0;
-                        const intdemCount = data.INTDEM[binKey][material]?.[lifespanBin] || 0;
-                        aggregated[binKey][material][lifespanBin] = razeCount + extdemCount + intdemCount;
-                    });
-                });
-            });
-            return aggregated;
-        }
 
         /**
          * Generates the Material vs. Lifespan Heatmap.
@@ -1605,14 +1561,9 @@
                 if (data.map_points) mapData = data.map_points;
                 else if (data.map_data) mapData = data.map_data;
 
-                if (currentData.material_lifespan_demo && !currentData.material_lifespan_demo.all) {
-                     currentData.material_lifespan_demo.all = aggregateAllTypesData(data.material_lifespan_demo);
-                }
-
                 loadingContainer.style.display = 'none';
                 mainContent.style.display = 'block';
-                
-                document.querySelector('input[name="demolitionView"][value="RAZE"]').checked = true;
+            
 
                 updateDashboard(data);
                 updateRazeLifespanSummary(data);
@@ -1634,16 +1585,13 @@
         }
 
         function updateDashboard(data) {
-            document.getElementById('totalDemo').textContent = data.summary_stats.total_demolitions.toLocaleString();
             document.getElementById('avgBuildingAge').textContent = data.summary_stats.avg_current_building_age.toFixed(1) + ' yrs';
 
             const defaultAvgLifespan = data.material_lifespan_demo_avg && data.material_lifespan_demo_avg.RAZE 
                 ? data.material_lifespan_demo_avg.RAZE 
                 : data.summary_stats.average_lifespan;
             document.getElementById('avgLifespan').textContent = defaultAvgLifespan.toFixed(1) + ' yrs';
-            document.getElementById('avgLifespanLabel').textContent = 'Average Lifespan (RAZE)';
-            document.getElementById('extdemCount').textContent = data.summary_stats.extdem_count.toLocaleString();
-            document.getElementById('intdemCount').textContent = data.summary_stats.intdem_count.toLocaleString();
+            document.getElementById('avgLifespanLabel').textContent = 'Average Lifespan';
             document.getElementById('razeCount').textContent = data.summary_stats.raze_count.toLocaleString();
             
             if (data.metadata) {
@@ -1662,9 +1610,8 @@
         }
 
         function updateDemolitionView() {
-            const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
+            const demolitionView = 'RAZE';
             
-            // Update the average lifespan stat
             updateStats(demolitionView);
             
             if (currentVisualization === 'stacked') {
@@ -1675,16 +1622,15 @@
             
             if (currentData) {
                 createYearlyChart(currentData.yearly_stacked);
-                createLifespanChart(currentData);
+                createLifespanChart(currentData, computeGlobalMaxAge(currentData)); 
                 createMaterialBoxplot(currentData, demolitionView); 
             }
-
         }
 
         function updateStackedBarCharts() {
             if (!currentData) return;
             const binSize = 20;
-            const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
+            const demolitionView = 'RAZE';
 
             document.getElementById('materialStackedTitle').innerText = `Material Type vs Lifespan (${demolitionView})`;
             document.getElementById('foundationStackedTitle').innerText = `Foundation Type vs Lifespan (${demolitionView})`;
@@ -1836,34 +1782,18 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
     });
 }
 
-        function createYearlyChart(yearlyData) {
+    function createYearlyChart(yearlyData) {
             const ctx = document.getElementById('yearlyChart').getContext('2d');
             if (charts.yearly) charts.yearly.destroy();
             
-            const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
+            const demolitionView = 'RAZE';
             const years = yearlyData.map(d => d.year);
             let datasets = [];
-            
-            let typesToShow = [];
 
-            if (demolitionView === 'all') {
-
-                typesToShow = [
-                    { key: 'RAZE', label: 'RAZE (>0 yrs)', color: colors.RAZE },
-                    { key: 'EXTDEM', label: 'EXTDEM', color: colors.EXTDEM },
-                    { key: 'INTDEM', label: 'INTDEM', color: colors.INTDEM },
-                    { key: 'demolished_and_replaced', label: 'Demolished & Replaced (≤0 yrs)', color: colors.demolished_and_replaced }
-                ];
-            } else if (demolitionView === 'RAZE') {
-                typesToShow = [
-                    { key: 'RAZE', label: 'RAZE (>0 yrs)', color: colors.RAZE },
-                    { key: 'demolished_and_replaced', label: 'Demolished & Replaced (≤0 yrs)', color: colors.demolished_and_replaced }
-                ];
-            } else {
-                typesToShow = [
-                    { key: demolitionView, label: demolitionView, color: colors[demolitionView] }
-                ];
-            }
+            const typesToShow = [
+                { key: 'RAZE', label: 'RAZE (>0 yrs)', color: colors.RAZE },
+                { key: 'demolished_and_replaced', label: 'Demolished & Replaced (≤0 yrs)', color: colors.demolished_and_replaced }
+            ];
 
             typesToShow.forEach(type => {
                 datasets.push({
@@ -1911,10 +1841,11 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
             if (charts.lifespan) charts.lifespan.destroy();
             
             const binSize = 20;
-            const demolitionView = document.querySelector('input[name="demolitionView"]:checked').value;
+            const demolitionView = 'RAZE'; 
             const useLogScale = document.getElementById('logScale').checked;
             const labels = [];
             const safeMaxAge = Math.max(globalMaxAge || 150, 150); 
+            
             for (let start = 0; start < safeMaxAge; start += binSize) {
                 labels.push(`${start}-${start + binSize}`);
             }
@@ -1925,7 +1856,6 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                 let count = 0;
                 rawData.forEach(d => {
                     const [dStart, dEnd] = parseRange(d.range);
-
                     if (dStart >= start && dEnd <= end) {
                         count += (d[type] || 0);
                     }
@@ -1933,35 +1863,17 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                 return count;
             }
 
-            let datasets = [];
+            const dataPoints = labels.map(lbl => {
+                const [s, e] = parseRange(lbl);
+                return getCountForRange('RAZE', s, e);
+            });
 
-            if (demolitionView === 'all') {
-                ['RAZE', 'EXTDEM', 'INTDEM'].forEach(type => {
-                    const dataPoints = labels.map(lbl => {
-                        const [s, e] = parseRange(lbl);
-                        return getCountForRange(type, s, e);
-                    });
-
-                    datasets.push({
-                        label: type,
-                        data: dataPoints,
-                        backgroundColor: colors[type],
-                        borderWidth: 1
-                    });
-                });
-            } else {
-                const dataPoints = labels.map(lbl => {
-                    const [s, e] = parseRange(lbl);
-                    return getCountForRange(demolitionView, s, e);
-                });
-
-                datasets.push({
-                    label: demolitionView,
-                    data: dataPoints,
-                    backgroundColor: colors[demolitionView],
-                    borderWidth: 1
-                });
-            }
+            const datasets = [{
+                label: 'RAZE',
+                data: dataPoints,
+                backgroundColor: colors.RAZE,
+                borderWidth: 1
+            }];
 
             charts.lifespan = new Chart(ctx, {
                 type: 'bar',
@@ -1971,12 +1883,12 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                     maintainAspectRatio: false,
                     scales: { 
                         x: { 
-                            stacked: demolitionView === 'all', // 只有 All 的时候才堆叠
+                            stacked: false,
                             title: {display: true, text: 'Lifespan (Synced X-Axis)'},
                             ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 }
                         },
                         y: { 
-                            stacked: demolitionView === 'all',
+                            stacked: false, 
                             title: {display: true, text: 'Count'},
                             type: useLogScale ? 'logarithmic' : 'linear',
                             beginAtZero: true
@@ -2203,94 +2115,58 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
             });
         }
 
-        function createMaterialBoxplot(data, demolitionType = 'RAZE') {
+        function createMaterialBoxplot(data, demolitionView = 'RAZE') {
             const ctx = document.getElementById('boxplotChart')?.getContext('2d');
             if (!ctx) return;
             
             if (charts.boxplot) charts.boxplot.destroy();
             
-            // Update title and description
             const titleElement = document.getElementById('boxplotTitle');
             const descriptionElement = document.getElementById('boxplotDescription');
             
-            if (demolitionType === 'all') {
-                titleElement.textContent = 'Building Lifespan by Material Type (All Demolition Types)';
-                descriptionElement.textContent = 'Box plot showing the distribution of building lifespans for each material type across all demolition types';
-            } else {
-                titleElement.textContent = `Building Lifespan by Material Type (${demolitionType} Only)`;
-                descriptionElement.textContent = `Box plot showing the distribution of building lifespans for each material type for ${demolitionType} demolitions`;
-            }
+            titleElement.textContent = 'Building Lifespan by Material Type';
+            descriptionElement.textContent = 'Box plot showing the distribution of building lifespans for each material type';
             
-            // Check if we have the raw lifespan data with demolition types
             if (!data.material_lifespan_raw_by_demo) {
-                console.error('No raw lifespan data available for boxplot by demolition type');
+                console.error('No raw lifespan data available for boxplot');
                 return;
             }
             
-            let rawData;
-            if (demolitionType === 'all') {
-                // Combine all demolition types
-                rawData = {};
-                const demoTypes = ['RAZE', 'EXTDEM', 'INTDEM'];
-                
-                demoTypes.forEach(demo => {
-                    if (data.material_lifespan_raw_by_demo[demo]) {
-                        Object.entries(data.material_lifespan_raw_by_demo[demo]).forEach(([material, values]) => {
-                            if (!rawData[material]) {
-                                rawData[material] = [];
-                            }
-                            rawData[material] = rawData[material].concat(values);
-                        });
-                    }
-                });
-            } else {
-                // Use specific demolition type
-                rawData = data.material_lifespan_raw_by_demo[demolitionType];
-                
-                if (!rawData) {
-                    console.error(`No raw lifespan data available for ${demolitionType}`);
-                    return;
-                }
+            const rawData = data.material_lifespan_raw_by_demo['RAZE'];
+            
+            if (!rawData) {
+                console.error(`No raw lifespan data available for RAZE`);
+                return;
             }
             
             const materials = Object.keys(rawData);
             
-            // Sort materials by median lifespan for better visualization
             materials.sort((a, b) => {
                 const medianA = rawData[a].sort((x, y) => x - y)[Math.floor(rawData[a].length / 2)];
                 const medianB = rawData[b].sort((x, y) => x - y)[Math.floor(rawData[b].length / 2)];
                 return medianB - medianA;
             });
             
-            // Limit to top 15 materials by count
             const materialCounts = materials.map(m => ({ material: m, count: rawData[m].length }));
             materialCounts.sort((a, b) => b.count - a.count);
             const top15Materials = materialCounts.slice(0, 15).map(item => item.material);
             
-            // Create the boxplot chart
             charts.boxplot = new Chart(ctx, {
                 type: 'boxplot',
                 data: {
                     labels: top15Materials,
                     datasets: [{
                         label: `Lifespan Distribution`,
-                        
-                        // === Change 1: Remove Color (Monochrome Style) ===
                         backgroundColor: 'transparent',  
                         borderColor: '#333333',        
                         borderWidth: 1.5,                
-                        
                         outlierColor: '#666666',      
                         outlierBackgroundColor: '#666666', 
                         outlierRadius: 2,         
-                        
                         medianColor: '#000000',        
                         itemRadius: 0,                 
-
-                        // === Change 2: Make Thinner ===
                         barPercentage: 0.4,            
                         categoryPercentage: 0.8,       
-                        
                         data: top15Materials.map(material => rawData[material])
                     }]
                 },
@@ -2298,9 +2174,7 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: false },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
@@ -2312,7 +2186,6 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                                     const min = Math.min(...values);
                                     const max = Math.max(...values);
                                     const count = values.length;
-                                    
                                     return [
                                         `Material: ${material}`,
                                         `Count: ${count}`,
@@ -2329,21 +2202,11 @@ function renderGenericStackedChart(canvasId, category, demoType, binSize) {
                     scales: {
                         y: {
                             beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Building Lifespan (years)'
-                            }
+                            title: { display: true, text: 'Building Lifespan (years)' }
                         },
                         x: {
-                            title: {
-                                display: true,
-                                text: 'Material Type'
-                            },
-                            ticks: {
-                                autoSkip: false,
-                                maxRotation: 45,
-                                minRotation: 45
-                            }
+                            title: { display: true, text: 'Material Type' },
+                            ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 }
                         }
                     }
                 }
